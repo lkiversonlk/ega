@@ -1,0 +1,20 @@
+{
+  "name": "eegalaxy",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ethereumjs-abi": "^0.6.5",
+    "express": "~4.15.5",
+    "jade": "~1.11.0",
+    "mercator-projection": "0.0.2",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5",
+    "web3": "^1.0.0-beta.26"
+  }
+}

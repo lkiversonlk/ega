@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+    <title>===EEGalaxy===</title>
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="cesium/Cesium.js"></script>
+    <style>
+        @import url(cesium/Widgets/widgets.css);
+        #galaxy {
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">EEGalaxy</a>
+        </div>
+        <div class="pull-right">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">iOS</a></li>
+                <li><a href="#">SVN</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        选择网络
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">jmeter</a></li>
+                        <li><a href="#">EJB</a></li>
+                        <li><a href="#">Jasper Report</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">分离的链接</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">另一个分离的链接</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+        <div class="row">
+            <div id="galaxy" class="col-md-8">
+
+            </div>
+            <div id="control-panel" class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        EEGalaxy Status
+                    </div>
+
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                                <span class="col-md-6">
+                                    <label>
+                                        Longitude
+                                    </label>
+                                    <span id="mouse-lon">
+        
+                                    </span>
+                                </span>
+                                <span class="col-md-6">
+                                    <label>
+                                        Laititude
+                                    </label>
+                                    <span id="mouse-lat">
+        
+                                    </span>
+                                </span>
+                        </div>
+                        
+                        <div class="row">
+                            <span class="col-md-6">
+                                <label>
+                                    Row
+                                </label>
+                                <span id="mouse-grid-y">
+    
+                                </span>
+                            </span>
+                            <span class="col-md-6">
+                                <label>
+                                    Col
+                                </label>
+                                <span id="mouse-grid-x">
+    
+                                </span>
+                            </span>            
+                        </div>
+                        <div>
+                            <label>
+                                Grid
+                            </label>
+                            <span id="mouse-grid">
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="javascripts/grids.js"></script>
+    <script src="javascripts/AppSkeleton.js"></script>
+</body>
+</html>

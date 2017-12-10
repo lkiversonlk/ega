@@ -1,0 +1,126 @@
+/**
+ * grids.js handle the calculation between (longitude, latitude) and grids
+ */
+
+ /**
+  * size is the number of grids on each side of the network
+  */
+function Grid(size){
+    this.size = size;
+    this.grid_size_pixel = TILE_SIZE / this.size;
+
+    this.lat_per_grid = 180 / size;
+    this.lng_per_grid = 360 / size;
+}
+
+var TILE_SIZE = 256;
+var pixelOrigin = {x: TILE_SIZE / 2, y: TILE_SIZE/2};
+var pixelsPerLngDegree = TILE_SIZE / 360;
+var pixelsPerLngRadian = TILE_SIZE / (2 * Math.PI);
+
+function _bound(value, opt_min, opt_max) {
+	if (opt_min != null) value = Math.max(value, opt_min);
+	if (opt_max != null) value = Math.min(value, opt_max);
+	return value;
+}
+
+Grid.prototype.degreeToRadians = function(degree){
+    return degree * (Math.PI / 180);
+}
+
+Grid.prototype.radiansToDegree = function(rad){
+    return rad / (Math.PI / 180);
+}
+
+Grid.prototype.fromLatLngToXY = function(lat, lng){
+    x = parseInt((parseFloat(lng) + 180)/this.lng_per_grid);
+    y = parseInt((parseFloat(lat) + 90)/this.lat_per_grid);
+    return {x: x, y:y};
+}
+
+Grid.prototype.fromXYToGrid = function(x, y){
+    var grid_x = parseInt(x / this.grid_size_pixel);
+    var grid_y = parseInt(y / this.grid_size_pixel);
+    return grid_x * this.size + grid_y;
+}
+
+/**
+ * lat range from -90 to 90
+ * lng range from -180 to 180
+ * @param {*} lat 
+ * @param {*} lng 
+ */
+Grid.prototype.fromLatLngToGrid = function(lat, lng){
+    x = parseInt((parseFloat(lng) + 180)/this.lng_per_grid);
+    y = parseInt((parseFloat(lat) + 90)/this.lat_per_grid);
+    return x * this.size + y;
+}
+
+Grid.prototype.drawGrids = function(viewer){
+    /*
+     * first draw const longitude lines
+     * lat range from (-90,90)
+     */ 
+    var i = 0;
+    for(i = 0; i < this.size; i ++){
+        var lng = this.lng_per_grid * i;
+        var pos = [];
+        for(var lat = -90; lat <= 90; lat ++){
+            pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
+        }
+        viewer.entities.add({
+            polyline: {
+                followSurface: true,
+                width: 1,
+                material: Cesium.Color.GREEN,
+                positions: pos
+            }
+        })
+    }
+
+    /*
+     * then latitude
+     */
+    for(i = 1; i < this.size; i ++){
+        var lat = this.lat_per_grid * (i - this.size / 2);
+        var pos = [];
+        for(var lng = -180; lng < 180; lng ++){
+            pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
+        }
+
+        viewer.entities.add({
+            polyline: {
+                followSurface: true,
+                width: 1,
+                material: Cesium.Color.GREEN,
+                positions: pos
+            }
+        })
+    }
+}
+
+Grid.prototype.fromGridIndexToDegrees = function(index){
+    var x = Math.floor(index / this.size);
+    var y = index - x * this.size;
+    //(x, y) (x + 1, y) (x + 1, y + 1) (x, y + 1)
+    var points = [];
+
+    var p1 = this.fromOffsetToDegrees(x, y);
+    points.push(p1.lng, p1.lat);
+    var p2 = this.fromOffsetToDegrees(x + 1, y);
+    points.push(p2.lng, p2.lat);
+    var p3 = this.fromOffsetToDegrees(x + 1, y + 1);
+    points.push(p3.lng, p3.lat);
+    var p4 = this.fromOffsetToDegrees(x , y + 1);
+    points.push(p4.lng, p4.lat);
+    return points;
+}
+
+Grid.prototype.fromOffsetToDegrees = function(x, y){
+    //TODO: validation
+    var lng = x * this.lng_per_grid - 180;
+    var lat = y * this.lat_per_grid - 90;
+    return {lng: lng, lat: lat};
+}
+
+gridSingle = new Grid(40);
