@@ -386,5 +386,39 @@
     // });
 
     gridSingle.drawGrids(viewer);
+
+    var GridStateEng = [
+        "On Sell",
+        "Owned",
+        "Forbidden"
+    ];
+
+    $("#search-grid").click(function(){
+        var grid_idx = parseInt($("[name=grid-idx]").val());
+        if(isNaN(grid_idx)) return;
+
+        if(window.earth){
+            var earth = window.earth;
+
+            earth.grids(grid_idx, function(err, result){
+                if(err){
+                    //TODO: error
+                } else {
+                    var gridState = result[0].toNumber();
+                    var owner = result[1].toString();
+                    var price = parseFloat(web3.fromWei(result[2].toNumber()));
+
+                    if(owner == "0x0000000000000000000000000000000000000000"){
+                        owner = "not sold out yet";
+                    }
+
+
+                    $("#oper-grid-owner").html(owner);
+                    $("#oper-grid-state").html(GridStateEng[gridState]);
+                    $("#oper-grid-price").html(price + " ETH");
+                }
+            });
+        }
+    });
 }());
 

@@ -23,11 +23,13 @@ function Earth(instance){
     }
 });
 
-/*
-Earth.prototype.mapSize = function(callback){
-    return this.ins.mapSize.call(getSingleVal(callback));
-}*/
+Earth.prototype.grids = function(idx, callback){
+    return this.ins.grids(idx, callback);
+}
 
+Earth.prototype.BuyGrid = function(x, y, callback){
+    return this.ins.BuyGrid(x, y, callback);
+}
 
 function getSingleVal(callback){
     return function(err, result){
