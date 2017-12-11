@@ -4,9 +4,10 @@ function InitEarthContract(web3, address){
     var EarthContract = web3.eth.contract(EarthContractAbi);
     var earthInstance = EarthContract.at(address);
 
-    return new Earth(earthInstance);
+    return new Contract(earthInstance);
 }
 
+/*
 function Earth(instance){
     this.ins = instance;
 }
@@ -47,7 +48,7 @@ function getSingleVal(callback){
             return callback(null, result);
         }
     }
-}
+}*/
 
 var networkName = {
     "1": "Mainnet",
@@ -59,7 +60,7 @@ var registryAddresses = {
     // Mainnet
 //    "1": "0x314159265dd8dbb310642f98f50c066173c1259b",
     // Ropsten
-    "3": "0xb97372c7cc8dd0c78fc8408604068d77302d6bb0"
+    "3": "0x1e6cbe27d5f897d97e9c3472c83ef6a1da144017"
     // Rinkeby
 //    "4": "0xe7410170f87102DF0055eB195163A03B7F2Bff4A",
 }

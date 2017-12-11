@@ -401,6 +401,24 @@
             }
         });
 
+        earth.GridsCount(web3.eth.coinbase, function(err, count){
+            if(err){
+                //TODO:
+            } else {
+                $("#player-address").html(web3.eth.coinbase);
+                $("#player-grids-count").html(count);
+
+                for(var i = 0; i < count; i ++){
+                    earth.ownedGrids(web3.eth.coinbase, i, function(err, grid_idx){
+                        if(err){
+                            //TODO:
+                        } else {
+                            $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');                            
+                        }
+                    });
+                }
+            }
+        });
         earth.mapSize(function(err, size){
             if(err){
                 //TODO:
@@ -468,9 +486,9 @@
                             if(err){
                                 //TODO: error
                             } else {
-                                var gridState = result[0].toNumber();
-                                var owner = result[1].toString();
-                                var price = parseFloat(web3.fromWei(result[2].toNumber()));
+                                var gridState = result[0];
+                                var owner = result[1];
+                                var price = parseFloat(web3.fromWei(result[2]));
             
                                 if(owner == "0x0000000000000000000000000000000000000000"){
                                     owner = "None";
@@ -501,9 +519,9 @@
                         if(err){
 
                         } else {
-                            var gridState = result[0].toNumber();
+                            var gridState = result[0];
                             if(gridState == 0){
-                                var price = result[2].toNumber();
+                                var price = result[2];
                                 if(price == 0){
                                     earth.minimalPrice(function(err, price){
                                         if(err){
