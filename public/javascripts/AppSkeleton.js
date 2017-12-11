@@ -312,7 +312,8 @@
       
         var earth = window.earth = InitEarthContract(web3, registryAddresses[web3.version.network]);
         $("#status-contract").html(registryAddresses[web3.version.network]);
-        $("#buy-grid").hide();        
+        $("#buy-grid").hide();
+        $("#sell-grid").hide();        
         StartEarth(earth, viewer);
     });
 
@@ -498,10 +499,16 @@
                                 $("#oper-grid-owner").html(owner);
                                 $("#oper-grid-state").html(GridStateEng[gridState]);
 
-                                if(gridState == 0){
+                                if(gridState == 0 && owner != web3.eth.coinbase){
                                     $("#buy-grid").show();
                                 } else {
                                     $("#buy-grid").hide();
+                                }
+
+                                if(owner == web3.eth.coinbase){
+                                    $("#sell-grid").show();
+                                } else {
+                                    $("#sell-grid").hide();
                                 }
                                 $("#oper-grid-price").html(price + " ETH");
                             }
@@ -509,7 +516,7 @@
                     }
                 });
 
-                $("#buy-grid").click(function(){
+                $("#buy-grid-btn").click(function(){
                     var grid_idx = parseInt($("[name=grid-idx]").val());
                     if(isNaN(grid_idx)) return;
                     
@@ -555,6 +562,36 @@
                                 }
                             } else {
                                 //can't
+                            }
+                        }
+                    })
+                    
+                });
+
+                $("#sell-grid-btn").click(function(){
+                    var grid_idx = parseInt($("[name=grid-idx]").val());
+                    if(isNaN(grid_idx)) return;
+                    var price = parseFloat($("[name=grid-sell-price]").val());
+                    if(isNaN(price)) return;
+
+                    var point = gridService.fromGridIndexToXY(grid_idx);
+
+                    earth.grids(grid_idx, function(err, result){
+                        if(err){
+
+                        } else {
+                            var owner = result[1];
+
+                            if(owner != web3.eth.coinbase){
+                                //TODO: error
+                            } else {
+                                earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {gas:470000}, function(err, txid){
+                                    if(err){
+                                        //TODO:
+                                    } else {
+
+                                    }
+                                });
                             }
                         }
                     })
