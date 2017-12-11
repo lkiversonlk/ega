@@ -27,8 +27,8 @@ Earth.prototype.grids = function(idx, callback){
     return this.ins.grids(idx, callback);
 }
 
-Earth.prototype.BuyGrid = function(x, y, callback){
-    return this.ins.BuyGrid(x, y, callback);
+Earth.prototype.BuyGrid = function(x, y, opt, callback){
+    return this.ins.BuyGrid(x, y, opt, callback);
 }
 
 function getSingleVal(callback){
@@ -49,9 +49,6 @@ function getSingleVal(callback){
     }
 }
 
-
-
-
 var networkName = {
     "1": "Mainnet",
     "3": "Ropsten testnet",
@@ -65,61 +62,4 @@ var registryAddresses = {
     "3": "0xb97372c7cc8dd0c78fc8408604068d77302d6bb0"
     // Rinkeby
 //    "4": "0xe7410170f87102DF0055eB195163A03B7F2Bff4A",
-}
-
-window.addEventListener('load', function() {
-      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-      if (typeof web3 !== 'undefined') {
-        // Use Mist/MetaMask's provider
-        window.web3 = new Web3(web3.currentProvider);
-        if(registryAddresses.hasOwnProperty(web3.version.network)){
-            $("#status-network").html("Connect to " + networkName[web3.version.network]);                
-        } else {
-            $("#status-network").html("Network " + networkName[web3.version.network] + " unsupported yet");
-            return;
-        }
-      } else {
-        console.log('No web3? You should consider trying MetaMask!')
-        $("#status-network").html("no ether network found");
-        return;
-      }
-    
-      var earth = window.earth = InitEarthContract(web3, registryAddresses[web3.version.network]);
-      $("#status-contract").html(registryAddresses[web3.version.network]);
-      
-      StartEarth(earth);
-});
-
-function StartEarth(earth){
-    earth.mapSize(function(err, size){
-        if(err){
-            //TODO:
-        } else {
-            $("#status-total-grids").html(size * size);
-        }
-    });
-
-    earth.gridSold(function(err, sold){
-        if(err){
-            //TODO:
-        } else {
-            $("#status-sold-grids").html(sold);
-        }
-    });
-
-    earth.fee(function(err, fee){
-        if(err){
-            //TODO:
-        } else {
-            $("#status-tran-fee").html(fee/1000);
-        }
-    });
-
-    earth.minimalPrice(function(err, price){
-        if(err){
-            //TODO:
-        } else {
-            $("#status-min-price").html(web3.fromWei(price) + " ETH");
-        }
-    });
 }

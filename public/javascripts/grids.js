@@ -123,4 +123,14 @@ Grid.prototype.fromOffsetToDegrees = function(x, y){
     return {lng: lng, lat: lat};
 }
 
-gridSingle = new Grid(40);
+Grid.prototype.fromGridIndexToXY = function(grid){
+    if(grid < 0 || grid >= (this.size * this.size)){
+        throw "invalid grid " + grid;
+    }
+
+    grid = Math.floor(grid);
+
+    var x = Math.floor(grid / this.size);
+    var y = grid - x * this.size;
+    return {x: x, y: y};
+}
