@@ -299,9 +299,9 @@
           // Use Mist/MetaMask's provider
           window.web3 = new Web3(web3.currentProvider);
           if(registryAddresses.hasOwnProperty(web3.version.network)){
-              $("#status-network").html("Connect to " + networkName[web3.version.network]);                
+              $("#network").html(networkName[web3.version.network]);
           } else {
-              $("#status-network").html("Network " + networkName[web3.version.network] + " unsupported yet");
+              $("#status-network").html("Unknown");
               return;
           }
         } else {

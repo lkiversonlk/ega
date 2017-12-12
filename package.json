@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "ethereumjs-abi": "^0.6.5",
     "express": "~4.15.5",
+    "express-handlebars": "^3.0.0",
     "jade": "~1.11.0",
     "mercator-projection": "0.0.2",
     "morgan": "~1.9.0",
