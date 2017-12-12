@@ -69,6 +69,16 @@
 
                             </span>
                     </div>
+                    <div>
+                        <div class="checkbox disabled">
+                            <label class="checkbox-inline">
+                                <input id="check-show-grids" type="checkbox" checked data-toggle="toggle"> Grids
+                            </label>
+                            <label class="checkbox-inline">
+                                <input id="check-show-mark" type="checkbox" checked data-toggle="toggle"> Mark
+                            </label>
+                        </div>                        
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default panel-transparent">
@@ -153,7 +163,21 @@
                         </div>
                     </div>
 
-                    <select id="player-grids-list"></select>
+                    <div>
+                        <label>
+                            ETH 
+                        </label>
+                        <div id="player-earns">
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>
+                            your grids
+                        </label>
+                        <select id="player-grids-list"></select>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default panel-transparent">
@@ -207,6 +231,7 @@
         </div>
     </div>
 </div>
+<script src="cesium/Cesium.js"></script>
 <script src="javascripts/index.js"></script>
 <script src="javascripts/Earth.js"></script>
 <script src="javascripts/contract.js"></script>

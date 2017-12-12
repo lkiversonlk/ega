@@ -11,6 +11,8 @@ function Grid(size){
 
     this.lat_per_grid = 180 / size;
     this.lng_per_grid = 360 / size;
+
+    this.grid_lines = [];
 }
 
 var TILE_SIZE = 256;
@@ -56,7 +58,14 @@ Grid.prototype.fromLatLngToGrid = function(lat, lng){
     return x * this.size + y;
 }
 
+Grid.prototype.flip = function(){
+    this.grid_lines.forEach(function(line){
+        line.show = !line.show;
+    });
+}
+
 Grid.prototype.drawGrids = function(viewer){
+
     /*
      * first draw const longitude lines
      * lat range from (-90,90)
@@ -99,6 +108,10 @@ Grid.prototype.drawGrids = function(viewer){
     }
 }
 
+/**
+ * get the edge points of a specified grid 
+ * @param {*} index 
+ */
 Grid.prototype.fromGridIndexToDegrees = function(index){
     var x = Math.floor(index / this.size);
     var y = index - x * this.size;
@@ -108,11 +121,31 @@ Grid.prototype.fromGridIndexToDegrees = function(index){
     var p1 = this.fromOffsetToDegrees(x, y);
     points.push(p1.lng, p1.lat);
     var p2 = this.fromOffsetToDegrees(x + 1, y);
+
+    for(var delta = 1; p1.lng + delta < p2.lng; delta +=1){
+        points.push(p1.lng + delta, p1.lat);
+    }
+
     points.push(p2.lng, p2.lat);
+
     var p3 = this.fromOffsetToDegrees(x + 1, y + 1);
+
+    for(var delta = 1; p2.lat + delta < p3.lat; delta += 1){
+        points.push(p2.lng, p2.lat + delta);
+    }
+
     points.push(p3.lng, p3.lat);
     var p4 = this.fromOffsetToDegrees(x , y + 1);
+
+    for(var delta = 1; p3.lng - delta > p4.lng; delta += 1){
+        points.push(p3.lng - delta, p3.lat);
+    }
+
     points.push(p4.lng, p4.lat);
+
+    for(var delta = 1; p4.lat - delta > p1.lat; delta += 1){
+        points.push(p4.lng, p4.lat - delta);
+    }
     return points;
 }
 
@@ -133,4 +166,9 @@ Grid.prototype.fromGridIndexToXY = function(grid){
     var x = Math.floor(grid / this.size);
     var y = grid - x * this.size;
     return {x: x, y: y};
+}
+
+
+Grid.prototype.destory = function(){
+
 }
