@@ -12,18 +12,20 @@
             crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="cesium/Cesium.js"></script>
     <style>
         @import url(cesium/Widgets/widgets.css);
         #galaxy {
-            height: 800px;
+            height: 600px;
         }
     </style>
 </head>
 <body>
-
+<canvas id="canvas"></canvas>        
+    
 <nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
+    <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Test</a>
         </div>
@@ -227,6 +229,7 @@
             </div>
         </div>
     </div>
+    <script src="javascripts/index.js"></script>
     <script src="javascripts/Earth.js"></script> 
     <script src="javascripts/contract.js"></script>
     <script src="javascripts/grids.js"></script>
