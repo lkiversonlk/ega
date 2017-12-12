@@ -1,8 +1,27 @@
 body {
   background: #060e1b;
+  color: white;
 }
 
 #canvas {
   opacity: 0.5;
   position: absolute;
+}
+
+.panel-transparent {
+  background: none;
+}
+
+.panel-transparent .panel-heading{
+  color: white;
+  background: rgba(122, 130, 136, 0.2)!important;
+}
+
+.panel-transparent .panel-body{
+  background: rgba(46, 51, 56, 0.2)!important;
+}
+
+.navbar-transparent{
+  background: none;
+  color: white;  
 }
