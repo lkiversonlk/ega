@@ -674,6 +674,7 @@
 
             $("#check-show-mark").change(function(){
                 show_grid_mark = $(this).prop('checked');
+                gridMark.show = show_grid_mark;
             });
 
             $("#player-location").click(function(){
