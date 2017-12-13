@@ -5,14 +5,30 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require("express-handlebars");
-
+var i18n = require("i18n");
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
+i18n.configure({
+  locales:['en', 'ch'],
+  defaultLocale: "ch",
+  directory: __dirname + '/public/locales'
+});
+
+app.use(i18n.init);
+
 // view engine setup
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main',
+  helpers: {
+    t: function(word){
+      return i18n.__(word);
+    }
+  }
+}));
+
 //app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 

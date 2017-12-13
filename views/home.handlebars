@@ -24,47 +24,42 @@
 </nav>
 
 <div class="container-fluid">
-
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="panel panel-default panel-transparent">
                 <div class="panel-heading">
-                    Status
+                    {{t "status"}}
                 </div>
 
                 <div class="panel-body">
+                    <!--
                     <div>
-                        <label>Network</label>
-                        <span id="status-network">
-
-                            </span>
-                    </div>
-                    <div>
-                        <label>Contract</label>
+                        <label>{{t "contract"}}</label>
                         <span id="status-contract">
 
-                            </span>
+                        </span>
                     </div>
+                    -->
                     <div>
-                        <label>Total Grids</label>
+                        <label>{{t "grids count"}}</label>
                         <span id="status-total-grids">
 
                             </span>
                     </div>
                     <div>
-                        <label>Sold Grids</label>
+                        <label>{{t "sold"}}</label>
                         <span id="status-sold-grids">
 
                             </span>
                     </div>
                     <div>
-                        <label>Transaction Fee</label>
+                        <label>{{t "fee"}}</label>
                         <span id="status-tran-fee">
 
                             </span>
                     </div>
                     <div>
-                        <label>Minimal Price</label>
+                        <label>{{t "min price"}}</label>
                         <span id="status-min-price">
 
                             </span>
@@ -72,58 +67,42 @@
                     <div>
                         <div class="checkbox">
                             <label class="checkbox-inline">
-                                <input id="check-show-grids" type="checkbox" checked data-toggle="toggle"> Grids
-                            </label>
-                            <label class="checkbox-inline">
-                                <input id="check-show-mark" type="checkbox" checked data-toggle="toggle"> Mark
+                                <input id="check-show-grids" type="checkbox" checked data-toggle="toggle"> {{t "reveal grids"}}
                             </label>
                         </div>                        
+                        <div class="checkbox">
+                            <label class="checkbox-inline">
+                                <input id="check-show-mark" type="checkbox" checked data-toggle="toggle"> {{t "reveal mark"}}
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="panel panel-default panel-transparent">
 
                 <div class="panel-body">
-                    <div class="row">
-                                <span class="col-md-6">
+                    <div>
+                                <div>
                                     <label>
-                                        Longitude
+                                        {{t "longitude"}}
                                     </label>
                                     <span id="mouse-lon">
 
                                     </span>
-                                </span>
-                        <span class="col-md-6">
+                                </div>
+                        <div>
                                     <label>
-                                        Laititude
+                                        {{t "latitude"}}
                                     </label>
                                     <span id="mouse-lat">
 
                                     </span>
-                                </span>
+                                </div>
                     </div>
 
-                    <div class="row">
-                            <span class="col-md-6">
-                                <label>
-                                    Row
-                                </label>
-                                <span id="mouse-grid-y">
-
-                                </span>
-                            </span>
-                        <span class="col-md-6">
-                                <label>
-                                    Col
-                                </label>
-                                <span id="mouse-grid-x">
-
-                                </span>
-                            </span>
-                    </div>
                     <div>
                         <label>
-                            Grid
+                            {{t "grid"}}
                         </label>
                         <span id="mouse-grid">
 
@@ -132,7 +111,7 @@
                 </div>
             </div>
         </div>
-        <div id="galaxy" class="col-md-6">
+        <div id="galaxy" class="col-md-7">
 
         </div>
 
@@ -142,7 +121,7 @@
             <div class="panel panel-default panel-transparent">
 
                 <div class="panel-heading">
-                    Player status
+                    {{t "player status"}}
                 </div>
                 <div class="panel-body">
                     <div>
@@ -156,7 +135,7 @@
 
                     <div>
                         <label>
-                            owned grids count
+                            {{t "owned grids"}}
                         </label>
                         <div id="player-grids-count">
 
@@ -165,7 +144,7 @@
 
                     <div>
                         <label>
-                            ETH 
+                            {{t "earns"}}
                         </label>
                         <div id="player-earns">
 
@@ -186,7 +165,7 @@
             </div>
             <div class="panel panel-default panel-transparent">
                 <div class="panel-heading">
-                    Operation Board
+                    {{t "operation board"}}
                 </div>
                 <div class="panel-body">
                     <div>
@@ -203,16 +182,16 @@
 
                         <div class="form-group">
                             <div>
-                                <label>Current owner</label>
+                                <label>{{t "current owner"}}</label>
                                 <span id="oper-grid-owner"></span>
                             </div>
 
                             <div>
-                                <label>Current State</label>
+                                <label>{{t "current state"}}</label>
                                 <span id="oper-grid-state"></span>
                             </div>
                             <div>
-                                <label>Current price</label>
+                                <label>{{t "current price"}}</label>
                                 <span id="oper-grid-price"></span>
                             </div>
                         </div>
