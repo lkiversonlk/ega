@@ -550,6 +550,15 @@
                             $("#sell-grid").hide();
                         }
                         $("#oper-grid-price").html(price + " ETH");
+
+                        //adjust the camera
+                        if(window.gridService){
+                            var center = window.gridService.gridCenterInDegree(grid_idx);
+
+                            viewer.camera.flyTo({
+                                destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 1500000.0)
+                            })
+                        }
                     }
                 });
             });
@@ -639,13 +648,22 @@
 
             $("#check-show-grids").change(function(){
                 var show = $(this).prop('checked');
-
+                if(window.gridService){
+                    window.gridService.showGrids(show);
+                }
             });
 
             $("#check-show-mark").change(function(){
-                var show = $(this).prop('checked');
-
+                show_grid_mark = $(this).prop('checked');
             });
+
+            $("#player-location").click(function(){
+                navigator.geolocation.getCurrentPosition(function(position){
+                    viewer.camera.flyTo({
+                        destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000000.0)
+                    });
+                });
+            })
         }
 
         galaxy.refresh_earth_status();

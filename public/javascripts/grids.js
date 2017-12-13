@@ -58,9 +58,9 @@ Grid.prototype.fromLatLngToGrid = function(lat, lng){
     return x * this.size + y;
 }
 
-Grid.prototype.flip = function(){
+Grid.prototype.showGrids = function(show){
     this.grid_lines.forEach(function(line){
-        line.show = !line.show;
+        line.show = show;
     });
 }
 
@@ -77,7 +77,7 @@ Grid.prototype.drawGrids = function(viewer){
         for(var lat = -90; lat <= 90; lat ++){
             pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
         }
-        viewer.entities.add({
+        var line = viewer.entities.add({
             polyline: {
                 followSurface: true,
                 width: 1,
@@ -85,6 +85,7 @@ Grid.prototype.drawGrids = function(viewer){
                 positions: pos
             }
         })
+        this.grid_lines.push(line);
     }
 
     /*
@@ -97,14 +98,15 @@ Grid.prototype.drawGrids = function(viewer){
             pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
         }
 
-        viewer.entities.add({
+        var line = viewer.entities.add({
             polyline: {
                 followSurface: true,
                 width: 1,
                 material: Cesium.Color.GREEN,
                 positions: pos
             }
-        })
+        });
+        this.grid_lines.push(line);        
     }
 }
 
@@ -168,6 +170,18 @@ Grid.prototype.fromGridIndexToXY = function(grid){
     return {x: x, y: y};
 }
 
+Grid.prototype.gridCenterInDegree = function(grid_idx){
+    //point2 point3
+    //point0 point1
+    var point0XY = this.fromGridIndexToXY(grid_idx);
+    var point0 = this.fromOffsetToDegrees(point0XY.x, point0XY.y);
+    var point1 = this.fromOffsetToDegrees(point0XY.x + 1, point0XY.y);
+    var point2 = this.fromOffsetToDegrees(point0XY.x, point0XY.y + 1);
+    var center_lng = (point0.lng + point1.lng)/2;
+    var center_lat = (point0.lat + point2.lat)/2;
+
+    return {lng: center_lng, lat: center_lat};
+}
 
 Grid.prototype.destory = function(){
 
