@@ -636,6 +636,16 @@
                 })
                 
             });
+
+            $("#check-show-grids").change(function(){
+                var show = $(this).prop('checked');
+
+            });
+
+            $("#check-show-mark").change(function(){
+                var show = $(this).prop('checked');
+
+            });
         }
 
         galaxy.refresh_earth_status();
