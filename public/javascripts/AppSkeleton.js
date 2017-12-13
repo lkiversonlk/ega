@@ -477,6 +477,47 @@
             }
         }
 
+        galaxy.grid_selected = function(grid_idx){
+            earth.grids(grid_idx, function(err, result){
+                if(err){
+                    //TODO: error
+                } else {
+                    var gridState = result[0];
+                    var owner = result[1];
+                    var price = parseFloat(web3.fromWei(result[2]));
+
+                    if(owner == "0x0000000000000000000000000000000000000000"){
+                        owner = "None";
+                    }
+
+                    $("#oper-grid-owner").html(owner);
+                    $("#oper-grid-state").html(GridStateEng[gridState]);
+
+                    if(gridState == 0 && owner != web3.eth.coinbase){
+                        $("#buy-grid").show();
+                    } else {
+                        $("#buy-grid").hide();
+                    }
+
+                    if(owner == web3.eth.coinbase){
+                        $("#sell-grid").show();
+                    } else {
+                        $("#sell-grid").hide();
+                    }
+                    $("#oper-grid-price").html(price + " ETH");
+
+                    //adjust the camera
+                    if(window.gridService){
+                        var center = window.gridService.gridCenterInDegree(grid_idx);
+
+                        viewer.camera.flyTo({
+                            destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 4000000.0)
+                        })
+                    }
+                }
+            });
+        }
+
         galaxy.init_mouse_event_handler = function(){
             var handler = viewer.screenSpaceEventHandler;
             handler.setInputAction(
@@ -510,6 +551,21 @@
                     }
                 }, 
                 Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+            handler.setInputAction(function(event){
+                var cartesian = viewer.camera.pickEllipsoid(event.position, scene.globe.ellipsoid);
+                if(cartesian) {
+                    var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+                    var lon = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
+                    var lat = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
+                    
+                    if(window.gridService){
+                        var grid_index = gridService.fromLatLngToGrid(lat, lon);
+                        $("[name=grid-idx]").val(grid_index);
+                        galaxy.grid_selected(grid_index);
+                    }
+                } 
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
         }
 
         var GridStateEng = [
@@ -523,44 +579,7 @@
                 var grid_idx = parseInt($("[name=grid-idx]").val());
                 if(isNaN(grid_idx)) return;
         
-                earth.grids(grid_idx, function(err, result){
-                    if(err){
-                        //TODO: error
-                    } else {
-                        var gridState = result[0];
-                        var owner = result[1];
-                        var price = parseFloat(web3.fromWei(result[2]));
-    
-                        if(owner == "0x0000000000000000000000000000000000000000"){
-                            owner = "None";
-                        }
-    
-                        $("#oper-grid-owner").html(owner);
-                        $("#oper-grid-state").html(GridStateEng[gridState]);
-
-                        if(gridState == 0 && owner != web3.eth.coinbase){
-                            $("#buy-grid").show();
-                        } else {
-                            $("#buy-grid").hide();
-                        }
-
-                        if(owner == web3.eth.coinbase){
-                            $("#sell-grid").show();
-                        } else {
-                            $("#sell-grid").hide();
-                        }
-                        $("#oper-grid-price").html(price + " ETH");
-
-                        //adjust the camera
-                        if(window.gridService){
-                            var center = window.gridService.gridCenterInDegree(grid_idx);
-
-                            viewer.camera.flyTo({
-                                destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 1500000.0)
-                            })
-                        }
-                    }
-                });
+                galaxy.grid_selected(grid_idx);
             });
 
             $("#buy-grid-btn").click(function(){
