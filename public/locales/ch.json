@@ -9,8 +9,8 @@
 	"latitude": "纬度",
 	"grid": "领地号",
 	"address": "地址",
-    "status": "总览",
-    "player status": "玩家信息",
+	"status": "总览",
+	"player status": "玩家信息",
 	"owned grids": "拥有领地",
 	"earns": "收益",
 	"operation board": "操作面板",
@@ -18,5 +18,6 @@
 	"current state": "状态",
 	"current price": "价格",
 	"contract": "合约",
-	"Hello World": "Hello World"
+	"my position": "我的位置",
+	"language": "语言"
 }

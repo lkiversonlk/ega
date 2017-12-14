@@ -1,16 +1,24 @@
 <canvas id="canvas"></canvas>
 
-<nav class="navbar navbar-default " role="navigation">
-    <div class="container">
+<nav class="navbar navbar-galaxy" role="navigation">
+    <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Test</a>
+            <a class="navbar-brand" href="#">EEGalaxy</a>
         </div>
         <div class="pull-right">
             <ul class="nav navbar-nav">
-                <li><a href="#" id="network"></a></li>
+                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span id="network"></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">{{t "contract"}}</a></li>
+                    </ul>
+                </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        Language
+                        {{t "language"}}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -121,7 +129,10 @@
             <div class="panel panel-default panel-transparent">
 
                 <div class="panel-heading">
-                    {{t "player status"}}
+                    {{t "player status"}} 
+
+                    <button class="btn btn-primary" id="player-location">{{t "my position"}}</button>
+
                 </div>
                 <div class="panel-body">
                     <div>
@@ -158,9 +169,6 @@
                         <select id="player-grids-list"></select>
                     </div>
 
-                    <div>
-                        <button class="btn btn-info" id="player-location">My position</button>
-                    </div>
                 </div>
             </div>
             <div class="panel panel-default panel-transparent">
@@ -214,6 +222,25 @@
         </div>
     </div>
 </div>
+<script
+        src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="/stylesheets/style.css">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<style>
+    @import url(cesium/Widgets/widgets.css);
+
+    #galaxy {
+        height: 700px;
+    }
+</style>
 <script src="cesium/Cesium.js"></script>
 <script src="javascripts/index.js"></script>
 <script src="javascripts/Earth.js"></script>
