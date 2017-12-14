@@ -241,7 +241,12 @@
         height: 700px;
     }
 </style>
-<script src="cesium/Cesium.js"></script>
+
+<script type="text/javascript">
+    window.CESIUM_BASE_URL = '/cesium'
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
+<!-- <script src="cesium/Cesium.js"></script>-->
 <script src="javascripts/index.js"></script>
 <script src="javascripts/Earth.js"></script>
 <script src="javascripts/contract.js"></script>
