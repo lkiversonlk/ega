@@ -19,5 +19,10 @@
 	"current price": "价格",
 	"contract": "合约",
 	"my position": "我的位置",
-	"language": "语言"
+	"language": "语言",
+	"claim": "领取",
+	"grids": "领地",
+	"SET": "SET",
+	"set grid label": "set grid label",
+	"set grid picture": "set grid picture"
 }

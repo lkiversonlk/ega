@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    Cesium.BingMapsApi.defaultKey = 'AihaXS6TtE_olKOVdtkMenAMq1L5nDlnU69mRtNisz1vZavr1HhdqGRNkB2Bcqvs'; // For use with this application only
+    Cesium.BingMapsApi.defaultKey = 'At36HWsCzUCdp9mDZXKXChHywJ4Rzt7OHdw-VLodUMknjJVR5VVS-E-BCanlX8W-'; // For use with this application only
 
     //////////////////////////////////////////////////////////////////////////
     // Creating the Viewer
@@ -9,6 +9,17 @@
 
     // var viewer = new Cesium.Viewer('cesiumContainer');
     //
+    /*
+    var viewer = new Cesium.Viewer('galaxy', {
+        imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+            url : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+        }),
+        scene3DOnly: true,
+        selectionIndicator: false,
+        baseLayerPicker: false,
+        animation: false,
+        timeline: false
+    });*/
     var viewer = new Cesium.Viewer('galaxy', {
         scene3DOnly: true,
         selectionIndicator: false,
@@ -293,6 +304,10 @@
         }
     )*/
 
+    $("#buy-grid").hide();
+    $("#sell-grid").hide();   
+    $("#oper-grid").hide();
+
     window.addEventListener('load', function() {
         // Checking if Web3 has been injected by the browser (Mist/MetaMask)
         if (typeof web3 !== 'undefined') {
@@ -312,8 +327,7 @@
       
         var earth = window.earth = InitEarthContract(web3, registryAddresses[web3.version.network]);
         $("#status-contract").html(registryAddresses[web3.version.network]);
-        $("#buy-grid").hide();
-        $("#sell-grid").hide();   
+
         
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
@@ -501,8 +515,10 @@
 
                     if(owner == web3.eth.coinbase){
                         $("#sell-grid").show();
+                        $("#oper-grid").show();
                     } else {
                         $("#sell-grid").hide();
+                        $("#oper-grid").hide();
                     }
                     $("#oper-grid-price").html(price + " ETH");
 
@@ -516,6 +532,38 @@
                     }
                 }
             });
+        }
+
+        galaxy.set_label = function(lng, lat, height, text){
+            var entity = viewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(lng, lat, height),
+                label : {
+                    text: text,
+                    fillColor : Cesium.Color.BLUE,
+                    sizeInMeters : true                    
+                }
+            });
+            entity.label.scale = 1.0
+        }
+
+        galaxy.set_grid_picture = function(grid, height, picture_url){
+            if(!window.gridService){
+                
+            } else {
+                var points = gridService.fromGridIndexToDegrees(grid);
+                var gridPic = viewer.entities.add(
+                    {
+                        name: "grid_picture",
+                        polygon: {
+                            height: 1000,
+                            material: picture_url,
+                            outline: true,
+                            hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
+                        }
+                    }
+                );
+                gridMark.polygon.show = true;
+            }
         }
 
         galaxy.init_mouse_event_handler = function(){
@@ -683,6 +731,48 @@
                         destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000000.0)
                     });
                 });
+            })
+
+            $("#player-grids-list").on('change', function(){
+                $("[name=grid-idx]").val(this.value);                
+                galaxy.grid_selected(this.value);
+            })
+
+            $("#player-claim").click(function(){
+                earth.GetEarn(function(error, tx){
+                    if(error){
+                        //TODO:
+                    } else {
+
+                    }
+                });
+            })
+
+            $("#set-grid-label").click(function(){
+                var text = $("#grid-label").val();
+                var grid = $("[name=grid-idx]").val();                
+
+                if(window.gridService){
+                    if(text.length == 0){
+    
+                    } else {
+                        var center = window.gridService.gridCenterInDegree(grid);
+                        galaxy.set_label(center.lng, center.lat, 100000, text);
+                    }
+                }
+            });
+
+            $("#set-grid-picture").click(function(){
+                var url = $("#grid-picture").val();
+                var grid = $("[name=grid-idx]").val();                
+
+                if(window.gridService){
+                    if(url.length == 0){
+    
+                    } else {
+                        galaxy.set_grid_picture(grid, 100000, url);
+                    }
+                }
             })
         }
 

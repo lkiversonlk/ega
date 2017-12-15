@@ -139,36 +139,34 @@
                         <label>
                             address
                         </label>
-                        <div id="player-address">
+                        <span id="player-address">
 
-                        </div>
+                        </span>
+                    </div>
+
+                    
+
+                    <div>
+                        <label>
+                            {{t "earns"}}
+                        </label>
+                        <span id="player-earns">
+
+                        </span>
+                        <button id="player-claim" class="btn btn-primary">
+                            {{t "claim"}}
+                        </button>
                     </div>
 
                     <div>
                         <label>
                             {{t "owned grids"}}
                         </label>
-                        <div id="player-grids-count">
+                        <span id="player-grids-count">
 
-                        </div>
+                        </span>
+                        <select id="player-grids-list" class="form-control"></select>
                     </div>
-
-                    <div>
-                        <label>
-                            {{t "earns"}}
-                        </label>
-                        <div id="player-earns">
-
-                        </div>
-                    </div>
-
-                    <div>
-                        <label>
-                            your grids
-                        </label>
-                        <select id="player-grids-list"></select>
-                    </div>
-
                 </div>
             </div>
             <div class="panel panel-default panel-transparent">
@@ -216,6 +214,21 @@
                             <br/>
                             <button id="sell-grid-btn" class="btn btn-danger col-xs-12">Sell this grid</button>
                         </div>
+
+                        <div id="oper-grid" class="form-group">
+
+                            <!--
+                            <div class="input-group">
+                                <input id="grid-label" type="text" placeholder='{{t "set grid label"}}' maxlength="10" class="form-control">
+                                <span id="set-grid-label" class="input-group-addon">{{t "SET"}}</span>
+                            </div>
+                            -->
+
+                            <div class="input-group">
+                                <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
+                                <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -246,7 +259,6 @@
     window.CESIUM_BASE_URL = '/cesium'
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
-<!-- <script src="cesium/Cesium.js"></script>-->
 <script src="javascripts/index.js"></script>
 <script src="javascripts/Earth.js"></script>
 <script src="javascripts/contract.js"></script>

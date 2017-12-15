@@ -80,8 +80,8 @@ Grid.prototype.drawGrids = function(viewer){
         var line = viewer.entities.add({
             polyline: {
                 followSurface: true,
-                width: 1,
-                material: Cesium.Color.GREEN,
+                width: 0.1,
+                material: Cesium.Color.GRAY,
                 positions: pos
             }
         })
@@ -101,8 +101,8 @@ Grid.prototype.drawGrids = function(viewer){
         var line = viewer.entities.add({
             polyline: {
                 followSurface: true,
-                width: 1,
-                material: Cesium.Color.GREEN,
+                width: 0.1,
+                material: Cesium.Color.GRAY,
                 positions: pos
             }
         });
