@@ -1,7 +1,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <link rel="stylesheet" href="/stylesheets/style.css">
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/javascripts/avatar.css">
 <style>
     @import url(cesium/Widgets/widgets.css);
@@ -102,28 +102,16 @@
 
                 <div class="panel-heading">
                     {{t "player board"}} 
+                    <span id="player-address">
 
-                    <span class="glyphicon glyphicon-screenshot" id="player-location"></span>
+                    </span>
+                    <span class="glyphicon glyphicon-screenshot pull-right" id="player-location"></span>
 
                 </div>
                 <div class="panel-body">
                     <div id="player-avatar" class="avatar-upload">
                 		<img >
                 	</div>
-                    <div>
-                        
-                    </div>
-                    <div>
-                        <label>
-                            address
-                        </label>
-                        <span id="player-address">
-
-                        </span>
-                    </div>
-
-                    
-
                     <div>
                         <label>
                             {{t "earns"}}
@@ -148,111 +136,114 @@
                 </div>
             </div>
         </div>
+
+        <!-- ========================================================================== -->
+        
+        
         <div id="galaxy" class="col-md-7">
 
         </div>
 
+
+
+        <!-- ========================================================================== -->
+
         <div id="control-panel" class="col-md-3">
             <div class="panel panel-default panel-transparent">
                 <div class="panel-heading">
-                    {{t "grid status"}} 
+                    {{t "grid panel"}} 
+                    <span id="mouse-grid"></span>
+                    <span class="pull-right">
+                        {{t "grid owner"}}
+                        <span id="grid-owner">
+
+                        </span>
+                    </span>
+                    
                 </div>
                 <div class="panel-body">
                     <div class="row">
                     </div>
                     <div class="row">
-                        <div class="col-xs-6">
-                            <div>
-                                    <label>
-                                        {{t "longitude"}}
-                                    </label>
-                                    <span id="mouse-lon">
-
-                                    </span>
-                                </div>
+                        <div class="col-xs-5">
+                            <img id="grid-lord-avatar">
                         </div>
-                         <div class="col-xs-6">
-                             <div>
-                                    <label>
-                                        {{t "latitude"}}
-                                    </label>
-                                    <span id="mouse-lat">
-
-                                    </span>
-                                </div>
-                        </div>                       
-                    </div>
-                    <div>
-                        <label>
-                            {{t "grid"}}
-                        </label>
-                        <span id="mouse-grid">
-
-                            </span>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="panel panel-default panel-transparent">
-                <div class="panel-heading">
-                    {{t "operation board"}}
-                </div>
-                <div class="panel-body">
-                    <div>
-                        <div class="form-group">
-                            <label for="grid-idx">
-                                Grid index
-                            </label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" name="grid-idx">
-                                <span id="search-grid" class="input-group-addon success"><span
-                                        class="glyphicon glyphicon-ok"></span></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
+                        <div class="col-xs-7">
                             <div>
-                                <label>{{t "current owner"}}</label>
-                                <span id="oper-grid-owner"></span>
-                            </div>
+                                <label>
+                                    {{t "longitude"}}
+                                </label>
+                                <span id="mouse-lon">
 
+                                </span>
+                            </div>
                             <div>
-                                <label>{{t "current state"}}</label>
-                                <span id="oper-grid-state"></span>
+                                <label>
+                                    {{t "latitude"}}
+                                </label>
+                                <span id="mouse-lat">
+
+                                </span>
+                            </div>
+                            <div>
+                                <label>
+                                    {{t "grid status"}}
+                                </label>
+                                <span id="grid-status">
+                                    
+                                </span>
                             </div>
                             <div>
                                 <label>{{t "current price"}}</label>
                                 <span id="oper-grid-price"></span>
                             </div>
                         </div>
+                                             
+                    </div>
 
+                </div>
+            </div>
+
+            
+            <div class="panel panel-default panel-transparent">
+                <div class="panel-heading">
+                        <!-- <label for="firstname" class="col-sm-4 control-label">{{t "operation board"}}</label> -->
+                    <div class="col-sm-12 input-group">
+                        <input type="number" class="form-control" placeholder='{{t "enter grid index"}}' name="grid-idx">
+                        <span id="search-grid" class="input-group-addon success"><span
+                                class="glyphicon glyphicon-ok"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="input-group">
+                                
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div>
                         <div id="buy-grid" class="form-group">
                             <button id="buy-grid-btn" class="btn btn-success col-xs-12">Buy this grid</button>
                         </div>
 
                         <div id="sell-grid" class="form-group">
                             <div class="input-group">
-                                <input type="number" class="form-control" name="grid-sell-price">
-                                <span class="input-group-addon">ETH</span>
+                                <span class="input-group-addon">{{t "sell grid"}}</span>
+                                <input type="number" name="grid-sell-price" placeholder='{{t "enter sell price"}}' class="form-control">
+                                <span id="sell-grid-btn" class="input-group-addon">ETH
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </span>
                             </div>
-                            <br/>
-                            <button id="sell-grid-btn" class="btn btn-danger col-xs-12">Sell this grid</button>
                         </div>
 
-                        <div id="oper-grid" class="form-group">
+                        
+                    </div>
+                </div>
 
-                            <!--
-                            <div class="input-group">
-                                <input id="grid-label" type="text" placeholder='{{t "set grid label"}}' maxlength="10" class="form-control">
-                                <span id="set-grid-label" class="input-group-addon">{{t "SET"}}</span>
-                            </div>
-                            -->
-
-                            <div class="input-group">
-                                <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
-                                <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
-                            </div>
+                <div class="panel-body">
+                    <div id="oper-grid" class="form-group">
+                        <div class="input-group">
+                            <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
+                            <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
                         </div>
                     </div>
                 </div>
