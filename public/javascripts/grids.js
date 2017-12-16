@@ -13,6 +13,7 @@ function Grid(size){
     this.lng_per_grid = 360 / size;
 
     this.grid_lines = [];
+    this.grid_image_mark = {};
 }
 
 var TILE_SIZE = 256;
@@ -185,6 +186,27 @@ Grid.prototype.gridCenterInDegree = function(grid_idx){
 
 Grid.prototype.destory = function(){
 
+}
+
+Grid.prototype.setGridImageTmp = function(grid, image_url, viewer){
+    if(this.grid_image_mark.hasOwnProperty(grid)){
+        //change the material
+        this.grid_image_mark[grid].polygon.material = image_url;
+    } else {
+        var points = gridService.fromGridIndexToDegrees(grid);
+        var gridPic = viewer.entities.add(
+            {
+                name: "grid_picture",
+                polygon: {
+                    height: 10000,
+                    material: image_url,
+                    outline: true,
+                    hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
+                }
+            }
+        );
+        this.grid_image_mark[grid] = gridPic;
+    }
 }
 
 if(typeof(module) != "undefined"){

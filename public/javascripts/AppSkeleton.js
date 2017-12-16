@@ -306,7 +306,7 @@
 
     $("#buy-grid").hide();
     $("#sell-grid").hide();   
-    $("#oper-grid").hide();
+    //$("#oper-grid").hide();
 
     function shortSpellAddress(addr){
         return addr.substr(0,9) + "...";
@@ -530,10 +530,10 @@
 
                     if(owner == web3.eth.coinbase){
                         $("#sell-grid").show();
-                        $("#oper-grid").show();
+                        //$("#oper-grid").show();
                     } else {
                         $("#sell-grid").hide();
-                        $("#oper-grid").hide();
+                        //$("#oper-grid").hide();
                     }
                     $("#oper-grid-price").html(price + " ETH");
 
@@ -565,19 +565,7 @@
             if(!window.gridService){
                 
             } else {
-                var points = gridService.fromGridIndexToDegrees(grid);
-                var gridPic = viewer.entities.add(
-                    {
-                        name: "grid_picture",
-                        polygon: {
-                            height: 10000,
-                            material: "images/girl.jpg",
-                            outline: true,
-                            hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
-                        }
-                    }
-                );
-                gridMark.polygon.show = true;
+                window.gridService.setGridImageTmp(grid, "images/girl.jpg", viewer);
             }
         }
 
@@ -791,16 +779,8 @@
             });
 
             $("#set-grid-picture").click(function(){
-                var url = $("#grid-picture").val();
                 var grid = $("[name=grid-idx]").val();                
-
-                if(window.gridService){
-                    if(url.length == 0){
-    
-                    } else {
-                        galaxy.set_grid_picture(grid, 100000, url);
-                    }
-                }
+                galaxy.set_grid_picture(grid, 100000, viewer);
             })
         }
 
