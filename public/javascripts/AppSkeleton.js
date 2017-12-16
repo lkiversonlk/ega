@@ -33,10 +33,10 @@
     //////////////////////////////////////////////////////////////////////////
 
     // Add Bing imagery
-    // viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
-    //     url : 'https://dev.virtualearth.net',
-    //     mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
-    // }));
+    viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+        url : 'https://dev.virtualearth.net',
+        mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
+    }));
 
     //////////////////////////////////////////////////////////////////////////
     // Loading Terrain
@@ -316,22 +316,27 @@
           if(registryAddresses.hasOwnProperty(web3.version.network)){
               $("#network").html(networkName[web3.version.network]);
           } else {
-              $("#status-network").html("Unknown");
+              $("#network").html("Unknown Network");
               return;
           }
         } else {
           console.log('No web3? You should consider trying MetaMask!')
-          $("#status-network").html("no ether network found");
+          $("#network").html("no ether network found");
           return;
         }
       
         var earth = window.earth = InitEarthContract(web3, registryAddresses[web3.version.network]);
         $("#status-contract").html(registryAddresses[web3.version.network]);
 
-        
+        new AvatarUpload({
+            el: document.querySelector('.avatar-upload'),
+            uploadUrl: '/local',
+            pretendUpload: true            
+        });
+
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
-
+        
     });
 
     
@@ -473,7 +478,7 @@
             {
                 name: "grid_selected",
                 polygon: {
-                    height: 1000,
+                    height: 10000,
                     material: Cesium.Color.BLUE.withAlpha(0.5),
                     outline: false
                 }
@@ -555,8 +560,8 @@
                     {
                         name: "grid_picture",
                         polygon: {
-                            height: 1000,
-                            material: picture_url,
+                            height: 10000,
+                            material: "images/girl.jpg",
                             outline: true,
                             hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
                         }

@@ -1,3 +1,15 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="/stylesheets/style.css">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/javascripts/avatar.css">
+<style>
+    @import url(cesium/Widgets/widgets.css);
+
+    #galaxy {
+        height: 700px;
+    }
+</style>
 <canvas id="canvas"></canvas>
 
 <nav class="navbar navbar-galaxy" role="navigation">
@@ -88,53 +100,19 @@
             </div>
             <div class="panel panel-default panel-transparent">
 
-                <div class="panel-body">
-                    <div>
-                                <div>
-                                    <label>
-                                        {{t "longitude"}}
-                                    </label>
-                                    <span id="mouse-lon">
-
-                                    </span>
-                                </div>
-                        <div>
-                                    <label>
-                                        {{t "latitude"}}
-                                    </label>
-                                    <span id="mouse-lat">
-
-                                    </span>
-                                </div>
-                    </div>
-
-                    <div>
-                        <label>
-                            {{t "grid"}}
-                        </label>
-                        <span id="mouse-grid">
-
-                            </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="galaxy" class="col-md-7">
-
-        </div>
-
-        <div id="control-panel" class="col-md-3">
-
-
-            <div class="panel panel-default panel-transparent">
-
                 <div class="panel-heading">
-                    {{t "player status"}} 
+                    {{t "player board"}} 
 
-                    <button class="btn btn-primary" id="player-location">{{t "my position"}}</button>
+                    <span class="glyphicon glyphicon-screenshot" id="player-location"></span>
 
                 </div>
                 <div class="panel-body">
+                    <div class="avatar-upload">
+                		<img src="placekitten.jpg">
+                	</div>
+                    <div>
+                        
+                    </div>
                     <div>
                         <label>
                             address
@@ -169,6 +147,53 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="galaxy" class="col-md-7">
+
+        </div>
+
+        <div id="control-panel" class="col-md-3">
+            <div class="panel panel-default panel-transparent">
+                <div class="panel-heading">
+                    {{t "grid status"}} 
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div>
+                                    <label>
+                                        {{t "longitude"}}
+                                    </label>
+                                    <span id="mouse-lon">
+
+                                    </span>
+                                </div>
+                        </div>
+                         <div class="col-xs-6">
+                             <div>
+                                    <label>
+                                        {{t "latitude"}}
+                                    </label>
+                                    <span id="mouse-lat">
+
+                                    </span>
+                                </div>
+                        </div>                       
+                    </div>
+                    <div>
+                        <label>
+                            {{t "grid"}}
+                        </label>
+                        <span id="mouse-grid">
+
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            
             <div class="panel panel-default panel-transparent">
                 <div class="panel-heading">
                     {{t "operation board"}}
@@ -242,23 +267,17 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" href="/stylesheets/style.css">
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<style>
-    @import url(cesium/Widgets/widgets.css);
-
-    #galaxy {
-        height: 700px;
-    }
-</style>
-
 <script type="text/javascript">
     window.CESIUM_BASE_URL = '/cesium'
 </script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script> -->
+<!-- <script src="/bower/bootstrap-fileinput/js/fileinput.js"></script> -->
+<script src="/javascripts/avatar.js"></script>
+<script src="/cesium/Cesium.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script> -->
 <script src="javascripts/index.js"></script>
 <script src="javascripts/Earth.js"></script>
 <script src="javascripts/contract.js"></script>

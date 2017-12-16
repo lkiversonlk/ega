@@ -24,5 +24,7 @@
 	"grids": "领地",
 	"SET": "SET",
 	"set grid label": "set grid label",
-	"set grid picture": "set grid picture"
+	"set grid picture": "set grid picture",
+	"grid status": "grid status",
+	"player board": "player board"
 }
