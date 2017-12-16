@@ -598,6 +598,8 @@
                                 } else {
                                     var owner = result[1];
                                     $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
+                                    var gridState = result[0];
+                                    $("#grid-status").html(GridStateEng[gridState]);
                                 }
                             })
 
