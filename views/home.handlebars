@@ -1,7 +1,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <link rel="stylesheet" href="/stylesheets/style.css">
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/javascripts/avatar.css">
 <style>
     @import url(cesium/Widgets/widgets.css);
@@ -102,28 +102,16 @@
 
                 <div class="panel-heading">
                     {{t "player board"}} 
+                    <span id="player-address">
 
-                    <span class="glyphicon glyphicon-screenshot" id="player-location"></span>
+                    </span>
+                    <span class="glyphicon glyphicon-screenshot pull-right" id="player-location"></span>
 
                 </div>
                 <div class="panel-body">
                     <div id="player-avatar" class="avatar-upload">
                 		<img >
                 	</div>
-                    <div>
-                        
-                    </div>
-                    <div>
-                        <label>
-                            address
-                        </label>
-                        <span id="player-address">
-
-                        </span>
-                    </div>
-
-                    
-
                     <div>
                         <label>
                             {{t "earns"}}
@@ -148,14 +136,30 @@
                 </div>
             </div>
         </div>
+
+        <!-- ========================================================================== -->
+        
+        
         <div id="galaxy" class="col-md-7">
 
         </div>
 
+
+
+        <!-- ========================================================================== -->
+
         <div id="control-panel" class="col-md-3">
             <div class="panel panel-default panel-transparent">
                 <div class="panel-heading">
-                    {{t "grid status"}} 
+                    {{t "grid panel"}} 
+                    <span id="mouse-grid"></span>
+                    <span class="pull-right">
+                        {{t "grid owner"}}
+                        <span id="grid-owner">
+
+                        </span>
+                    </span>
+                    
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -183,14 +187,6 @@
                             </div>
                             <div>
                                 <label>
-                                {{t "grid"}}
-                                </label>
-                                <span id="mouse-grid">
-
-                                </span>
-                            </div>
-                            <div>
-                                <label>
                                     {{t "grid status"}}
                                 </label>
                                 <span id="grid-status">
@@ -207,19 +203,22 @@
             
             <div class="panel panel-default panel-transparent">
                 <div class="panel-heading">
-                    {{t "operation board"}}
+                        <!-- <label for="firstname" class="col-sm-4 control-label">{{t "operation board"}}</label> -->
+                    <div class="col-sm-12 input-group">
+                        <input type="number" class="form-control" placeholder='{{t "enter grid index"}}' name="grid-idx">
+                        <span id="search-grid" class="input-group-addon success"><span
+                                class="glyphicon glyphicon-ok"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="input-group">
+                                
+                    </div>
                 </div>
                 <div class="panel-body">
                     <div>
                         <div class="form-group">
-                            <label for="grid-idx">
-                                Grid index
-                            </label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" name="grid-idx">
-                                <span id="search-grid" class="input-group-addon success"><span
-                                        class="glyphicon glyphicon-ok"></span></span>
-                            </div>
+                            
                         </div>
 
                         <div class="form-group">

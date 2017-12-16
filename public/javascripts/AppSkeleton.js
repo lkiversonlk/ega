@@ -21,7 +21,7 @@
         timeline: false
     });*/
     var viewer = new Cesium.Viewer('galaxy', {
-        scene3DOnly: true,
+        //scene3DOnly: true,
         selectionIndicator: false,
         baseLayerPicker: false,
         animation: false,
@@ -308,6 +308,10 @@
     $("#sell-grid").hide();   
     $("#oper-grid").hide();
 
+    function shortSpellAddress(addr){
+        return addr.substr(0,9) + "...";
+    }
+
     window.addEventListener('load', function() {
         // Checking if Web3 has been injected by the browser (Mist/MetaMask)
         if (typeof web3 !== 'undefined') {
@@ -436,7 +440,8 @@
                 if(err){
                     //TODO:
                 } else {
-                    $("#player-address").html(web3.eth.coinbase);
+                    $("#player-address").html(shortSpellAddress(web3.eth.coinbase));
+                    $("#player-address").prop('title', web3.eth.coinbase);
                     $("#player-grids-count").html(count);
     
                     for(var i = 0; i < count; i ++){
@@ -482,8 +487,8 @@
                 name: "grid_selected",
                 polygon: {
                     height: 10000,
-                    material: Cesium.Color.BLUE.withAlpha(0.5),
-                    outline: false
+                    material: Cesium.Color.GREY.withAlpha(0.2),
+                    outline: true,
                 }
             }
         );
@@ -600,11 +605,12 @@
                                     $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
                                     var gridState = result[0];
                                     $("#grid-status").html(GridStateEng[gridState]);
+                                    $("#grid-owner").html(shortSpellAddress(owner));
+                                    $("#grid-owner").prop("title", owner);
                                 }
                             })
 
                             $("#mouse-grid").html(grid_index);
-                    
                             $("#mouse-grid-x").html(point.x);
                             $("#mouse-grid-y").html(point.y);
 
