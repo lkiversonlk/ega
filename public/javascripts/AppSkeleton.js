@@ -329,11 +329,12 @@
         $("#status-contract").html(registryAddresses[web3.version.network]);
 
         new AvatarUpload({
-            el: document.querySelector('.avatar-upload'),
-            uploadUrl: '/local',
-            pretendUpload: true            
+            el: document.querySelector('#player-avatar'),
+            uploadUrl: '/avatar/upload',
+            uploadData: {
+                address: web3.eth.coinbase
+            }
         });
-
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
         
@@ -456,7 +457,9 @@
                 } else {
                     $("#player-earns").html(web3.fromWei(earn) + "ETH");
                 }
-            })
+            });
+
+            $("#player-avatar img").attr("src", "/avatars/" + web3.eth.coinbase);
         }
 
         galaxy.init_grid_service = function(){
