@@ -459,7 +459,7 @@
                 }
             });
 
-            $("#player-avatar img").attr("src", "/avatars/" + web3.eth.coinbase);
+            $("#player-avatar img").attr("src", "/avatar/get/" + web3.eth.coinbase);
         }
 
         galaxy.init_grid_service = function(){
