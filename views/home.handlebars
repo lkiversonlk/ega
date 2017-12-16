@@ -193,6 +193,10 @@
                                     
                                 </span>
                             </div>
+                            <div>
+                                <label>{{t "current price"}}</label>
+                                <span id="oper-grid-price"></span>
+                            </div>
                         </div>
                                              
                     </div>
@@ -217,52 +221,29 @@
                 </div>
                 <div class="panel-body">
                     <div>
-                        <div class="form-group">
-                            
-                        </div>
-
-                        <div class="form-group">
-                            <div>
-                                <label>{{t "current owner"}}</label>
-                                <span id="oper-grid-owner"></span>
-                            </div>
-
-                            <div>
-                                <label>{{t "current state"}}</label>
-                                <span id="oper-grid-state"></span>
-                            </div>
-                            <div>
-                                <label>{{t "current price"}}</label>
-                                <span id="oper-grid-price"></span>
-                            </div>
-                        </div>
-
                         <div id="buy-grid" class="form-group">
                             <button id="buy-grid-btn" class="btn btn-success col-xs-12">Buy this grid</button>
                         </div>
 
                         <div id="sell-grid" class="form-group">
                             <div class="input-group">
-                                <input type="number" class="form-control" name="grid-sell-price">
-                                <span class="input-group-addon">ETH</span>
+                                <span class="input-group-addon">{{t "sell grid"}}</span>
+                                <input type="number" name="grid-sell-price" placeholder='{{t "enter sell price"}}' class="form-control">
+                                <span id="sell-grid-btn" class="input-group-addon">ETH
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </span>
                             </div>
-                            <br/>
-                            <button id="sell-grid-btn" class="btn btn-danger col-xs-12">Sell this grid</button>
                         </div>
 
-                        <div id="oper-grid" class="form-group">
+                        
+                    </div>
+                </div>
 
-                            <!--
-                            <div class="input-group">
-                                <input id="grid-label" type="text" placeholder='{{t "set grid label"}}' maxlength="10" class="form-control">
-                                <span id="set-grid-label" class="input-group-addon">{{t "SET"}}</span>
-                            </div>
-                            -->
-
-                            <div class="input-group">
-                                <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
-                                <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
-                            </div>
+                <div class="panel-body">
+                    <div id="oper-grid" class="form-group">
+                        <div class="input-group">
+                            <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
+                            <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
                         </div>
                     </div>
                 </div>

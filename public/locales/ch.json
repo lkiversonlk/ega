@@ -29,5 +29,7 @@
 	"player board": "玩家",
 	"grid panel": "领地",
 	"enter grid index": "输入领地编号",
-	"grid owner": "领主"
+	"grid owner": "领主",
+	"sell grid": "出售",
+	"enter sell price": "enter sell price"
 }
