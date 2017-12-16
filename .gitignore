@@ -2,3 +2,4 @@ node_modules
 public/bower
 public/avatars
 .idea
+npm-debug.log
