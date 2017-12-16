@@ -29,3 +29,7 @@ body {
 .avatar-upload img {
   max-width: 100%;
 }
+
+#grid-lord-avatar {
+  max-width: 100%;
+}

@@ -586,11 +586,21 @@
                         
                         $("#mouse-lon").html(lon);
                         $('#mouse-lat').html(lat);
-                
+
                         if(window.gridService){
                             var gridService = window.gridService;
                             var point = gridService.fromLatLngToXY(lat, lon);
                             var grid_index = gridService.fromLatLngToGrid(lat, lon);
+
+                            earth.grids(grid_index, function(err, result){
+                                if(err){
+
+                                } else {
+                                    var owner = result[1];
+                                    $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
+                                }
+                            })
+
                             $("#mouse-grid").html(grid_index);
                     
                             $("#mouse-grid-x").html(point.x);
