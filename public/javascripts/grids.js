@@ -186,3 +186,7 @@ Grid.prototype.gridCenterInDegree = function(grid_idx){
 Grid.prototype.destory = function(){
 
 }
+
+if(typeof(module) != "undefined"){
+    module.exports = Grid;
+}

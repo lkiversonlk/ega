@@ -339,6 +339,8 @@
                 address: web3.eth.coinbase
             }
         });
+
+        
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
         
