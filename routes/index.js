@@ -38,7 +38,7 @@ router.post("/grid_avatar/upload", function(req, res, next){
         console.log("receive avatar");
         var address = fields.grid_idx;
         var image = files.upload;
-        var err = fs.renameSync(image.path, path.join(avatar_save_path, address));
+        var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, address));
         return res.sendStatus(200);
     });
 });

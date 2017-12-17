@@ -10,16 +10,16 @@
     // var viewer = new Cesium.Viewer('cesiumContainer');
     //
     /*
-    var viewer = new Cesium.Viewer('galaxy', {
-        imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
-            url : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
-        }),
-        scene3DOnly: true,
-        selectionIndicator: false,
-        baseLayerPicker: false,
-        animation: false,
-        timeline: false
-    });*/
+     var viewer = new Cesium.Viewer('galaxy', {
+     imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+     url : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+     }),
+     scene3DOnly: true,
+     selectionIndicator: false,
+     baseLayerPicker: false,
+     animation: false,
+     timeline: false
+     });*/
     var viewer = new Cesium.Viewer('galaxy', {
         //scene3DOnly: true,
         selectionIndicator: false,
@@ -34,7 +34,7 @@
 
     // Add Bing imagery
     viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
-        url : 'https://dev.virtualearth.net',
+        url: 'https://dev.virtualearth.net',
         mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
     }));
 
@@ -44,9 +44,9 @@
 
     // // Load STK World Terrain
     viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-        url : 'https://assets.agi.com/stk-terrain/world',
-        requestWaterMask : true, // required for water effects
-        requestVertexNormals : false // required for terrain lighting
+        url: 'https://assets.agi.com/stk-terrain/world',
+        requestWaterMask: true, // required for water effects
+        requestVertexNormals: false // required for terrain lighting
     });
     // // Enable depth testing so things behind the terrain disappear.
     viewer.scene.globe.depthTestAgainstTerrain = true;
@@ -286,23 +286,23 @@
 
     // // If the mouse is over a point of interest, change the entity billboard scale and color
     // var previousPickedEntity;
-	
+
     var scene = viewer.scene;
     //var mercator = new Cesium.WebMercatorProjection;
 
     /*
-    var entity = viewer.entities.add(
-        {
-            label: {
-                show: false,
-                showBackground: true,
-                font: '14px monospace',
-                horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
-                verticalOrigin : Cesium.VerticalOrigin.TOP,
-                pixelOffset : new Cesium.Cartesian2(15, 0)
-            }
-        }
-    )*/
+     var entity = viewer.entities.add(
+     {
+     label: {
+     show: false,
+     showBackground: true,
+     font: '14px monospace',
+     horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+     verticalOrigin : Cesium.VerticalOrigin.TOP,
+     pixelOffset : new Cesium.Cartesian2(15, 0)
+     }
+     }
+     )*/
 
     $("#buy-grid").hide();
     $("#sell-grid").hide();   
@@ -336,11 +336,11 @@
               return;
           }
         } else {
-          console.log('No web3? You should consider trying MetaMask!')
-          $("#network").html("no ether network found");
-          return;
+            console.log('No web3? You should consider trying MetaMask!')
+            $("#network").html("no ether network found");
+            return;
         }
-      
+
         var earth = window.earth = InitEarthContract(web3, registryAddresses[web3.version.network]);
         $("#status-contract").html(registryAddresses[web3.version.network]);
 
@@ -360,16 +360,12 @@
             }
         });
 
-        
+
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
-        
+
     });
 
-    
-    
-
-    
 
     //////////////////////////////////////////////////////////////////////////
     // Setup Camera Modes
@@ -422,64 +418,75 @@
     //     loadingIndicator.style.display = 'none';
     // });
 
-    function StartEarth(earth, viewer, galaxy){
-        galaxy.refresh_earth_status = function(){
-            earth.gridSold(function(err, sold){
-                if(err){
+    var changeLocale = function (locale) {
+        $.post('/locale', {
+            l: locale
+        }, function () {
+            window.location.reload();
+        });
+    };
+
+    $('#set-lan-en').click(changeLocale.bind(null, 'en'));
+    $('#set-lan-ch').click(changeLocale.bind(null, 'ch'));
+
+    function StartEarth(earth, viewer, galaxy) {
+        galaxy.refresh_earth_status = function () {
+            earth.gridSold(function (err, sold) {
+                if (err) {
                     //TODO:
                 } else {
                     $("#status-sold-grids").html(sold);
                 }
             });
 
-            earth.mapSize(function(err, size){
-                if(err){
+            earth.mapSize(function (err, size) {
+                if (err) {
                     //TODO:
                 } else {
                     $("#status-total-grids").html(size * size);
                 }
             });
-        
-            earth.fee(function(err, fee){
-                if(err){
+
+            earth.fee(function (err, fee) {
+                if (err) {
                     //TODO:
                 } else {
-                    $("#status-tran-fee").html(fee/1000);
+                    $("#status-tran-fee").html(fee / 1000);
                 }
             });
-        
-            earth.minimalPrice(function(err, price){
-                if(err){
+
+            earth.minimalPrice(function (err, price) {
+                if (err) {
                     //TODO:
                 } else {
                     $("#status-min-price").html(web3.fromWei(price) + " ETH");
                 }
             });
-        }
-        
-        galaxy.refresh_player_stauts = function(){
-            earth.GridsCount(web3.eth.coinbase, function(err, count){
-                if(err){
+        };
+
+        galaxy.refresh_player_stauts = function () {
+            earth.GridsCount(web3.eth.coinbase, function (err, count) {
+                if (err) {
                     //TODO:
                 } else {
                     $("#player-address").html(shortSpellAddress(web3.eth.coinbase));
                     $("#player-address").prop('title', web3.eth.coinbase);
                     $("#player-grids-count").html(count);
-    
-                    for(var i = 0; i < count; i ++){
-                        earth.ownedGrids(web3.eth.coinbase, i, function(err, grid_idx){
-                            if(err){
+
+                    for (var i = 0; i < count; i++) {
+                        earth.ownedGrids(web3.eth.coinbase, i, function (err, grid_idx) {
+                            if (err) {
                                 //TODO:
                             } else {
-                                $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');                            
+                                $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');
                             }
                         });
                     }
                 }
             });
 
-            earth.earns(web3.eth.coinbase, function(err, earn){
-                if(err){
+            earth.earns(web3.eth.coinbase, function (err, earn) {
+                if (err) {
 
                 } else {
                     $("#player-earns").html(web3.fromWei(earn) + "ETH");
@@ -489,12 +496,12 @@
             $("#player-avatar img").attr("src", "/avatar/get/" + web3.eth.coinbase);
         }
 
-        galaxy.init_grid_service = function(){
-            earth.mapSize(function(err, size){
-                if(err){
+        galaxy.init_grid_service = function () {
+            earth.mapSize(function (err, size) {
+                if (err) {
                     //TODO:
                 } else {
-                    if(window.gridService){
+                    if (window.gridService) {
 
                     }
 
@@ -516,39 +523,39 @@
         );
         var show_grid_mark = true;
 
-        galaxy.draw_mark = function(grid_idx){
-            if(!window.gridService){
+        galaxy.draw_mark = function (grid_idx) {
+            if (!window.gridService) {
 
             } else {
                 var points = gridService.fromGridIndexToDegrees(grid_index);
                 gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
                 gridMark.polygon.show = true;
             }
-        }
+        };
 
-        galaxy.grid_selected = function(grid_idx){
-            earth.grids(grid_idx, function(err, result){
-                if(err){
+        galaxy.grid_selected = function (grid_idx) {
+            earth.grids(grid_idx, function (err, result) {
+                if (err) {
                     //TODO: error
                 } else {
                     var gridState = result[0];
                     var owner = result[1];
                     var price = parseFloat(web3.fromWei(result[2]));
 
-                    if(owner == "0x0000000000000000000000000000000000000000"){
+                    if (owner == "0x0000000000000000000000000000000000000000") {
                         owner = "None";
                     }
 
                     $("#oper-grid-owner").html(owner);
                     $("#oper-grid-state").html(GridStateEng[gridState]);
 
-                    if(gridState == 0 && owner != web3.eth.coinbase){
+                    if (gridState == 0 && owner != web3.eth.coinbase) {
                         $("#buy-grid").show();
                     } else {
                         $("#buy-grid").hide();
                     }
 
-                    if(owner == web3.eth.coinbase){
+                    if (owner == web3.eth.coinbase) {
                         $("#sell-grid").show();
                         //$("#oper-grid").show();
                     } else {
@@ -558,7 +565,7 @@
                     $("#oper-grid-price").html(price + " ETH");
 
                     //adjust the camera
-                    if(window.gridService){
+                    if (window.gridService) {
                         var center = window.gridService.gridCenterInDegree(grid_idx);
 
                         viewer.camera.flyTo({
@@ -567,38 +574,38 @@
                     }
                 }
             });
-        }
+        };
 
-        galaxy.set_label = function(lng, lat, height, text){
+        galaxy.set_label = function (lng, lat, height, text) {
             var entity = viewer.entities.add({
                 position: Cesium.Cartesian3.fromDegrees(lng, lat, height),
-                label : {
+                label: {
                     text: text,
-                    fillColor : Cesium.Color.BLUE,
-                    sizeInMeters : true                    
+                    fillColor: Cesium.Color.BLUE,
+                    sizeInMeters: true
                 }
             });
             entity.label.scale = 1.0
-        }
+        };
 
-        galaxy.set_grid_picture = function(grid, height, picture_url){
-            if(!window.gridService){
-                
+        galaxy.set_grid_picture = function (grid, height, picture_url) {
+            if (!window.gridService) {
+
             } else {
                 window.gridService.setGridImageTmp(grid, "images/girl.jpg", viewer);
             }
-        }
+        };
 
-        galaxy.init_mouse_event_handler = function(){
+        galaxy.init_mouse_event_handler = function () {
             var handler = viewer.screenSpaceEventHandler;
             handler.setInputAction(
                 function (movement) {
                     var cartesian = viewer.camera.pickEllipsoid(movement.endPosition, scene.globe.ellipsoid);
-                    if(cartesian) {
+                    if (cartesian) {
                         var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
                         var lon = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
                         var lat = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
-                        
+
                         $("#mouse-lon").html(lon);
                         $('#mouse-lat').html(lat);
 
@@ -624,7 +631,7 @@
                             $("#mouse-grid-x").html(point.x);
                             $("#mouse-grid-y").html(point.y);
 
-                            if(show_grid_mark){
+                            if (show_grid_mark) {
                                 var points = gridService.fromGridIndexToDegrees(grid_index);
                                 gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
                                 gridMark.polygon.show = true;
@@ -633,24 +640,24 @@
                     } else {
                         gridMark.polygon.show = false;
                     }
-                }, 
+                },
                 Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
-            handler.setInputAction(function(event){
+            handler.setInputAction(function (event) {
                 var cartesian = viewer.camera.pickEllipsoid(event.position, scene.globe.ellipsoid);
-                if(cartesian) {
+                if (cartesian) {
                     var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
                     var lon = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
                     var lat = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
-                    
-                    if(window.gridService){
+
+                    if (window.gridService) {
                         var grid_index = gridService.fromLatLngToGrid(lat, lon);
                         $("[name=grid-idx]").val(grid_index);
                         galaxy.grid_selected(grid_index);
                     }
-                } 
+                }
             }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-        }
+        };
 
         var GridStateEng = [
             "On Sell",
@@ -658,86 +665,86 @@
             "Forbidden"
         ];
 
-        galaxy.init_page_event = function(){
-            $("#search-grid").click(function(){
+        galaxy.init_page_event = function () {
+            $("#search-grid").click(function () {
                 var grid_idx = parseInt($("[name=grid-idx]").val());
-                if(isNaN(grid_idx)) return;
-        
+                if (isNaN(grid_idx)) return;
+
                 galaxy.grid_selected(grid_idx);
             });
 
-            $("#buy-grid-btn").click(function(){
+            $("#buy-grid-btn").click(function () {
                 var grid_idx = parseInt($("[name=grid-idx]").val());
-                if(isNaN(grid_idx)) return;
-                
-                if(window.gridService){
+                if (isNaN(grid_idx)) return;
+
+                if (window.gridService) {
                     var point = window.gridService.fromGridIndexToXY(grid_idx);
-                    
-                                    earth.grids(grid_idx, function(err, result){
-                                        if(err){
-                    
+
+                    earth.grids(grid_idx, function (err, result) {
+                        if (err) {
+
+                        } else {
+                            var gridState = result[0];
+                            if (gridState == 0) {
+                                var price = result[2];
+                                if (price == 0) {
+                                    earth.minimalPrice(function (err, price) {
+                                        if (err) {
+
                                         } else {
-                                            var gridState = result[0];
-                                            if(gridState == 0){
-                                                var price = result[2];
-                                                if(price == 0){
-                                                    earth.minimalPrice(function(err, price){
-                                                        if(err){
-                    
-                                                        } else {
-                                                            earth.BuyGrid(
-                                                                point.x, 
-                                                                point.y, 
-                                                                {
-                                                                    value: price,
-                                                                    gas: 470000
-                                                                },
-                                                                function(err, res){
-                                                                    console.log(err, res);
-                                                                }
-                                                            );
-                                                        }
-                                                    })
-                                                } else {
-                                                    earth.BuyGrid(
-                                                        point.x, 
-                                                        point.y, 
-                                                        {
-                                                            value: price,
-                                                            gas: 470000
-                                                        },
-                                                        function(err, res){
-                                                            console.log(err, res);
-                                                        }
-                                                    );
+                                            earth.BuyGrid(
+                                                point.x,
+                                                point.y,
+                                                {
+                                                    value: price,
+                                                    gas: 470000
+                                                },
+                                                function (err, res) {
+                                                    console.log(err, res);
                                                 }
-                                            } else {
-                                                //can't
-                                            }
+                                            );
                                         }
                                     })
-                }  
+                                } else {
+                                    earth.BuyGrid(
+                                        point.x,
+                                        point.y,
+                                        {
+                                            value: price,
+                                            gas: 470000
+                                        },
+                                        function (err, res) {
+                                            console.log(err, res);
+                                        }
+                                    );
+                                }
+                            } else {
+                                //can't
+                            }
+                        }
+                    })
+                }
             });
 
-            $("#sell-grid-btn").click(function(){
+            $("#sell-grid-btn").click(function () {
                 var grid_idx = parseInt($("[name=grid-idx]").val());
-                if(isNaN(grid_idx)) return;
+                if (isNaN(grid_idx)) return;
                 var price = parseFloat($("[name=grid-sell-price]").val());
-                if(isNaN(price)) return;
+                if (isNaN(price)) return;
 
                 var point = gridService.fromGridIndexToXY(grid_idx);
 
-                earth.grids(grid_idx, function(err, result){
-                    if(err){
+                earth.grids(grid_idx, function (err, result) {
+                    if (err) {
 
                     } else {
                         var owner = result[1];
 
-                        if(owner != web3.eth.coinbase){
+                        if (owner != web3.eth.coinbase) {
                             //TODO: error
                         } else {
-                            earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {gas:470000}, function(err, txid){
-                                if(err){
+                            earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {gas: 470000}, function (err, txid) {
+                                if (err) {
                                     //TODO:
                                 } else {
 
@@ -746,37 +753,37 @@
                         }
                     }
                 })
-                
+
             });
 
-            $("#check-show-grids").change(function(){
+            $("#check-show-grids").change(function () {
                 var show = $(this).prop('checked');
-                if(window.gridService){
+                if (window.gridService) {
                     window.gridService.showGrids(show);
                 }
             });
 
-            $("#check-show-mark").change(function(){
+            $("#check-show-mark").change(function () {
                 show_grid_mark = $(this).prop('checked');
                 gridMark.show = show_grid_mark;
             });
 
-            $("#player-location").click(function(){
-                navigator.geolocation.getCurrentPosition(function(position){
+            $("#player-location").click(function () {
+                navigator.geolocation.getCurrentPosition(function (position) {
                     viewer.camera.flyTo({
-                        destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000000.0)
+                        destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000000.0)
                     });
                 });
             })
 
-            $("#player-grids-list").on('change', function(){
-                $("[name=grid-idx]").val(this.value);                
+            $("#player-grids-list").on('change', function () {
+                $("[name=grid-idx]").val(this.value);
                 galaxy.grid_selected(this.value);
             })
 
-            $("#player-claim").click(function(){
-                earth.GetEarn(function(error, tx){
-                    if(error){
+            $("#player-claim").click(function () {
+                earth.GetEarn(function (error, tx) {
+                    if (error) {
                         //TODO:
                     } else {
 
@@ -784,13 +791,13 @@
                 });
             })
 
-            $("#set-grid-label").click(function(){
+            $("#set-grid-label").click(function () {
                 var text = $("#grid-label").val();
-                var grid = $("[name=grid-idx]").val();                
+                var grid = $("[name=grid-idx]").val();
 
-                if(window.gridService){
-                    if(text.length == 0){
-    
+                if (window.gridService) {
+                    if (text.length == 0) {
+
                     } else {
                         var center = window.gridService.gridCenterInDegree(grid);
                         galaxy.set_label(center.lng, center.lat, 100000, text);
@@ -799,10 +806,10 @@
             });
 
             $("#set-grid-picture").click(function(){
-                var grid = $("[name=grid-idx]").val();                
+                var grid = $("[name=grid-idx]").val();
                 galaxy.set_grid_picture(grid, 100000, viewer);
             })
-        }
+        };
 
         galaxy.refresh_earth_status();
         galaxy.refresh_player_stauts();
