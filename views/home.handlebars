@@ -7,7 +7,7 @@
     @import url(cesium/Widgets/widgets.css);
 
     #galaxy {
-        height: 700px;
+        height: 600px;
     }
 </style>
 <canvas id="canvas"></canvas>
@@ -245,8 +245,15 @@
                 <div id="oper-grid" class="panel-body">
                     <div  class="form-group">
                         <div class="input-group">
+                            
                             <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
                             <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div id="grid-avatar" class="avatar-upload">
+                		        <img src="sl">
                         </div>
                     </div>
                 </div>

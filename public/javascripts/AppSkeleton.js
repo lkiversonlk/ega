@@ -352,6 +352,14 @@
             }
         });
 
+        new AvatarUpload({
+            el: document.querySelector('#grid-avatar'),
+            uploadUrl: '/grid_avatar/upload',
+            uploadData: {
+                address: web3.eth.coinbase
+            }
+        });
+
         
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
