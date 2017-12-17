@@ -4,3 +4,5 @@ public/avatars
 avatars
 .idea
 npm-debug.log
+public/images/.DS_Store
+.DS_Store

@@ -420,7 +420,7 @@
 
     var changeLocale = function (locale) {
         $.post('/locale', {
-            l: locale
+            lan: locale
         }, function () {
             window.location.reload();
         });

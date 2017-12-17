@@ -51,6 +51,11 @@ router.get("/grid_avatar/get/:grid_idx", function(req, res, next){
     }
 });
 
+router.post('/locale', function (req, res) {
+    var lan = req.param('lan');
+    res.cookie('locale', lan || 'ch', {maxAge: 900000, httpOnly: true});
+    return res.sendStatus(200);
+});
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('home', {title: '===TEST==='});
