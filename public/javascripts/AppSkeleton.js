@@ -305,15 +305,15 @@
      )*/
 
     $("#buy-grid").hide();
-    $("#sell-grid").hide();   
+    $("#sell-grid").hide();
     //$("#oper-grid").hide();
 
-    function shortSpellAddress(addr){
-        return addr.substr(0,9) + "...";
+    function shortSpellAddress(addr) {
+        return addr.substr(0, 9) + "...";
     }
 
-    function getEtherAddress(network, address){
-        switch(network){
+    function getEtherAddress(network, address) {
+        switch (network) {
             case "1":
                 return "https://etherscan.io/address/" + address;
             case "3":
@@ -323,18 +323,18 @@
         }
     }
 
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
         // Checking if Web3 has been injected by the browser (Mist/MetaMask)
         if (typeof web3 !== 'undefined') {
-          // Use Mist/MetaMask's provider
-          window.web3 = new Web3(web3.currentProvider);
-          if(registryAddresses.hasOwnProperty(web3.version.network)){
-              $("#network").html(networkName[web3.version.network]);
-              $("#contract").prop("href", getEtherAddress(web3.version.network, registryAddresses[web3.version.network]));
-          } else {
-              $("#network").html("Unknown Network");
-              return;
-          }
+            // Use Mist/MetaMask's provider
+            window.web3 = new Web3(web3.currentProvider);
+            if (registryAddresses.hasOwnProperty(web3.version.network)) {
+                $("#network").html(networkName[web3.version.network]);
+                $("#contract").prop("href", getEtherAddress(web3.version.network, registryAddresses[web3.version.network]));
+            } else {
+                $("#network").html("Unknown Network");
+                return;
+            }
         } else {
             console.log('No web3? You should consider trying MetaMask!')
             $("#network").html("no ether network found");
@@ -428,6 +428,20 @@
 
     $('#set-lan-en').click(changeLocale.bind(null, 'en'));
     $('#set-lan-ch').click(changeLocale.bind(null, 'ch'));
+
+    var initI18n = function () {
+        var locale = window.LOCALE;
+        $.get('/locales/' + locale + '.json', function (ret) {
+            if (!ret) {
+                return;
+            }
+
+            $.i18n().load(ret, locale);
+            $.i18n().locale = locale;
+
+            // $.i18n('current owner') => 领主
+        });
+    };
 
     function StartEarth(earth, viewer, galaxy) {
         galaxy.refresh_earth_status = function () {
@@ -609,13 +623,13 @@
                         $("#mouse-lon").html(lon);
                         $('#mouse-lat').html(lat);
 
-                        if(window.gridService){
+                        if (window.gridService) {
                             var gridService = window.gridService;
                             var point = gridService.fromLatLngToXY(lat, lon);
                             var grid_index = gridService.fromLatLngToGrid(lat, lon);
 
-                            earth.grids(grid_index, function(err, result){
-                                if(err){
+                            earth.grids(grid_index, function (err, result) {
+                                if (err) {
 
                                 } else {
                                     var owner = result[1];
@@ -805,7 +819,7 @@
                 }
             });
 
-            $("#set-grid-picture").click(function(){
+            $("#set-grid-picture").click(function () {
                 var grid = $("[name=grid-idx]").val();
                 galaxy.set_grid_picture(grid, 100000, viewer);
             })
@@ -816,6 +830,8 @@
         galaxy.init_grid_service();
         galaxy.init_mouse_event_handler();
         galaxy.init_page_event();
+
+        initI18n();
     }
 }());
 

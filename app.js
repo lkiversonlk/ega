@@ -23,6 +23,9 @@ app.engine('handlebars', exphbs({
     helpers: {
         t: function (word) {
             return this.__(word);
+        },
+        l: function () {
+            return this.locale;
         }
     }
 }));
