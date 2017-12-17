@@ -312,6 +312,17 @@
         return addr.substr(0,9) + "...";
     }
 
+    function getEtherAddress(network, address){
+        switch(network){
+            case "1":
+                return "https://etherscan.io/address/" + address;
+            case "3":
+                return "https://ropsten.etherscan.io/address/" + address;
+            default:
+                return "";
+        }
+    }
+
     window.addEventListener('load', function() {
         // Checking if Web3 has been injected by the browser (Mist/MetaMask)
         if (typeof web3 !== 'undefined') {
@@ -319,6 +330,7 @@
           window.web3 = new Web3(web3.currentProvider);
           if(registryAddresses.hasOwnProperty(web3.version.network)){
               $("#network").html(networkName[web3.version.network]);
+              $("#contract").prop("href", getEtherAddress(web3.version.network, registryAddresses[web3.version.network]));
           } else {
               $("#network").html("Unknown Network");
               return;

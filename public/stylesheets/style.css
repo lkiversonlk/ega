@@ -33,3 +33,7 @@ body {
 #grid-lord-avatar {
   max-width: 100%;
 }
+
+.navbar-galaxy {
+  margin-bottom: 10px;
+}

@@ -56,6 +56,7 @@ var networkName = {
     "4": "Rinkeby testnet",
 };
 
+
 var registryAddresses = {
     // Mainnet
 //    "1": "0x314159265dd8dbb310642f98f50c066173c1259b",
