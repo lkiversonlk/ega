@@ -6,7 +6,8 @@
 # 
 public/bower
 public/avatars
-avatars
+avatars/*
+!avatars/placeholder
 
 # node.js
 #
