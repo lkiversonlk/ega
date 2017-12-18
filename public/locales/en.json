@@ -29,5 +29,7 @@
 	"grid owner": "grid owner",
 	"enter grid index": "enter grid index",
 	"sell grid": "sell grid",
-	"enter sell price": "enter sell price"
+	"enter sell price": "enter sell price",
+	"unknown network": "unknown or unsupported network",
+	"not connected to ETH": "not connected to ethereum, please check metamask"
 }

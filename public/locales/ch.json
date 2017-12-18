@@ -33,5 +33,5 @@
 	"sell grid": "出售",
 	"enter sell price": "输入卖出价格",
 	"unknown network": "未知或尚不支持的网路",
-	"not connected to ETH": "未接入以太坊网络"
+	"not connected to ETH": "未接入以太坊网络，请检查metamask插件"
 }
