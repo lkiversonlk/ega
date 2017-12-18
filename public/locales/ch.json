@@ -31,5 +31,7 @@
 	"enter grid index": "输入领地编号",
 	"grid owner": "领主",
 	"sell grid": "出售",
-	"enter sell price": "enter sell price"
+	"enter sell price": "输入卖出价格",
+	"unknown network": "未知或尚不支持的网路",
+	"not connected to ETH": "未接入以太坊网络"
 }

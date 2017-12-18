@@ -312,6 +312,40 @@
         return addr.substr(0, 9) + "...";
     }
 
+    var initI18n = function () {
+        var locale = window.LOCALE;
+        $.get('/locales/' + locale + '.json', function (ret) {
+            if (!ret) {
+                return;
+            }
+
+            $.i18n().load(ret, locale);
+            $.i18n().locale = locale;
+
+            // $.i18n('current owner') => 领主
+        });
+    };
+    initI18n();
+
+    function showError(msg_key){
+        $.notify({
+            // options
+            message: $.i18n(msg_key)
+        },{
+            // settings
+            type: 'danger',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+            placement : {
+                align : "center"
+            },
+            timer: 1000,
+            newest_on_top: false
+        });
+    }
+
     function getEtherAddress(network, address) {
         switch (network) {
             case "1":
@@ -332,11 +366,13 @@
                 $("#network").html(networkName[web3.version.network]);
                 $("#contract").prop("href", getEtherAddress(web3.version.network, registryAddresses[web3.version.network]));
             } else {
+                showError("unknown network");
                 $("#network").html("Unknown Network");
                 return;
             }
         } else {
             console.log('No web3? You should consider trying MetaMask!')
+            showError("not connected to ETH");
             $("#network").html("no ether network found");
             return;
         }
@@ -362,6 +398,7 @@
         });*/
 
 
+        
         var galaxy = window._galaxyApis = {};
         StartEarth(earth, viewer, galaxy);
 
@@ -430,25 +467,12 @@
     $('#set-lan-en').click(changeLocale.bind(null, 'en'));
     $('#set-lan-ch').click(changeLocale.bind(null, 'ch'));
 
-    var initI18n = function () {
-        var locale = window.LOCALE;
-        $.get('/locales/' + locale + '.json', function (ret) {
-            if (!ret) {
-                return;
-            }
-
-            $.i18n().load(ret, locale);
-            $.i18n().locale = locale;
-
-            // $.i18n('current owner') => 领主
-        });
-    };
 
     function StartEarth(earth, viewer, galaxy) {
         galaxy.refresh_earth_status = function () {
             earth.gridSold(function (err, sold) {
                 if (err) {
-                    //TODO:
+                    showError("contract call error");
                 } else {
                     $("#status-sold-grids").html(sold);
                 }
@@ -456,7 +480,7 @@
 
             earth.mapSize(function (err, size) {
                 if (err) {
-                    //TODO:
+                    showError("contract call error");
                 } else {
                     $("#status-total-grids").html(size * size);
                 }
@@ -464,7 +488,7 @@
 
             earth.fee(function (err, fee) {
                 if (err) {
-                    //TODO:
+                    showError("contract call error");
                 } else {
                     $("#status-tran-fee").html(fee / 1000);
                 }
@@ -472,7 +496,7 @@
 
             earth.minimalPrice(function (err, price) {
                 if (err) {
-                    //TODO:
+                    showError("contract call error");
                 } else {
                     $("#status-min-price").html(web3.fromWei(price) + " ETH");
                 }
@@ -482,7 +506,7 @@
         galaxy.refresh_player_stauts = function () {
             earth.GridsCount(web3.eth.coinbase, function (err, count) {
                 if (err) {
-                    //TODO:
+                    showError("contract call error");
                 } else {
                     $("#player-address").html(shortSpellAddress(web3.eth.coinbase));
                     $("#player-address").prop('title', web3.eth.coinbase);
@@ -491,7 +515,7 @@
                     for (var i = 0; i < count; i++) {
                         earth.ownedGrids(web3.eth.coinbase, i, function (err, grid_idx) {
                             if (err) {
-                                //TODO:
+                                showError("contract call error");
                             } else {
                                 $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');
                             }
@@ -502,7 +526,7 @@
 
             earth.earns(web3.eth.coinbase, function (err, earn) {
                 if (err) {
-
+                    showError("contract call error");
                 } else {
                     $("#player-earns").html(web3.fromWei(earn) + "ETH");
                 }
@@ -514,7 +538,7 @@
         galaxy.init_grid_service = function () {
             earth.mapSize(function (err, size) {
                 if (err) {
-                    //TODO:
+                    showError("contract call error");
                 } else {
                     if (window.gridService) {
 
@@ -540,7 +564,7 @@
 
         galaxy.draw_mark = function (grid_idx) {
             if (!window.gridService) {
-
+                showError("grid server uninitialized");
             } else {
                 var points = gridService.fromGridIndexToDegrees(grid_index);
                 gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
@@ -551,7 +575,7 @@
         galaxy.grid_selected = function (grid_idx) {
             earth.grids(grid_idx, function (err, result) {
                 if (err) {
-                    //TODO: error
+                    showError("contract call error");
                 } else {
                     var gridState = result[0];
                     var owner = result[1];
@@ -605,7 +629,7 @@
 
         galaxy.set_grid_picture = function (grid, height, picture_url) {
             if (!window.gridService) {
-
+                showError("grid service uninitialized");
             } else {
                 window.gridService.setGridImageTmp(grid, "images/girl.jpg", viewer);
             }
@@ -631,7 +655,7 @@
 
                             earth.grids(grid_index, function (err, result) {
                                 if (err) {
-
+                                    showError("contract call error");
                                 } else {
                                     var owner = result[1];
                                     $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
@@ -697,7 +721,7 @@
 
                     earth.grids(grid_idx, function (err, result) {
                         if (err) {
-
+                            showError("contract call error");
                         } else {
                             var gridState = result[0];
                             if (gridState == 0) {
@@ -705,7 +729,7 @@
                                 if (price == 0) {
                                     earth.minimalPrice(function (err, price) {
                                         if (err) {
-
+                                            showError("contract call error");
                                         } else {
                                             earth.BuyGrid(
                                                 point.x,
@@ -715,6 +739,11 @@
                                                     gas: 470000
                                                 },
                                                 function (err, res) {
+                                                    if(err){
+                                                        showError("contract call error");
+                                                    } else {
+                                                        //TODO: about tx
+                                                    }
                                                     console.log(err, res);
                                                 }
                                             );
@@ -729,6 +758,11 @@
                                             gas: 470000
                                         },
                                         function (err, res) {
+                                            if(err){
+                                                showError("contract call error");
+                                            } else {
+                                                //TODO:
+                                            }
                                             console.log(err, res);
                                         }
                                     );
@@ -751,16 +785,17 @@
 
                 earth.grids(grid_idx, function (err, result) {
                     if (err) {
-
+                        showError("contract call error");
                     } else {
                         var owner = result[1];
 
                         if (owner != web3.eth.coinbase) {
                             //TODO: error
+                            showError("not owner of this grid");
                         } else {
                             earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {gas: 470000}, function (err, txid) {
                                 if (err) {
-                                    //TODO:
+                                    showError("contract call error");
                                 } else {
 
                                 }
@@ -799,7 +834,7 @@
             $("#player-claim").click(function () {
                 earth.GetEarn(function (error, tx) {
                     if (error) {
-                        //TODO:
+                        showError("contract call error");
                     } else {
 
                     }
@@ -832,7 +867,6 @@
         galaxy.init_mouse_event_handler();
         galaxy.init_page_event();
 
-        initI18n();
     }
 }());
 
