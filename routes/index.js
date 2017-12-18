@@ -23,6 +23,11 @@ router.post('/avatar/upload', function(req, res, next){
 });
 
 router.get("/avatar/get/:address", function(req, res, next){
+
+    if(req.params.address == "0x0000000000000000000000000000000000000000"){
+        return res.sendFile(anonymous);
+    }
+
     if(fs.existsSync(path.join(avatar_save_path, req.params.address))){
         return res.sendFile(path.join(avatar_save_path, req.params.address));
     } else {
@@ -56,6 +61,7 @@ router.post('/locale', function (req, res) {
     res.cookie('locale', lan || 'ch', {maxAge: 900000, httpOnly: true});
     return res.sendStatus(200);
 });
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('home', {title: '===TEST==='});

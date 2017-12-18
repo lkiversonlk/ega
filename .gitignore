@@ -2,14 +2,20 @@
 #
 .DS_Store
 
-# node.js
-#
-node_modules
+# project
+# 
 public/bower
 public/avatars
 avatars
-.idea
+
+# node.js
+#
+node_modules
 npm-debug.log
+
+# ide
+# 
+.idea
 
 # vim
 #
