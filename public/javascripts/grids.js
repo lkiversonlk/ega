@@ -6,6 +6,7 @@
   * size is the number of grids on each side of the network
   */
 function Grid(size){
+
     this.size = size;
     this.grid_size_pixel = TILE_SIZE / this.size;
 
@@ -13,7 +14,13 @@ function Grid(size){
     this.lng_per_grid = 360 / size;
 
     this.grid_lines = [];
-    this.grid_image_mark = {};
+    this.grid_avatar = {};
+
+    if(typeof(window) == "undefined"){
+        this.server = true;
+    } else {
+        this.server = false;
+    }
 }
 
 var TILE_SIZE = 256;
@@ -188,10 +195,11 @@ Grid.prototype.destory = function(){
 
 }
 
+Grid.prototype.
 Grid.prototype.setGridImageTmp = function(grid, image_url, viewer){
-    if(this.grid_image_mark.hasOwnProperty(grid)){
+    if(this.grid_avatar.hasOwnProperty(grid)){
         //change the material
-        this.grid_image_mark[grid].polygon.material = image_url;
+        this.grid_avatar[grid].polygon.material = image_url;
     } else {
         var points = gridService.fromGridIndexToDegrees(grid);
         var gridPic = viewer.entities.add(
@@ -205,9 +213,27 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer){
                 }
             }
         );
-        this.grid_image_mark[grid] = gridPic;
+        this.grid_avatar[grid] = gridPic;
     }
-}
+};
+
+/**
+ * Grid Service will both work in server side and client side
+ * 
+ * in client side:
+ * * load configuration from server
+ * * user can temporarily modidify the conf
+ * * user can save conf to server.
+ * 
+ * in server side:
+ * * load configuration from database
+ * * return configuration to client side
+ * * save configuration to database
+ * @param {*} callback 
+ */
+Grid.prototype.loadGridAvatar = function(callback){
+
+};
 
 if(typeof(module) != "undefined"){
     module.exports = Grid;

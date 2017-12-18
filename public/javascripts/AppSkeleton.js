@@ -306,7 +306,7 @@
 
     $("#buy-grid").hide();
     $("#sell-grid").hide();   
-    //$("#oper-grid").hide();
+    $("#oper-grid").hide();
 
     function shortSpellAddress(addr){
         return addr.substr(0,9) + "...";
@@ -557,13 +557,14 @@
 
                     if (owner == web3.eth.coinbase) {
                         $("#sell-grid").show();
-                        //$("#oper-grid").show();
+                        $("#oper-grid").show();
                     } else {
                         $("#sell-grid").hide();
-                        //$("#oper-grid").hide();
+                        $("#oper-grid").hide();
                     }
                     $("#oper-grid-price").html(price + " ETH");
 
+                    //
                     //adjust the camera
                     if (window.gridService) {
                         var center = window.gridService.gridCenterInDegree(grid_idx);

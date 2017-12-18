@@ -23,6 +23,11 @@ router.post('/avatar/upload', function(req, res, next){
 });
 
 router.get("/avatar/get/:address", function(req, res, next){
+
+    if(req.params.address == "0x0000000000000000000000000000000000000000"){
+        return res.sendFile(anonymous);
+    }
+    
     if(fs.existsSync(path.join(avatar_save_path, req.params.address))){
         return res.sendFile(path.join(avatar_save_path, req.params.address));
     } else {
