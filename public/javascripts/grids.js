@@ -195,7 +195,7 @@ Grid.prototype.destory = function(){
 
 }
 
-Grid.prototype.
+//Grid.prototype.
 Grid.prototype.setGridImageTmp = function(grid, image_url, viewer){
     if(this.grid_avatar.hasOwnProperty(grid)){
         //change the material
@@ -232,7 +232,7 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer){
  * @param {*} callback 
  */
 Grid.prototype.loadGridAvatar = function(callback){
-
+    
 };
 
 if(typeof(module) != "undefined"){

@@ -352,13 +352,14 @@
             }
         });
 
+        /*
         new AvatarUpload({
             el: document.querySelector('#grid-avatar'),
             uploadUrl: '/grid_avatar/upload',
             uploadData: {
                 address: web3.eth.coinbase
             }
-        });
+        });*/
 
 
         var galaxy = window._galaxyApis = {};
@@ -569,6 +570,7 @@
                     if (window.gridService) {
                         var center = window.gridService.gridCenterInDegree(grid_idx);
 
+                        
                         viewer.camera.flyTo({
                             destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 4000000.0)
                         })
