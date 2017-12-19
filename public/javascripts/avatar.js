@@ -28,7 +28,23 @@
   };
 
   var AvatarUpload = function(config) {
-    extend(this.config, config);
+    const baseConfig = {
+      el: undefined,
+
+      uploadUrl: '',
+      uploadMethod: 'post',
+      uploadImageKey: 'upload',
+      uploadData: {},
+
+      pretendUpload: false,
+
+      onProgress: undefined,
+      onSuccess: undefined,
+      onError: undefined
+    };
+
+    extend(baseConfig, config);
+    this.config = baseConfig;
 
     if (!this.config.el) {
       throw new Error('An element is required to manipulate');
@@ -47,18 +63,6 @@
   };
 
   AvatarUpload.prototype.config = {
-    el: undefined,
-
-    uploadUrl: '',
-    uploadMethod: 'post',
-    uploadImageKey: 'upload',
-    uploadData: {},
-
-    pretendUpload: false,
-
-    onProgress: undefined,
-    onSuccess: undefined,
-    onError: undefined
   };
 
   AvatarUpload.prototype.renderInput = function() {
