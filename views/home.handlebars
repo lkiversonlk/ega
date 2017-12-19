@@ -221,26 +221,28 @@
         </div>
 
         <div id="oper-grid" class="panel-body">
-          <!--
-                    <div  class="form-group">
-                        <div class="input-group">
-                            
-                            <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
-                            <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
-                        </div>
-                    </div>
-                    -->
-
-          <div class="form-group">
-            <div id="grid-avatar" class="avatar-upload">
-              <img>
+          <div class="panel-body">
+            <!--
+              <div  class="form-group">
+                <div class="input-group">
+                  <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
+                  <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
+                </div>
+              </div>
+            -->
+            <div class="form-group">
+              <div id="grid-avatar" class="avatar-upload">
+                <img>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
@@ -250,17 +252,25 @@
   integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
   crossorigin="anonymous"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 <script type="text/javascript">
   window.CESIUM_BASE_URL = '/cesium';
   window.LOCALE = '{{ l }}' || 'cn';
 </script>
+
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script> -->
 <!-- <script src="/bower/bootstrap-fileinput/js/fileinput.js"></script> -->
+
 <script src="/javascripts/avatar.js"></script>
-<!-- <script src="/cesium/Cesium.js"></script> -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
+<script type="text/javascript">
+</script>
+
+<!-- distinguish test and pro env -->
+<script src="/cesium/Cesium.js"></script>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script> -->
+
 <script src="javascripts/stars.js"></script>
 <script src="javascripts/Earth.js"></script>
 <script src="javascripts/contract.js"></script>

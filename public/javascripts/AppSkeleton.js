@@ -304,12 +304,15 @@
    }
    )*/
 
+
   $("#buy-grid").hide();
   $("#sell-grid").hide();
   $("#oper-grid").hide();
 
   function shortSpellAddress(addr) {
-    return addr.substr(0, 9) + "...";
+    if(addr) {
+      return addr.substr(0, 9) + "...";
+    }
   }
 
   function getEtherAddress(network, address) {
@@ -342,8 +345,10 @@
     }
 
     var earth = window.earth = InitEarthContract(web3, registryAddresses[web3.version.network]);
+    // TODO comment contract display html now
     $("#status-contract").html(registryAddresses[web3.version.network]);
 
+    // TODO issue avatar lib
     new AvatarUpload({
       el: document.querySelector('#player-avatar'),
       uploadUrl: '/avatar/upload',
@@ -352,15 +357,13 @@
       }
     });
 
-    /*
     new AvatarUpload({
-        el: document.querySelector('#grid-avatar'),
-        uploadUrl: '/grid_avatar/upload',
-        uploadData: {
-            address: web3.eth.coinbase
-        }
-    });*/
-
+      el: document.querySelector('#grid-avatar'),
+      uploadUrl: '/grid_avatar/upload',
+      uploadData: {
+        address: web3.eth.coinbase
+      }
+    });
 
     var galaxy = window._galaxyApis = {};
     StartEarth(earth, viewer, galaxy);
@@ -571,6 +574,8 @@
           if (owner == web3.eth.coinbase) {
             $("#sell-grid").show();
             $("#oper-grid").show();
+            $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
+
           } else {
             $("#sell-grid").hide();
             $("#oper-grid").hide();
@@ -601,11 +606,12 @@
       entity.label.scale = 1.0
     };
 
-    galaxy.set_grid_picture = function(grid, height, picture_url) {
+    galaxy.set_grid_picture = function(grid_idx, height, picture_url) {
       if (!window.gridService) {
 
       } else {
-        window.gridService.setGridImageTmp(grid, "images/girl.jpg", viewer);
+        var url = "/grid_avatar/get/" + grid_idx;
+        window.gridService.setGridImageTmp(grid_idx, url, viewer);
       }
     };
 
@@ -654,7 +660,8 @@
             gridMark.polygon.show = false;
           }
         },
-        Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        Cesium.ScreenSpaceEventType.MOUSE_MOVE
+      );
 
       handler.setInputAction(function(event) {
         var cartesian = viewer.camera.pickEllipsoid(event.position, scene.globe.ellipsoid);
@@ -729,10 +736,19 @@
                     }
                   );
                 }
+
+                // after buying behaviour
+                $("#buy-grid").hide();
+                $("#sell-grid").show();
+                $("#oper-grid").show();
+                $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
+                galaxy.set_grid_picture(grid_idx, 100000, viewer);
+
               } else {
-                //can't
+                // can't buy mean can't trigger follow-up actions
               }
             }
+
           })
         }
       });
@@ -818,10 +834,13 @@
         }
       });
 
+      // TODO not useful
+      /*
       $("#set-grid-picture").click(function() {
-        var grid = $("[name=grid-idx]").val();
-        galaxy.set_grid_picture(grid, 100000, viewer);
+        var grid_idx = $("[name=grid-idx]").val();
+        galaxy.set_grid_picture(grid_idx, 100000, viewer);
       })
+      */
     };
 
     galaxy.refresh_earth_status();

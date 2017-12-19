@@ -8,6 +8,7 @@ var fs = require("fs");
 var avatar_save_path = path.join(__dirname, "..", "avatars");
 var grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
 var anonymous = path.join(__dirname, "..", "public", "images", "anonymous.jpg");
+var anonymous_grid = path.join(__dirname, "..", "public", "images", "flag.png");
 
 router.post('/avatar/upload', function(req, res, next) {
   // create an incoming form object
@@ -52,7 +53,7 @@ router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
   if (fs.existsSync(path.join(grid_avatar_save_path, req.params.grid_idx))) {
     return res.sendFile(path.join(avatar_save_path, req.params.grid_idx));
   } else {
-    return res.sendFile(anonymous);
+    return res.sendFile(anonymous_grid);
   }
 });
 
