@@ -11,9 +11,7 @@ var anonymous = path.join(__dirname, "..", "public", "images", "anonymous.jpg");
 var anonymous_grid = path.join(__dirname, "..", "public", "images", "flag.png");
 
 router.post('/avatar/upload', function(req, res, next) {
-  // create an incoming form object
   var form = new formidable.IncomingForm();
-  //form.uploadDir = path.join(__dirname, "..", "avatars");
   form.parse(req, function(err, fields, files) {
     console.log("receive avatar");
     var address = fields.address;
@@ -37,9 +35,7 @@ router.get("/avatar/get/:address", function(req, res, next) {
 });
 
 router.post("/grid_avatar/upload", function(req, res, next) {
-  // create an incoming form object
   var form = new formidable.IncomingForm();
-  //form.uploadDir = path.join(__dirname, "..", "avatars");
   form.parse(req, function(err, fields, files) {
     console.log("receive avatar from grid");
     var address = fields.grid_idx;
@@ -51,7 +47,7 @@ router.post("/grid_avatar/upload", function(req, res, next) {
 
 router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
   if (fs.existsSync(path.join(grid_avatar_save_path, req.params.grid_idx))) {
-    return res.sendFile(path.join(avatar_save_path, req.params.grid_idx));
+    return res.sendFile(path.join(grid_avatar_save_path, req.params.grid_idx));
   } else {
     return res.sendFile(anonymous_grid);
   }

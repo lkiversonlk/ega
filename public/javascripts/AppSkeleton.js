@@ -291,18 +291,17 @@
   //var mercator = new Cesium.WebMercatorProjection;
 
 /*
- var entity = viewer.entities.add(
- {
- label: {
- show: false,
- showBackground: true,
- font: '14px monospace',
- horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
- verticalOrigin : Cesium.VerticalOrigin.TOP,
- pixelOffset : new Cesium.Cartesian2(15, 0)
- }
- }
- )*/
+  var entity = viewer.entities.add({
+    label: {
+      show: false,
+      showBackground: true,
+      font: '14px monospace',
+      horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+      verticalOrigin : Cesium.VerticalOrigin.TOP,
+      pixelOffset : new Cesium.Cartesian2(15, 0)
+    }
+  })
+*/
 
   $("#buy-grid").hide();
   $("#sell-grid").hide();
@@ -388,15 +387,25 @@
       uploadUrl: '/avatar/upload',
       uploadData: {
         address: web3.eth.coinbase
-      }
+      },
     });
 
     new AvatarUpload({
       el: document.querySelector('#grid-avatar'),
       uploadUrl: '/grid_avatar/upload',
       uploadData: {
-        address: web3.eth.coinbase
-      }
+        address: web3.eth.coinbase,
+      },
+      onSuccess: function() {
+        let grid_idx = parseInt($("[name=grid-idx]").val())
+        $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
+        if (isNaN(grid_idx)) {
+          showError("non grid selected");
+          grid_idx = '';
+        }
+        $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
+        galaxy.set_grid_picture(grid_idx, 100000, viewer);
+      },
     });
 
     var galaxy = window._galaxyApis = {};

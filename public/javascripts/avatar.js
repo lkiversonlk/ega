@@ -178,10 +178,6 @@
     var progress = 0;
     var id = setInterval(function() {
       progress += 1;
-      // if (progress == 50) {
-      // 	callbacks.error();
-      // 	return clearInterval(id);
-      // }
       if (progress > 100) {
         callbacks.success();
         return clearInterval(id);
@@ -214,6 +210,10 @@
     for (val in config.uploadData) {
       formData.append(val, config.uploadData[val]);
     }
+
+    // in addition, append grid_idx currently
+    const grid_idx = $("[name=grid-idx]").val();
+    formData.append('grid_idx', grid_idx)
 
     xhr.open(config.uploadMethod, config.uploadUrl);
     xhr.send(formData);
