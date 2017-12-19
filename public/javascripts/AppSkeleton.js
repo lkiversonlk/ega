@@ -777,9 +777,15 @@
 
             $("#sell-grid-btn").click(function () {
                 var grid_idx = parseInt($("[name=grid-idx]").val());
-                if (isNaN(grid_idx)) return;
+                if (isNaN(grid_idx)) {
+                    showError("non grid selected");
+                    return;
+                }
                 var price = parseFloat($("[name=grid-sell-price]").val());
-                if (isNaN(price)) return;
+                if (isNaN(price)) {
+                    showError("please enter price in ETH");
+                    return;
+                }
 
                 var point = gridService.fromGridIndexToXY(grid_idx);
 
