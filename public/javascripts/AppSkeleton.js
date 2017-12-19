@@ -398,12 +398,10 @@
       },
       onSuccess: function() {
         let grid_idx = parseInt($("[name=grid-idx]").val())
-        $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
         if (isNaN(grid_idx)) {
           showError("non grid selected");
           grid_idx = '';
         }
-        $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
         galaxy.set_grid_picture(grid_idx, 100000, viewer);
       },
     });
