@@ -1,61 +1,63 @@
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+  rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+  crossorigin="anonymous">
 <link rel="stylesheet" href="/stylesheets/style.css">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
+  rel="stylesheet">
 <link rel="stylesheet" href="/javascripts/avatar.css">
 <style>
-    @import url(cesium/Widgets/widgets.css);
-
-    #galaxy {
-        height: 600px;
-    }
+  @import url(cesium/Widgets/widgets.css);
+  #galaxy {
+    height: 600px;
+  }
 </style>
 <canvas id="canvas"></canvas>
 
 <nav class="navbar navbar-galaxy" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a href="#">
-                <!-- #FFCC00 -->
-                <img src="/images/title40.png">
-            </a>
-        </div>
-        <div class="pull-right">
-            <ul class="nav navbar-nav">
-                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span id="network"></span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a id="contract" target="_blank" href="#">{{t "contract"}}</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        {{t "language"}}
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a id="set-lan-en" href="">English</a></li>
-                        <li><a id="set-lan-ch" href="">中文</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="#">
+        <!-- #FFCC00 -->
+        <img src="/images/title40.png">
+      </a>
     </div>
+    <div class="pull-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span id="network"></span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a id="contract" target="_blank" href="#">{{t "contract"}}</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{t "language"}}
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a id="set-lan-en" href="">English</a></li>
+            <li><a id="set-lan-ch" href="">中文</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
-            <div class="panel panel-default panel-transparent">
-                <div class="panel-heading">
-                    {{t "status"}}
-                </div>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="panel panel-default panel-transparent">
+        <div class="panel-heading">
+          {{t "status"}}
+        </div>
 
-                <div class="panel-body">
-                    <!--
+        <div class="panel-body">
+          <!--
                     <div>
                         <label>{{t "contract"}}</label>
                         <span id="status-contract">
@@ -63,169 +65,144 @@
                         </span>
                     </div>
                     -->
-                    <div>
-                        <label>{{t "grids count"}}</label>
-                        <span id="status-total-grids">
-
-                            </span>
-                    </div>
-                    <div>
-                        <label>{{t "sold"}}</label>
-                        <span id="status-sold-grids">
-
-                            </span>
-                    </div>
-                    <div>
-                        <label>{{t "fee"}}</label>
-                        <span id="status-tran-fee">
-
-                            </span>
-                    </div>
-                    <div>
-                        <label>{{t "min price"}}</label>
-                        <span id="status-min-price">
-
-                            </span>
-                    </div>
-                    <div>
-                        <div class="checkbox">
-                            <label class="checkbox-inline">
-                                <input id="check-show-grids" type="checkbox" checked data-toggle="toggle"> {{t "reveal grids"}}
-                            </label>
-                        </div>                        
-                        <div class="checkbox">
-                            <label class="checkbox-inline">
-                                <input id="check-show-mark" type="checkbox" checked data-toggle="toggle"> {{t "reveal mark"}}
-                            </label>
-                        </div>
-                    </div>
-                </div>
+          <div>
+            <label>{{t "grids count"}}</label>
+            <span id="status-total-grids"></span>
+          </div>
+          <div>
+            <label>{{t "sold"}}</label>
+            <span id="status-sold-grids"></span>
+          </div>
+          <div>
+            <label>{{t "fee"}}</label>
+            <span id="status-tran-fee"></span>
+          </div>
+          <div>
+            <label>{{t "min price"}}</label>
+            <span id="status-min-price"></span>
+          </div>
+          <div>
+            <div class="checkbox">
+              <label class="checkbox-inline">
+                <input id="check-show-grids" type="checkbox" checked data-toggle="toggle">
+                  {{t "reveal grids"}}
+              </label>
             </div>
-            <div class="panel panel-default panel-transparent">
+            <div class="checkbox">
+              <label class="checkbox-inline">
+                <input id="check-show-mark" type="checkbox" checked data-toggle="toggle">
+                  {{t "reveal mark"}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default panel-transparent">
 
                 <div class="panel-heading">
                     <span id="player-address">
 
                     </span>
-                    <span class="glyphicon glyphicon-screenshot pull-right" id="player-location"></span>
-
-                </div>
-                <div class="panel-body">
-                    <div id="player-avatar" class="avatar-upload">
-                		<img >
-                	</div>
-                    <div>
-                        <label>
-                            {{t "earns"}}
-                        </label>
-                        <span id="player-earns">
-
-                        </span>
-                        <button id="player-claim" class="btn btn-primary">
-                            {{t "claim"}}
-                        </button>
-                    </div>
-
-                    <div>
-                        <label>
-                            {{t "owned grids"}}
-                        </label>
-                        <span id="player-grids-count">
-
-                        </span>
-                        <select id="player-grids-list" class="form-control"></select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================================================== -->
-        
-        
-        <div id="galaxy" class="col-md-7">
+          <span class="glyphicon glyphicon-screenshot pull-right" id="player-location"></span>
 
         </div>
+        <div class="panel-body">
+          <div id="player-avatar" class="avatar-upload">
+            <img>
+          </div>
+          <div>
+            <label>
+              {{t "earns"}}
+            </label>
+            <span id="player-earns"></span>
+            <button id="player-claim" class="btn btn-primary">
+              {{t "claim"}}
+            </button>
+          </div>
 
+          <div>
+            <label>
+              {{t "owned grids"}}
+            </label>
+            <span id="player-grids-count"></span>
+            <select id="player-grids-list" class="form-control"></select>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- galaxy container -->
+    <div id="galaxy" class="col-md-7"></div>
+    <!-- end galaxy container -->
 
-        <!-- ========================================================================== -->
-
-        <div id="control-panel" class="col-md-3">
-            <div class="panel panel-default panel-transparent">
-                <div class="panel-heading">
-                    {{t "grid panel"}} 
-                    <span id="mouse-grid"></span>
-                    <span class="pull-right">
-                        {{t "grid owner"}}
-                        <span id="grid-owner">
-
-                        </span>
-                    </span>
-                    
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-5">
-                            <img id="grid-lord-avatar">
-                        </div>
-                        <div class="col-xs-7">
-                            <div>
-                                <label>
-                                    {{t "longitude"}}
-                                </label>
-                                <span id="mouse-lon">
-
-                                </span>
-                            </div>
-                            <div>
-                                <label>
-                                    {{t "latitude"}}
-                                </label>
-                                <span id="mouse-lat">
-
-                                </span>
-                            </div>
-                            <div>
-                                <label>
-                                    {{t "grid status"}}
-                                </label>
-                                <span id="grid-status">
-                                    
-                                </span>
-                            </div>
-                            <div>
-                                <label>{{t "current price"}}</label>
-                                <span id="oper-grid-price"></span>
-                            </div>
-                        </div>
-                                             
-                    </div>
-
-                </div>
+    <div id="control-panel" class="col-md-3">
+      <div class="panel panel-default panel-transparent">
+        <div class="panel-heading">
+          {{t "grid panel"}}
+          <span id="mouse-grid"></span>
+          <span class="pull-right">
+            {{t "grid owner"}}
+            <span id="grid-owner"></span>
+          </span>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+          </div>
+          <div class="row">
+            <div class="col-xs-5">
+              <img id="grid-lord-avatar">
+            </div>
+            <div class="col-xs-7">
+              <div>
+                <label>
+                  {{t "longitude"}}
+                </label>
+                <span id="mouse-lon"></span>
+              </div>
+              <div>
+                <label>
+                  {{t "latitude"}}
+                </label>
+                <span id="mouse-lat"></span>
+              </div>
+              <div>
+                <label>
+                  {{t "grid status"}}
+                </label>
+                <span id="grid-status"></span>
+              </div>
+              <div>
+                <label>{{t "current price"}}</label>
+                <span id="oper-grid-price"></span>
+              </div>
             </div>
 
-            
-            <div class="panel panel-default panel-transparent">
-                <div class="panel-heading">
-                        <!-- <label for="firstname" class="col-sm-4 control-label">{{t "operation board"}}</label> -->
-                    <div class="col-sm-12 input-group">
-                        <input type="number" class="form-control" placeholder='{{t "enter grid index"}}' name="grid-idx">
-                        <span id="search-grid" class="input-group-addon success"><span
-                                class="glyphicon glyphicon-ok"></span>
-                        </span>
-                    </div>
-                    
-                    <div class="input-group">
-                                
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div>
-                        <div id="buy-grid" class="form-group">
-                            <button id="buy-grid-btn" class="btn btn-success col-xs-12">Buy this grid</button>
-                        </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="panel panel-default panel-transparent">
+        <div class="panel-heading">
+          <!-- <label for="firstname" class="col-sm-4 control-label">{{t "operation board"}}</label> -->
+          <div class="col-sm-12 input-group">
+            <input type="number" class="form-control" placeholder='{{t "enter grid index"}}'
+              name="grid-idx">
+            <span id="search-grid" class="input-group-addon success">
+              <span class="glyphicon glyphicon-ok"></span>
+            </span>
+          </div>
+
+          <div class="input-group">
+
+          </div>
+        </div>
+        <div class="panel-body">
+          <div>
+            <div id="buy-grid" class="form-group">
+              <button id="buy-grid-btn" class="btn btn-success col-xs-12">Buy this grid</button>
+            </div>
 
                         <div id="sell-grid" class="form-group">
                             <div class="input-group">
@@ -237,55 +214,62 @@
                             </div>
                         </div>
 
-                        
-                    </div>
-                </div>
-    
-                <div id="oper-grid" class="panel-body">
-                    <!--
-                    <div  class="form-group">
-                        <div class="input-group">
-                            
-                            <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
-                            <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
-                        </div>
-                    </div>
-                    -->
-                    
-                    <div class="form-group">
-                        <div id="grid-avatar" class="avatar-upload">
-                		        <img src="sl">
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+          </div>
         </div>
+
+        <div id="oper-grid" class="panel-body">
+          <div class="panel-body">
+            <!--
+              <div  class="form-group">
+                <div class="input-group">
+                  <input id="grid-picture" type="url" placeholder='{{t "set grid picture"}}' class="form-control">
+                  <span id="set-grid-picture" class="input-group-addon">{{t "SET"}}</span>
+                </div>
+              </div>
+            -->
+            <div class="form-group">
+              <div id="grid-avatar" class="avatar-upload">
+                <img>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 </div>
-<script
-        src="https://code.jquery.com/jquery-2.2.4.min.js"
-        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-        crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery.i18n/1.0.4/jquery.i18n.js"></script>
 <script src="https://cdn.bootcss.com/jquery.i18n/1.0.4/jquery.i18n.messagestore.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
+  integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+  crossorigin="anonymous"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="/bower/remarkable-bootstrap-notify/bootstrap-notify.min.js"></script>
 <script type="text/javascript">
-    window.CESIUM_BASE_URL = '/cesium';
-    window.LOCALE = '{{ l }}' || 'cn';
+  window.CESIUM_BASE_URL = '/cesium';
+  window.LOCALE = '{{ l }}' || 'cn';
 </script>
+
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script> -->
 <!-- <script src="/bower/bootstrap-fileinput/js/fileinput.js"></script> -->
+
 <script src="/javascripts/avatar.js"></script>
-<!-- <script src="/cesium/Cesium.js"></script> -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
-<script src="javascripts/index.js"></script>
+<script type="text/javascript">
+</script>
+
+<!-- distinguish test and pro env -->
+<script src="/cesium/Cesium.js"></script>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script> -->
+
+<script src="javascripts/stars.js"></script>
 <script src="javascripts/Earth.js"></script>
 <script src="javascripts/contract.js"></script>
 <script src="javascripts/grids.js"></script>

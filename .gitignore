@@ -1,8 +1,29 @@
-node_modules
+# OSX
+#
+.DS_Store
+
+# project
+# 
 public/bower
 public/avatars
-avatars
-.idea
+avatars/*
+!avatars/placeholder
+
+# node.js
+#
+node_modules
 npm-debug.log
-public/images/.DS_Store
-.DS_Store
+
+# ide
+# 
+.idea
+
+# vim
+#
+*.swp
+*.~
+Session.vim
+
+# tmux
+#
+tmux*.log
