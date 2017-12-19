@@ -8,6 +8,8 @@ public/bower
 public/avatars
 avatars/*
 !avatars/placeholder
+grid_avatars/*
+!grid_avatars/placeholder
 
 # node.js
 #
