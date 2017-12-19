@@ -104,8 +104,8 @@
           {{t "player board"}}
           <span id="player-address"></span>
           <span class="glyphicon glyphicon-screenshot pull-right" id="player-location"></span>
-
         </div>
+
         <div class="panel-body">
           <div id="player-avatar" class="avatar-upload">
             <img>
@@ -191,9 +191,9 @@
               <span class="glyphicon glyphicon-ok"></span>
             </span>
           </div>
-
           <div class="input-group"></div>
         </div>
+
         <div class="panel-body">
           <div>
             <div id="buy-grid" class="form-group">
@@ -202,15 +202,13 @@
 
             <div id="sell-grid" class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">{{t "sell grid"}}</span>
-                <input type="number" name="grid-sell-price" placeholder='{{t "enter sell price"}}'
-                  class="form-control">
-                <span id="sell-grid-btn" class="input-group-addon">ETH
-                  <span class="glyphicon glyphicon-ok"></span>
+                <!-- <span class="input-group-addon">{{t "sell grid"}}</span>-->
+                <input type="number" name="grid-sell-price" placeholder='{{t "enter sell price"}}' class="form-control">
+                <span id="sell-grid-btn" class="input-group-addon btn-primary">
+                  {{t "sell grid"}}
                 </span>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -239,17 +237,13 @@
   integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
   crossorigin="anonymous"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script src="/bower/remarkable-bootstrap-notify/bootstrap-notify.min.js"></script>
 <!-- end import jquery & bootstrap -->
 
 <script type="text/javascript">
   window.CESIUM_BASE_URL = '/cesium';
   window.LOCALE = '{{ l }}' || 'cn';
 </script>
-
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script> -->
-<!-- <script src="/bower/bootstrap-fileinput/js/fileinput.js"></script> -->
 
 <script src="/javascripts/avatar.js"></script>
 <script type="text/javascript">
@@ -265,3 +259,9 @@
 <script src="javascripts/contract.js"></script>
 <script src="javascripts/grids.js"></script>
 <script src="javascripts/AppSkeleton.js"></script>
+<script>
+  ((window.gitter = {}).chat = {}).options = {
+    room: 'EEGalaxy/Lobby'
+  };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>

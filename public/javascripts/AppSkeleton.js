@@ -1,25 +1,25 @@
-(function() {
+;(function() {
   "use strict";
 
   Cesium.BingMapsApi.defaultKey = 'At36HWsCzUCdp9mDZXKXChHywJ4Rzt7OHdw-VLodUMknjJVR5VVS-E-BCanlX8W-'; // For use with this application only
 
-  //////////////////////////////////////////////////////////////////////////
-  // Creating the Viewer
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Creating the Viewer
+//////////////////////////////////////////////////////////////////////////
 
-  // var viewer = new Cesium.Viewer('cesiumContainer');
-  //
-  /*
-   var viewer = new Cesium.Viewer('galaxy', {
-   imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
-   url : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
-   }),
-   scene3DOnly: true,
-   selectionIndicator: false,
-   baseLayerPicker: false,
-   animation: false,
-   timeline: false
-   });*/
+// var viewer = new Cesium.Viewer('cesiumContainer');
+//
+/*
+ var viewer = new Cesium.Viewer('galaxy', {
+ imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+ url : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+ }),
+ scene3DOnly: true,
+ selectionIndicator: false,
+ baseLayerPicker: false,
+ animation: false,
+ timeline: false
+ });*/
   var viewer = new Cesium.Viewer('galaxy', {
     //scene3DOnly: true,
     selectionIndicator: false,
@@ -38,280 +38,314 @@
     mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
   }));
 
-  //////////////////////////////////////////////////////////////////////////
-  // Loading Terrain
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Loading Terrain
+//////////////////////////////////////////////////////////////////////////
 
-  // // Load STK World Terrain
+  // Load STK World Terrain
   viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
     url: 'https://assets.agi.com/stk-terrain/world',
     requestWaterMask: true, // required for water effects
     requestVertexNormals: false // required for terrain lighting
   });
-  // // Enable depth testing so things behind the terrain disappear.
+  // Enable depth testing so things behind the terrain disappear.
   viewer.scene.globe.depthTestAgainstTerrain = true;
 
-  //////////////////////////////////////////////////////////////////////////
-  // Configuring the Scene
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Configuring the Scene
+//////////////////////////////////////////////////////////////////////////
 
-  // // Enable lighting based on sun/moon positions
-  // viewer.scene.globe.enableLighting = true;
-  //
-  // // Create an initial camera view
-  // var initialPosition = new Cesium.Cartesian3.fromDegrees(-73.998114468289017509, 40.674512895646692812, 2631.082799425431);
-  // var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(7.1077496389876024807, -31.987223091598949054, 0.025883251314954971306);
-  // var homeCameraView = {
-  //     destination : initialPosition,
-  //     orientation : {
-  //         heading : initialOrientation.heading,
-  //         pitch : initialOrientation.pitch,
-  //         roll : initialOrientation.roll
-  //     }
-  // };
-  // // Set the initial view
-  // viewer.scene.camera.setView(homeCameraView);
-  //
-  // // Add some camera flight animation options
-  // homeCameraView.duration = 2.0;
-  // homeCameraView.maximumHeight = 2000;
-  // homeCameraView.pitchAdjustHeight = 2000;
-  // homeCameraView.endTransform = Cesium.Matrix4.IDENTITY;
-  // // Override the default home button
-  // viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
-  //     e.cancel = true;
-  //     viewer.scene.camera.flyTo(homeCameraView);
-  // });
-  //
-  // // Set up clock and timeline.
-  // viewer.clock.shouldAnimate = true; // default
-  // viewer.clock.startTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:00:00Z");
-  // viewer.clock.stopTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:20:00Z");
-  // viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:00:00Z");
-  // viewer.clock.multiplier = 2; // sets a speedup
-  // viewer.clock.clockStep = Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER; // tick computation mode
-  // viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // loop at the end
-  // viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime); // set visible range
+// // Enable lighting based on sun/moon positions
+// viewer.scene.globe.enableLighting = true;
+//
+// // Create an initial camera view
+// var initialPosition = new Cesium.Cartesian3.fromDegrees(-73.998114468289017509, 40.674512895646692812, 2631.082799425431);
+// var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(7.1077496389876024807, -31.987223091598949054, 0.025883251314954971306);
+// var homeCameraView = {
+//     destination : initialPosition,
+//     orientation : {
+//         heading : initialOrientation.heading,
+//         pitch : initialOrientation.pitch,
+//         roll : initialOrientation.roll
+//     }
+// };
+// // Set the initial view
+// viewer.scene.camera.setView(homeCameraView);
+//
+// // Add some camera flight animation options
+// homeCameraView.duration = 2.0;
+// homeCameraView.maximumHeight = 2000;
+// homeCameraView.pitchAdjustHeight = 2000;
+// homeCameraView.endTransform = Cesium.Matrix4.IDENTITY;
+// // Override the default home button
+// viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
+//     e.cancel = true;
+//     viewer.scene.camera.flyTo(homeCameraView);
+// });
+//
+// // Set up clock and timeline.
+// viewer.clock.shouldAnimate = true; // default
+// viewer.clock.startTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:00:00Z");
+// viewer.clock.stopTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:20:00Z");
+// viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:00:00Z");
+// viewer.clock.multiplier = 2; // sets a speedup
+// viewer.clock.clockStep = Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER; // tick computation mode
+// viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // loop at the end
+// viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime); // set visible range
 
-  //////////////////////////////////////////////////////////////////////////
-  // Loading and Styling Entity Data
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Loading and Styling Entity Data
+//////////////////////////////////////////////////////////////////////////
 
-  // var kmlOptions = {
-  //     camera : viewer.scene.camera,
-  //     canvas : viewer.scene.canvas,
-  //     clampToGround : true
-  // };
-  // // Load geocache points of interest from a KML file
-  // // Data from : http://catalog.opendata.city/dataset/pediacities-nyc-neighborhoods/resource/91778048-3c58-449c-a3f9-365ed203e914
-  // var geocachePromise = Cesium.KmlDataSource.load('./Source/SampleData/sampleGeocacheLocations.kml', kmlOptions);
-  //
-  // // Add geocache billboard entities to scene and style them
-  // geocachePromise.then(function(dataSource) {
-  //     // Add the new data as entities to the viewer
-  //     viewer.dataSources.add(dataSource);
-  //
-  //     // Get the array of entities
-  //     var geocacheEntities = dataSource.entities.values;
-  //
-  //     for (var i = 0; i < geocacheEntities.length; i++) {
-  //         var entity = geocacheEntities[i];
-  //         if (Cesium.defined(entity.billboard)) {
-  //             // Adjust the vertical origin so pins sit on terrain
-  //             entity.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM;
-  //             // Disable the labels to reduce clutter
-  //             entity.label = undefined;
-  //             // Add distance display condition
-  //             entity.billboard.distanceDisplayCondition = new Cesium.DistanceDisplayCondition(10.0, 20000.0);
-  //             // Compute latitude and longitude in degrees
-  //             var cartographicPosition = Cesium.Cartographic.fromCartesian(entity.position.getValue(Cesium.JulianDate.now()));
-  //             var latitude = Cesium.Math.toDegrees(cartographicPosition.latitude);
-  //             var longitude = Cesium.Math.toDegrees(cartographicPosition.longitude);
-  //             // Modify description
-  //             var description = '<table class="cesium-infoBox-defaultTable cesium-infoBox-defaultTable-lighter"><tbody>';
-  //             description += '<tr><th>' + "Latitude" + '</th><td>' + latitude + '</td></tr>';
-  //             description += '<tr><th>' + "Longitude" + '</th><td>' + longitude + '</td></tr>';
-  //             description += '</tbody></table>';
-  //             entity.description = description;
-  //         }
-  //     }
-  // });
-  //
-  // var geojsonOptions = {
-  //     clampToGround : true
-  // };
-  // // Load neighborhood boundaries from a GeoJson file
-  // // Data from : https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq
-  // var neighborhoodsPromise = Cesium.GeoJsonDataSource.load('./Source/SampleData/sampleNeighborhoods.geojson', geojsonOptions);
-  //
-  // // Save an new entity collection of neighborhood data
-  // var neighborhoods;
-  // neighborhoodsPromise.then(function(dataSource) {
-  //     // Add the new data as entities to the viewer
-  //     viewer.dataSources.add(dataSource);
-  //     neighborhoods = dataSource.entities;
-  //
-  //     // Get the array of entities
-  //     var neighborhoodEntities = dataSource.entities.values;
-  //     for (var i = 0; i < neighborhoodEntities.length; i++) {
-  //         var entity = neighborhoodEntities[i];
-  //
-  //         if (Cesium.defined(entity.polygon)) {
-  //             // Use kml neighborhood value as entity name
-  //             entity.name = entity.properties.neighborhood;
-  //             // Set the polygon material to a random, translucent color
-  //             entity.polygon.material = Cesium.Color.fromRandom({
-  //                 red : 0.1,
-  //                 maximumGreen : 0.5,
-  //                 minimumBlue : 0.5,
-  //                 alpha : 0.6
-  //             });
-  //             // Generate Polygon center
-  //             var polyPositions = entity.polygon.hierarchy.getValue(Cesium.JulianDate.now()).positions;
-  //             var polyCenter = Cesium.BoundingSphere.fromPoints(polyPositions).center;
-  //             polyCenter = Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(polyCenter);
-  //             entity.position = polyCenter;
-  //             // Generate labels
-  //             entity.label = {
-  //                 text : entity.name,
-  //                 showBackground : true,
-  //                 scale : 0.6,
-  //                 horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-  //                 verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-  //                 distanceDisplayCondition : new Cesium.DistanceDisplayCondition(10.0, 8000.0),
-  //                 disableDepthTestDistance : Number.POSITIVE_INFINITY
-  //             };
-  //         }
-  //     }
-  // });
-  //
-  // // Load a drone flight path from a CZML file
-  // var dronePromise = Cesium.CzmlDataSource.load('./Source/SampleData/SampleFlight.czml');
-  //
-  // // Save a new drone model entity
-  // var drone;
-  // dronePromise.then(function(dataSource) {
-  //     viewer.dataSources.add(dataSource);
-  //     drone = dataSource.entities.values[0];
-  //     // Attach a 3D model
-  //     drone.model = {
-  //         uri : './Source/SampleData/Models/CesiumDrone.gltf',
-  //         minimumPixelSize : 128,
-  //         maximumScale : 2000
-  //     };
-  //     // Add computed orientation based on sampled positions
-  //     drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
-  //
-  //     // Smooth path interpolation
-  //     drone.position.setInterpolationOptions({
-  //         interpolationAlgorithm : Cesium.HermitePolynomialApproximation,
-  //         interpolationDegree : 2
-  //     });
-  //     drone.viewFrom = new Cesium.Cartesian3(-30, 0, 0);
-  // });
+// var kmlOptions = {
+//     camera : viewer.scene.camera,
+//     canvas : viewer.scene.canvas,
+//     clampToGround : true
+// };
+// // Load geocache points of interest from a KML file
+// // Data from : http://catalog.opendata.city/dataset/pediacities-nyc-neighborhoods/resource/91778048-3c58-449c-a3f9-365ed203e914
+// var geocachePromise = Cesium.KmlDataSource.load('./Source/SampleData/sampleGeocacheLocations.kml', kmlOptions);
+//
+// // Add geocache billboard entities to scene and style them
+// geocachePromise.then(function(dataSource) {
+//     // Add the new data as entities to the viewer
+//     viewer.dataSources.add(dataSource);
+//
+//     // Get the array of entities
+//     var geocacheEntities = dataSource.entities.values;
+//
+//     for (var i = 0; i < geocacheEntities.length; i++) {
+//         var entity = geocacheEntities[i];
+//         if (Cesium.defined(entity.billboard)) {
+//             // Adjust the vertical origin so pins sit on terrain
+//             entity.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM;
+//             // Disable the labels to reduce clutter
+//             entity.label = undefined;
+//             // Add distance display condition
+//             entity.billboard.distanceDisplayCondition = new Cesium.DistanceDisplayCondition(10.0, 20000.0);
+//             // Compute latitude and longitude in degrees
+//             var cartographicPosition = Cesium.Cartographic.fromCartesian(entity.position.getValue(Cesium.JulianDate.now()));
+//             var latitude = Cesium.Math.toDegrees(cartographicPosition.latitude);
+//             var longitude = Cesium.Math.toDegrees(cartographicPosition.longitude);
+//             // Modify description
+//             var description = '<table class="cesium-infoBox-defaultTable cesium-infoBox-defaultTable-lighter"><tbody>';
+//             description += '<tr><th>' + "Latitude" + '</th><td>' + latitude + '</td></tr>';
+//             description += '<tr><th>' + "Longitude" + '</th><td>' + longitude + '</td></tr>';
+//             description += '</tbody></table>';
+//             entity.description = description;
+//         }
+//     }
+// });
+//
+// var geojsonOptions = {
+//     clampToGround : true
+// };
+// // Load neighborhood boundaries from a GeoJson file
+// // Data from : https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq
+// var neighborhoodsPromise = Cesium.GeoJsonDataSource.load('./Source/SampleData/sampleNeighborhoods.geojson', geojsonOptions);
+//
+// // Save an new entity collection of neighborhood data
+// var neighborhoods;
+// neighborhoodsPromise.then(function(dataSource) {
+//     // Add the new data as entities to the viewer
+//     viewer.dataSources.add(dataSource);
+//     neighborhoods = dataSource.entities;
+//
+//     // Get the array of entities
+//     var neighborhoodEntities = dataSource.entities.values;
+//     for (var i = 0; i < neighborhoodEntities.length; i++) {
+//         var entity = neighborhoodEntities[i];
+//
+//         if (Cesium.defined(entity.polygon)) {
+//             // Use kml neighborhood value as entity name
+//             entity.name = entity.properties.neighborhood;
+//             // Set the polygon material to a random, translucent color
+//             entity.polygon.material = Cesium.Color.fromRandom({
+//                 red : 0.1,
+//                 maximumGreen : 0.5,
+//                 minimumBlue : 0.5,
+//                 alpha : 0.6
+//             });
+//             // Generate Polygon center
+//             var polyPositions = entity.polygon.hierarchy.getValue(Cesium.JulianDate.now()).positions;
+//             var polyCenter = Cesium.BoundingSphere.fromPoints(polyPositions).center;
+//             polyCenter = Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(polyCenter);
+//             entity.position = polyCenter;
+//             // Generate labels
+//             entity.label = {
+//                 text : entity.name,
+//                 showBackground : true,
+//                 scale : 0.6,
+//                 horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
+//                 verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+//                 distanceDisplayCondition : new Cesium.DistanceDisplayCondition(10.0, 8000.0),
+//                 disableDepthTestDistance : Number.POSITIVE_INFINITY
+//             };
+//         }
+//     }
+// });
+//
+// // Load a drone flight path from a CZML file
+// var dronePromise = Cesium.CzmlDataSource.load('./Source/SampleData/SampleFlight.czml');
+//
+// // Save a new drone model entity
+// var drone;
+// dronePromise.then(function(dataSource) {
+//     viewer.dataSources.add(dataSource);
+//     drone = dataSource.entities.values[0];
+//     // Attach a 3D model
+//     drone.model = {
+//         uri : './Source/SampleData/Models/CesiumDrone.gltf',
+//         minimumPixelSize : 128,
+//         maximumScale : 2000
+//     };
+//     // Add computed orientation based on sampled positions
+//     drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
+//
+//     // Smooth path interpolation
+//     drone.position.setInterpolationOptions({
+//         interpolationAlgorithm : Cesium.HermitePolynomialApproximation,
+//         interpolationDegree : 2
+//     });
+//     drone.viewFrom = new Cesium.Cartesian3(-30, 0, 0);
+// });
 
-  //////////////////////////////////////////////////////////////////////////
-  // Load 3D Tileset
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Load 3D Tileset
+//////////////////////////////////////////////////////////////////////////
 
-  // // Load the NYC buildings tileset
-  // var city = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-  //     url: 'https://beta.cesium.com/api/assets/1461?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkYWJmM2MzNS02OWM5LTQ3OWItYjEyYS0xZmNlODM5ZDNkMTYiLCJpZCI6NDQsImFzc2V0cyI6WzE0NjFdLCJpYXQiOjE0OTkyNjQ3NDN9.vuR75SqPDKcggvUrG_vpx0Av02jdiAxnnB1fNf-9f7s',
-  //     maximumScreenSpaceError: 16 // default value
-  // }));
-  //
-  // // Adjust the tileset height so it's not floating above terrain
-  // var heightOffset = -32;
-  // city.readyPromise.then(function(tileset) {
-  //     // Position tileset
-  //     var boundingSphere = tileset.boundingSphere;
-  //     var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-  //     var surfacePosition = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
-  //     var offsetPosition = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
-  //     var translation = Cesium.Cartesian3.subtract(offsetPosition, surfacePosition, new Cesium.Cartesian3());
-  //     tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
-  // });
+// // Load the NYC buildings tileset
+// var city = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+//     url: 'https://beta.cesium.com/api/assets/1461?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkYWJmM2MzNS02OWM5LTQ3OWItYjEyYS0xZmNlODM5ZDNkMTYiLCJpZCI6NDQsImFzc2V0cyI6WzE0NjFdLCJpYXQiOjE0OTkyNjQ3NDN9.vuR75SqPDKcggvUrG_vpx0Av02jdiAxnnB1fNf-9f7s',
+//     maximumScreenSpaceError: 16 // default value
+// }));
+//
+// // Adjust the tileset height so it's not floating above terrain
+// var heightOffset = -32;
+// city.readyPromise.then(function(tileset) {
+//     // Position tileset
+//     var boundingSphere = tileset.boundingSphere;
+//     var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
+//     var surfacePosition = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+//     var offsetPosition = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
+//     var translation = Cesium.Cartesian3.subtract(offsetPosition, surfacePosition, new Cesium.Cartesian3());
+//     tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+// });
 
-  //////////////////////////////////////////////////////////////////////////
-  // Style 3D Tileset
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Style 3D Tileset
+//////////////////////////////////////////////////////////////////////////
 
-  // // Define a white, opaque building style
-  // var defaultStyle = new Cesium.Cesium3DTileStyle({
-  //     color : "color('white')",
-  //     show : true
-  // });
-  //
-  // // Set the tileset style to default
-  // city.style = defaultStyle;
-  //
-  // // Define a white, transparent building style
-  // var transparentStyle = new Cesium.Cesium3DTileStyle({
-  //     color : "color('white', 0.3)",
-  //     show : true
-  // });
-  //
-  // // Define a style in which buildings are colored by height
-  // var heightStyle = new Cesium.Cesium3DTileStyle({
-  //     color : {
-  //         conditions : [
-  //             ["${height} >= 300", "rgba(45, 0, 75, 0.5)"],
-  //             ["${height} >= 200", "rgb(102, 71, 151)"],
-  //             ["${height} >= 100", "rgb(170, 162, 204)"],
-  //             ["${height} >= 50", "rgb(224, 226, 238)"],
-  //             ["${height} >= 25", "rgb(252, 230, 200)"],
-  //             ["${height} >= 10", "rgb(248, 176, 87)"],
-  //             ["${height} >= 5", "rgb(198, 106, 11)"],
-  //             ["true", "rgb(127, 59, 8)"]
-  //         ]
-  //     }
-  // });
-  //
-  // var tileStyle = document.getElementById('tileStyle');
-  // function set3DTileStyle() {
-  //     var selectedStyle = tileStyle.options[tileStyle.selectedIndex].value;
-  //     if (selectedStyle === 'none') {
-  //         city.style = defaultStyle;
-  //     } else if (selectedStyle === 'height') {
-  //         city.style = heightStyle;
-  //     } else if (selectedStyle === 'transparent') {
-  //         city.style = transparentStyle;
-  //     }
-  // }
-  // tileStyle.addEventListener('change', set3DTileStyle);
+// // Define a white, opaque building style
+// var defaultStyle = new Cesium.Cesium3DTileStyle({
+//     color : "color('white')",
+//     show : true
+// });
+//
+// // Set the tileset style to default
+// city.style = defaultStyle;
+//
+// // Define a white, transparent building style
+// var transparentStyle = new Cesium.Cesium3DTileStyle({
+//     color : "color('white', 0.3)",
+//     show : true
+// });
+//
+// // Define a style in which buildings are colored by height
+// var heightStyle = new Cesium.Cesium3DTileStyle({
+//     color : {
+//         conditions : [
+//             ["${height} >= 300", "rgba(45, 0, 75, 0.5)"],
+//             ["${height} >= 200", "rgb(102, 71, 151)"],
+//             ["${height} >= 100", "rgb(170, 162, 204)"],
+//             ["${height} >= 50", "rgb(224, 226, 238)"],
+//             ["${height} >= 25", "rgb(252, 230, 200)"],
+//             ["${height} >= 10", "rgb(248, 176, 87)"],
+//             ["${height} >= 5", "rgb(198, 106, 11)"],
+//             ["true", "rgb(127, 59, 8)"]
+//         ]
+//     }
+// });
+//
+// var tileStyle = document.getElementById('tileStyle');
+// function set3DTileStyle() {
+//     var selectedStyle = tileStyle.options[tileStyle.selectedIndex].value;
+//     if (selectedStyle === 'none') {
+//         city.style = defaultStyle;
+//     } else if (selectedStyle === 'height') {
+//         city.style = heightStyle;
+//     } else if (selectedStyle === 'transparent') {
+//         city.style = transparentStyle;
+//     }
+// }
+// tileStyle.addEventListener('change', set3DTileStyle);
 
-  //////////////////////////////////////////////////////////////////////////
-  // Custom mouse interaction for highlighting and selecting
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Custom mouse interaction for highlighting and selecting
+//////////////////////////////////////////////////////////////////////////
 
-  // // If the mouse is over a point of interest, change the entity billboard scale and color
-  // var previousPickedEntity;
+// // If the mouse is over a point of interest, change the entity billboard scale and color
+// var previousPickedEntity;
 
   var scene = viewer.scene;
   //var mercator = new Cesium.WebMercatorProjection;
 
-  /*
-   var entity = viewer.entities.add(
-   {
-   label: {
-   show: false,
-   showBackground: true,
-   font: '14px monospace',
-   horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
-   verticalOrigin : Cesium.VerticalOrigin.TOP,
-   pixelOffset : new Cesium.Cartesian2(15, 0)
-   }
-   }
-   )*/
+/*
+ var entity = viewer.entities.add(
+ {
+ label: {
+ show: false,
+ showBackground: true,
+ font: '14px monospace',
+ horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+ verticalOrigin : Cesium.VerticalOrigin.TOP,
+ pixelOffset : new Cesium.Cartesian2(15, 0)
+ }
+ }
+ )*/
 
   $("#buy-grid").hide();
   $("#sell-grid").hide();
   $("#oper-grid").hide();
 
   function shortSpellAddress(addr) {
-    if(addr) {
+    if (addr) {
       return addr.substr(0, 9) + "...";
     }
+  }
+
+  const initI18n = function() {
+    var locale = window.LOCALE;
+    $.get('/locales/' + locale + '.json', function(ret) {
+      if (!ret) {
+        return;
+      }
+
+      $.i18n().load(ret, locale);
+      $.i18n().locale = locale;
+
+      // $.i18n('current owner') => 领主
+    });
+  };
+  initI18n();
+
+  function showError(msg_key) {
+    $.notify({
+      // options
+      message: $.i18n(msg_key)
+    }, {
+      // settings
+      type: 'danger',
+      animate: {
+        enter: 'animated fadeInDown',
+        exit: 'animated fadeOutUp'
+      },
+      placement: {
+        align: "center"
+      },
+      timer: 1000,
+      newest_on_top: false
+    });
   }
 
   function getEtherAddress(network, address) {
@@ -334,11 +368,13 @@
         $("#network").html(networkName[web3.version.network]);
         $("#contract").prop("href", getEtherAddress(web3.version.network, registryAddresses[web3.version.network]));
       } else {
+        showError("unknown network");
         $("#network").html("Unknown Network");
         return;
       }
     } else {
       console.log('No web3? You should consider trying MetaMask!')
+      showError("not connected to ETH");
       $("#network").html("no ether network found");
       return;
     }
@@ -347,7 +383,6 @@
     // TODO comment contract display html now
     $("#status-contract").html(registryAddresses[web3.version.network]);
 
-    // TODO issue avatar lib
     new AvatarUpload({
       el: document.querySelector('#player-avatar'),
       uploadUrl: '/avatar/upload',
@@ -366,62 +401,61 @@
 
     var galaxy = window._galaxyApis = {};
     StartEarth(earth, viewer, galaxy);
-
   });
 
 
-  //////////////////////////////////////////////////////////////////////////
-  // Setup Camera Modes
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Setup Camera Modes
+//////////////////////////////////////////////////////////////////////////
 
-  // var freeModeElement = document.getElementById('freeMode');
-  // var droneModeElement = document.getElementById('droneMode');
-  //
-  // // Create a follow camera by tracking the drone entity
-  // function setViewMode() {
-  //     if (droneModeElement.checked) {
-  //         viewer.trackedEntity = drone;
-  //     } else {
-  //         viewer.trackedEntity = undefined;
-  //         viewer.scene.camera.flyTo(homeCameraView);
-  //     }
-  // }
-  //
-  // freeModeElement.addEventListener('change', setViewMode);
-  // droneModeElement.addEventListener('change', setViewMode);
-  //
-  // viewer.trackedEntityChanged.addEventListener(function() {
-  //     if (viewer.trackedEntity === drone) {
-  //         freeModeElement.checked = false;
-  //         droneModeElement.checked = true;
-  //     }
-  // });
+// var freeModeElement = document.getElementById('freeMode');
+// var droneModeElement = document.getElementById('droneMode');
+//
+// // Create a follow camera by tracking the drone entity
+// function setViewMode() {
+//     if (droneModeElement.checked) {
+//         viewer.trackedEntity = drone;
+//     } else {
+//         viewer.trackedEntity = undefined;
+//         viewer.scene.camera.flyTo(homeCameraView);
+//     }
+// }
+//
+// freeModeElement.addEventListener('change', setViewMode);
+// droneModeElement.addEventListener('change', setViewMode);
+//
+// viewer.trackedEntityChanged.addEventListener(function() {
+//     if (viewer.trackedEntity === drone) {
+//         freeModeElement.checked = false;
+//         droneModeElement.checked = true;
+//     }
+// });
 
-  //////////////////////////////////////////////////////////////////////////
-  // Setup Display Options
-  //////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// Setup Display Options
+//////////////////////////////////////////////////////////////////////////
 
-  // var shadowsElement = document.getElementById('shadows');
-  // var neighborhoodsElement =  document.getElementById('neighborhoods');
-  //
-  // shadowsElement.addEventListener('change', function (e) {
-  //     viewer.shadows = e.target.checked;
-  // });
-  //
-  // neighborhoodsElement.addEventListener('change', function (e) {
-  //     neighborhoods.show = e.target.checked;
-  //     tileStyle.value = 'transparent';
-  //     city.style = transparentStyle;
-  // });
-  //
-  // // Finally, wait for the initial city to be ready before removing the loading indicator.
-  // var loadingIndicator = document.getElementById('loadingIndicator');
-  // loadingIndicator.style.display = 'block';
-  // city.readyPromise.then(function () {
-  //     loadingIndicator.style.display = 'none';
-  // });
+// var shadowsElement = document.getElementById('shadows');
+// var neighborhoodsElement =  document.getElementById('neighborhoods');
+//
+// shadowsElement.addEventListener('change', function (e) {
+//     viewer.shadows = e.target.checked;
+// });
+//
+// neighborhoodsElement.addEventListener('change', function (e) {
+//     neighborhoods.show = e.target.checked;
+//     tileStyle.value = 'transparent';
+//     city.style = transparentStyle;
+// });
+//
+// // Finally, wait for the initial city to be ready before removing the loading indicator.
+// var loadingIndicator = document.getElementById('loadingIndicator');
+// loadingIndicator.style.display = 'block';
+// city.readyPromise.then(function () {
+//     loadingIndicator.style.display = 'none';
+// });
 
-  var changeLocale = function(locale) {
+  const changeLocale = function(locale) {
     $.post('/locale', {
       lan: locale
     }, function() {
@@ -432,25 +466,12 @@
   $('#set-lan-en').click(changeLocale.bind(null, 'en'));
   $('#set-lan-ch').click(changeLocale.bind(null, 'ch'));
 
-  var initI18n = function() {
-    var locale = window.LOCALE;
-    $.get('/locales/' + locale + '.json', function(ret) {
-      if (!ret) {
-        return;
-      }
-
-      $.i18n().load(ret, locale);
-      $.i18n().locale = locale;
-
-      // $.i18n('current owner') => 领主
-    });
-  };
 
   function StartEarth(earth, viewer, galaxy) {
     galaxy.refresh_earth_status = function() {
       earth.gridSold(function(err, sold) {
         if (err) {
-          //TODO:
+          showError("contract call error");
         } else {
           $("#status-sold-grids").html(sold);
         }
@@ -458,7 +479,7 @@
 
       earth.mapSize(function(err, size) {
         if (err) {
-          //TODO:
+          showError("contract call error");
         } else {
           $("#status-total-grids").html(size * size);
         }
@@ -466,7 +487,7 @@
 
       earth.fee(function(err, fee) {
         if (err) {
-          //TODO:
+          showError("contract call error");
         } else {
           $("#status-tran-fee").html(fee / 1000);
         }
@@ -474,17 +495,17 @@
 
       earth.minimalPrice(function(err, price) {
         if (err) {
-          //TODO:
+          showError("contract call error");
         } else {
           $("#status-min-price").html(web3.fromWei(price) + " ETH");
         }
       });
-    };
+    }
 
     galaxy.refresh_player_stauts = function() {
       earth.GridsCount(web3.eth.coinbase, function(err, count) {
         if (err) {
-          //TODO:
+          showError("contract call error");
         } else {
           $("#player-address").html(shortSpellAddress(web3.eth.coinbase));
           $("#player-address").prop('title', web3.eth.coinbase);
@@ -493,7 +514,7 @@
           for (var i = 0; i < count; i++) {
             earth.ownedGrids(web3.eth.coinbase, i, function(err, grid_idx) {
               if (err) {
-                //TODO:
+                showError("contract call error");
               } else {
                 $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');
               }
@@ -504,7 +525,7 @@
 
       earth.earns(web3.eth.coinbase, function(err, earn) {
         if (err) {
-
+          showError("contract call error");
         } else {
           $("#player-earns").html(web3.fromWei(earn) + "ETH");
         }
@@ -516,7 +537,7 @@
     galaxy.init_grid_service = function() {
       earth.mapSize(function(err, size) {
         if (err) {
-          //TODO:
+          showError("contract call error");
         } else {
           if (window.gridService) {
 
@@ -540,7 +561,7 @@
 
     galaxy.draw_mark = function(grid_idx) {
       if (!window.gridService) {
-
+        showError("grid server uninitialized");
       } else {
         var points = gridService.fromGridIndexToDegrees(grid_index);
         gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
@@ -551,7 +572,7 @@
     galaxy.grid_selected = function(grid_idx) {
       earth.grids(grid_idx, function(err, result) {
         if (err) {
-          //TODO: error
+          showError("contract call error");
         } else {
           var gridState = result[0];
           var owner = result[1];
@@ -607,9 +628,9 @@
 
     galaxy.set_grid_picture = function(grid_idx, height, picture_url) {
       if (!window.gridService) {
-
+        showError("grid service uninitialized");
       } else {
-        var url = "/grid_avatar/get/" + grid_idx;
+        const url = "/grid_avatar/get/" + grid_idx;
         window.gridService.setGridImageTmp(grid_idx, url, viewer);
       }
     };
@@ -634,7 +655,7 @@
 
               earth.grids(grid_index, function(err, result) {
                 if (err) {
-
+                  showError("contract call error");
                 } else {
                   var owner = result[1];
                   $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
@@ -701,7 +722,7 @@
 
           earth.grids(grid_idx, function(err, result) {
             if (err) {
-
+              showError("contract call error");
             } else {
               var gridState = result[0];
               if (gridState == 0) {
@@ -709,7 +730,7 @@
                 if (price == 0) {
                   earth.minimalPrice(function(err, price) {
                     if (err) {
-
+                      showError("contract call error");
                     } else {
                       earth.BuyGrid(
                         point.x,
@@ -718,6 +739,11 @@
                           gas: 470000
                         },
                         function(err, res) {
+                          if (err) {
+                            showError("contract call error");
+                          } else {
+                            //TODO: about tx
+                          }
                           console.log(err, res);
                         }
                       );
@@ -731,6 +757,11 @@
                       gas: 470000
                     },
                     function(err, res) {
+                      if (err) {
+                        showError("contract call error");
+                      } else {
+                        //TODO:
+                      }
                       console.log(err, res);
                     }
                   );
@@ -750,96 +781,101 @@
           })
         }
       });
+    }
 
-      $("#sell-grid-btn").click(function() {
-        var grid_idx = parseInt($("[name=grid-idx]").val());
-        if (isNaN(grid_idx)) return;
-        var price = parseFloat($("[name=grid-sell-price]").val());
-        if (isNaN(price)) return;
+    $("#sell-grid-btn").click(function() {
+      var grid_idx = parseInt($("[name=grid-idx]").val());
+      if (isNaN(grid_idx)) {
+        showError("non grid selected");
+        return;
+      }
+      var price = parseFloat($("[name=grid-sell-price]").val());
+      if (isNaN(price)) {
+        showError("please enter price in ETH");
+        return;
+      }
 
-        var point = gridService.fromGridIndexToXY(grid_idx);
+      var point = gridService.fromGridIndexToXY(grid_idx);
 
-        earth.grids(grid_idx, function(err, result) {
-          if (err) {
+      earth.grids(grid_idx, function(err, result) {
+        if (err) {
+          showError("contract call error");
+        } else {
+          var owner = result[1];
 
+          if (owner != web3.eth.coinbase) {
+            //TODO: error
+            showError("not owner of this grid");
           } else {
-            var owner = result[1];
+            earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {
+              gas: 470000
+            }, function(err, txid) {
+              if (err) {
+                showError("contract call error");
+              } else {
 
-            if (owner != web3.eth.coinbase) {
-              //TODO: error
-            } else {
-              earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {
-                gas: 470000
-              }, function(err, txid) {
-                if (err) {
-                  //TODO:
-                } else {
-
-                }
-              });
-            }
-          }
-        })
-
-      });
-
-      $("#check-show-grids").change(function() {
-        var show = $(this).prop('checked');
-        if (window.gridService) {
-          window.gridService.showGrids(show);
-        }
-      });
-
-      $("#check-show-mark").change(function() {
-        show_grid_mark = $(this).prop('checked');
-        gridMark.show = show_grid_mark;
-      });
-
-      $("#player-location").click(function() {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          viewer.camera.flyTo({
-            destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000000.0)
-          });
-        });
-      })
-
-      $("#player-grids-list").on('change', function() {
-        $("[name=grid-idx]").val(this.value);
-        galaxy.grid_selected(this.value);
-      })
-
-      $("#player-claim").click(function() {
-        earth.GetEarn(function(error, tx) {
-          if (error) {
-            //TODO:
-          } else {
-
-          }
-        });
-      })
-
-      $("#set-grid-label").click(function() {
-        var text = $("#grid-label").val();
-        var grid = $("[name=grid-idx]").val();
-
-        if (window.gridService) {
-          if (text.length == 0) {
-
-          } else {
-            var center = window.gridService.gridCenterInDegree(grid);
-            galaxy.set_label(center.lng, center.lat, 100000, text);
+              }
+            });
           }
         }
-      });
+      })
 
-    };
+    });
+
+    $("#check-show-grids").change(function() {
+      var show = $(this).prop('checked');
+      if (window.gridService) {
+        window.gridService.showGrids(show);
+      }
+    });
+
+    $("#check-show-mark").change(function() {
+      show_grid_mark = $(this).prop('checked');
+      gridMark.show = show_grid_mark;
+    });
+
+    $("#player-location").click(function() {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000000.0)
+        });
+      });
+    })
+
+    $("#player-grids-list").on('change', function() {
+      $("[name=grid-idx]").val(this.value);
+      galaxy.grid_selected(this.value);
+    })
+
+    $("#player-claim").click(function() {
+      earth.GetEarn(function(error, tx) {
+        if (error) {
+          showError("contract call error");
+        } else {
+
+        }
+      });
+    })
+
+    $("#set-grid-label").click(function() {
+      var text = $("#grid-label").val();
+      var grid = $("[name=grid-idx]").val();
+
+      if (window.gridService) {
+        if (text.length == 0) {
+
+        } else {
+          var center = window.gridService.gridCenterInDegree(grid);
+          galaxy.set_label(center.lng, center.lat, 100000, text);
+        }
+      }
+    });
 
     galaxy.refresh_earth_status();
     galaxy.refresh_player_stauts();
     galaxy.init_grid_service();
     galaxy.init_mouse_event_handler();
     galaxy.init_page_event();
-
-    initI18n();
   }
+
 }());
