@@ -62,9 +62,6 @@
     this.imageWrapper = this.el.querySelector('.avatar-upload__image-wrapper');
   };
 
-  AvatarUpload.prototype.config = {
-  };
-
   AvatarUpload.prototype.renderInput = function() {
     var imgEl = this.el.querySelector('img'),
       img = imgEl.src;

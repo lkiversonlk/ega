@@ -304,7 +304,6 @@
    }
    )*/
 
-
   $("#buy-grid").hide();
   $("#sell-grid").hide();
   $("#oper-grid").hide();
@@ -748,7 +747,6 @@
                 // can't buy mean can't trigger follow-up actions
               }
             }
-
           })
         }
       });
@@ -834,13 +832,6 @@
         }
       });
 
-      // TODO not useful
-      /*
-      $("#set-grid-picture").click(function() {
-        var grid_idx = $("[name=grid-idx]").val();
-        galaxy.set_grid_picture(grid_idx, 100000, viewer);
-      })
-      */
     };
 
     galaxy.refresh_earth_status();
