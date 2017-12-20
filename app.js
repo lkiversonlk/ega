@@ -7,8 +7,13 @@ var bodyParser = require('body-parser');
 var exphbs = require("express-handlebars");
 var i18n = require("i18n");
 var index = require('./routes/index');
+//var Web3 = require("web3");
+
+//var web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/vAugb8H4cG1bOuFMZj3y"));
 
 var app = express();
+
+//app.set("web3", web3);
 
 i18n.configure({
   locales: ['en', 'ch'],

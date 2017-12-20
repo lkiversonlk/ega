@@ -878,6 +878,22 @@
       }
     });
 
+    $("#sign").click(function(){
+      signWithTimestamp(web3, function(err, ret){
+        if(err){
+
+        } else {
+          $.post(
+            "/sign",
+            ret
+          ).done(function(data){
+            console.log(data);
+          });
+          
+        }
+      });
+    });
+
     galaxy.refresh_earth_status();
     galaxy.refresh_player_stauts();
     galaxy.init_grid_service();

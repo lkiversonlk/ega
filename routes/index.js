@@ -3,7 +3,7 @@ var router = express.Router();
 var formidable = require("formidable");
 var path = require("path");
 var fs = require("fs");
-
+var etherUtil = require("ethereumjs-util");
 
 var avatar_save_path = path.join(__dirname, "..", "avatars");
 var grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
@@ -62,6 +62,30 @@ router.post('/locale', function(req, res) {
   return res.sendStatus(200);
 });
 
+const prefix = new Buffer("\x19Ethereum Signed Message:\n");
+
+router.post("/sign", function(req, res){
+
+  if(req.body && req.body.data && req.body.timestamp && req.body.address){
+    var data = req.body.data;
+    var timestamp = req.body.timestamp;
+    var addr = req.body.address;
+
+    var a = new Date();
+    var real_time = a.getTime();
+
+    //first validate 
+    var signs = etherUtil.fromRpcSig(data);
+    var hashed = etherUtil.sha3(timestamp);
+    var origin = Buffer.concat([prefix, new Buffer(String(hashed.length)), etherUtil.toBuffer(hashed)]);
+    origin = etherUtil.sha3(origin);
+
+    var pub = etherUtil.ecrecover(origin, signs.v, signs.r, signs.s);
+    var decryptedxs = etherUtil.bufferToHex(etherUtil.pubToAddress(pub));
+    
+  }
+  return res.sendStatus(200);
+});
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('home', {
