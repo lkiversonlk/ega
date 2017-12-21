@@ -887,8 +887,8 @@
       }
     });
 
-    $("#sign").click(function(){
-      signWithTimestamp(web3, function(err, ret){
+    $("#sign").click(function() {
+      $validation.signWithTimestamp(web3, function(err, ret){
         if(err){
 
         } else {
@@ -898,7 +898,6 @@
           ).done(function(data){
             console.log(data);
           });
-          
         }
       });
     });

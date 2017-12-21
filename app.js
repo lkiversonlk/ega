@@ -10,9 +10,7 @@ var index = require('./routes/index');
 var confRouter = require("./routes/conf");
 var GridService = require("./public/javascripts/grids");
 
-
 //var Web3 = require("web3");
-
 //var web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/vAugb8H4cG1bOuFMZj3y"));
 
 var app = express();

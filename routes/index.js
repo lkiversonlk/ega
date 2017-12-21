@@ -5,10 +5,11 @@ var path = require("path");
 var fs = require("fs");
 var etherUtil = require("ethereumjs-util");
 
-var avatar_save_path = path.join(__dirname, "..", "avatars");
-var grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
-var anonymous = path.join(__dirname, "..", "public", "images", "anonymous.jpg");
-var anonymous_grid = path.join(__dirname, "..", "public", "images", "flag.png");
+const avatar_save_path = path.join(__dirname, "..", "avatars");
+const grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
+const anonymous = path.join(__dirname, "..", "public", "images", "anonymous.jpg");
+const anonymous_grid = path.join(__dirname, "..", "public", "images", "flag.png");
+const delay = 5 * 60 * 1000;
 
 router.post('/avatar/upload', function(req, res, next) {
   var form = new formidable.IncomingForm();
@@ -22,7 +23,6 @@ router.post('/avatar/upload', function(req, res, next) {
 });
 
 router.get("/avatar/get/:address", function(req, res, next) {
-
   if (req.params.address == "0x0000000000000000000000000000000000000000") {
     return res.sendFile(anonymous);
   }
@@ -65,32 +65,65 @@ router.post('/locale', function(req, res) {
 const prefix = new Buffer("\x19Ethereum Signed Message:\n");
 
 router.post("/sign", function(req, res){
+  res.setHeader('Content-Type', 'application/json');
 
-  if(req.body && req.body.data && req.body.timestamp && req.body.address){
-    var data = req.body.data;
-    var timestamp = req.body.timestamp;
-    var addr = req.body.address;
+  if (req.body && req.body.key && req.body.timestamp && req.body.address){
+    const {
+      key,
+      address,
+      timestamp: past,
+    } = req.body
 
-    var a = new Date();
-    var real_time = a.getTime();
+    const now = new Date().getTime();
+    if (now - past < delay) {
+      const signature = etherUtil.fromRpcSig(key);
+      const pastHashed = etherUtil.sha3(past);
+      const origin = Buffer.concat([prefix, new Buffer(String(pastHashed.length)), etherUtil.toBuffer(pastHashed)]);
+      const originHashed = etherUtil.sha3(origin);
 
-    //first validate 
-    var signs = etherUtil.fromRpcSig(data);
-    var hashed = etherUtil.sha3(timestamp);
-    var origin = Buffer.concat([prefix, new Buffer(String(hashed.length)), etherUtil.toBuffer(hashed)]);
-    origin = etherUtil.sha3(origin);
+      const pub = etherUtil.ecrecover(originHashed, signature.v, signature.r, signature.s);
+      const decryptedxs = etherUtil.bufferToHex(etherUtil.pubToAddress(pub));
+      if (decryptedxs === address) {
+        res.send(JSON.stringify({
+          isOK: true,
+          msg: 'You are lucky :)',
+        }));
 
-    var pub = etherUtil.ecrecover(origin, signs.v, signs.r, signs.s);
-    var decryptedxs = etherUtil.bufferToHex(etherUtil.pubToAddress(pub));
-    
+      } else {
+        res.send(JSON.stringify({
+          isOK: false,
+          msg: 'Different address from agent',
+        }));
+      }
+
+    } else {
+      res.send(JSON.stringify({
+        isOK: false,
+        msg: 'Request timeout',
+      }));
+    }
+
+  } else  {
+    res.send(JSON.stringify({
+      isOK: false,
+      msg: 'Lack required arguments',
+    }));
   }
-  return res.sendStatus(200);
 });
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('home', {
     title: '===TEST==='
   });
+});
+
+router.post('/test', function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify({
+    isOK: false,
+    msg: 'Miao MiMi',
+  }));
 });
 
 module.exports = router;

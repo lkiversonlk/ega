@@ -1,4 +1,4 @@
-(function(root, factory) {
+;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(function() {
@@ -117,12 +117,37 @@
   };
 
   AvatarUpload.prototype.upload = function(file) {
-    var Uploader = this.config.pretendUpload ? FakeUploader : XhrUploader;
+    const upload = () => {
+      var Uploader = this.config.pretendUpload ? FakeUploader : XhrUploader;
 
-    Uploader(file, this.config, {
-      progress: this.uploadProgress.bind(this),
-      success: this.uploadSuccess.bind(this),
-      error: this.uploadError.bind(this),
+      Uploader(file, this.config, {
+        progress: this.uploadProgress.bind(this),
+        success: this.uploadSuccess.bind(this),
+        error: this.uploadError.bind(this),
+      });
+    }
+    
+    this.validation(upload);
+  };
+
+  AvatarUpload.prototype.validation = function(upload) {
+    $validation.signWithTimestamp(web3, function(err, data){
+      if (err) {
+        console.error('Error occured when sign with timestamp');
+        return
+
+      } else {
+        $.post("/sign", data)
+          .done(function({ isOK, msg }) {
+            if (isOK === true) {
+              console.log(msg)
+              upload();
+            } else {
+              console.error(msg)
+              return
+            }
+          });
+      }
     });
   };
 
