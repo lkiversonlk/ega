@@ -1,0 +1,118 @@
+<div id="control-panel" class="col-md-3">
+  <div class="panel panel-default panel-transparent">
+    <div class="panel-heading">
+      {{t "grid panel"}}
+      <span id="mouse-grid"></span>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+      </div>
+      <div class="row">
+        <div class="col-xs-5">
+          <img id="grid-lord-avatar">
+
+          <div>
+            <span>
+              {{t "grid owner"}}
+            </span>
+            
+            <span id="grid-owner"></span>
+          </div>
+        </div>
+        <div class="col-xs-7">
+          <div>
+            <label>
+              {{t "longitude"}}
+            </label>
+            <span id="mouse-lon"></span>
+          </div>
+          <div>
+            <label>
+              {{t "latitude"}}
+            </label>
+            <span id="mouse-lat"></span>
+          </div>
+          <div>
+            <label>
+              {{t "grid status"}}
+            </label>
+            <span id="grid-status"></span>
+          </div>
+          <div>
+            <label>{{t "current price"}}</label>
+            <span id="oper-grid-price"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default panel-transparent">
+    <div class="panel-heading">
+      <!-- <label for="firstname" class="col-sm-4 control-label">{{t "operation board"}}</label> -->
+      <div class="col-sm-12 input-group">
+        <input type="number" class="form-control" placeholder='{{t "enter grid index"}}'
+          name="grid-idx">
+        <span id="search-grid" class="input-group-addon success">
+          <span class="glyphicon glyphicon-ok"></span>
+        </span>
+      </div>
+      <div class="input-group"></div>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-5">
+          <img id="selected-grid-avatar">
+        </div>
+        <div class="col-xs-7">              
+          <div>
+            <label>
+              {{t "grid status"}}
+            </label>
+            <span id="selected-grid-status"></span>
+          </div>
+          <div>
+            <label>{{t "current price"}}</label>
+            <span id="selected-grid-price"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <div>
+        <div id="buy-grid" class="form-group">
+          <button id="buy-grid-btn" class="btn btn-success col-xs-12">Buy this grid</button>
+        </div>
+
+        <div id="sell-grid" class="form-group">
+          <div class="input-group">
+            <!-- <span class="input-group-addon">{{t "sell grid"}}</span>-->
+            <input type="number" name="grid-sell-price" placeholder='{{t "enter sell price"}}' class="form-control">
+            <span id="sell-grid-btn" class="input-group-addon btn-primary">
+              {{t "sell grid"}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="oper-grid" class="panel-body">
+      <div class="panel-body">
+        <div class="form-group">
+          <div id="grid-avatar" class="avatar-upload">
+            <img>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--
+    <div class="panel-body">
+      <button class="btn btn-primary" id="sign">Sign Test</button>
+    </div>
+    -->
+  </div>
+</div>
