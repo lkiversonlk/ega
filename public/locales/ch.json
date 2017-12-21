@@ -36,5 +36,8 @@
 	"not connected to ETH": "未接入以太坊网络，请检查metamask插件",
 	"please enter price in ETH": "请输入以太坊价格",
 	"non grid selected": "未选中领地",
-	"finding...": "检测中..."
+	"finding...": "检测中...",
+	"On Sell": "出售中",
+	"Owned": "私人领地",
+	"Forbidden":"禁区"
 }
