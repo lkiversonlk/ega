@@ -157,10 +157,6 @@
         <div class="panel-heading">
           {{t "grid panel"}}
           <span id="mouse-grid"></span>
-          <span class="pull-right">
-            {{t "grid owner"}}
-            <span id="grid-owner"></span>
-          </span>
         </div>
 
         <div class="panel-body">
@@ -169,6 +165,14 @@
           <div class="row">
             <div class="col-xs-5">
               <img id="grid-lord-avatar">
+
+              <div>
+                <span>
+                  {{t "grid owner"}}
+                </span>
+                
+                <span id="grid-owner"></span>
+              </div>
             </div>
             <div class="col-xs-7">
               <div>
@@ -209,6 +213,26 @@
             </span>
           </div>
           <div class="input-group"></div>
+        </div>
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-5">
+              <img id="selected-grid-avatar">
+            </div>
+            <div class="col-xs-7">              
+              <div>
+                <label>
+                  {{t "grid status"}}
+                </label>
+                <span id="selected-grid-status"></span>
+              </div>
+              <div>
+                <label>{{t "current price"}}</label>
+                <span id="selected-grid-price"></span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="panel-body">

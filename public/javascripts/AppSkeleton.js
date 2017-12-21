@@ -590,6 +590,10 @@
             owner = "None";
           }
 
+          $("#selected-grid-avatar").attr("src", "/avatar/get/" + owner);
+          $("#selected-grid-status").html($.i18n(GridStateEng[gridState]));
+          $("#selected-grid-price").html(price + "ETH");
+
           $("#oper-grid-owner").html(owner);
           $("#oper-grid-state").html(GridStateEng[gridState]);
 
