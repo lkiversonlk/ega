@@ -34,16 +34,67 @@ router.get("/avatar/get/:address", function(req, res, next) {
   }
 });
 
+// Upload image together with validation address from user agent
+const prefix = new Buffer("\x19Ethereum Signed Message:\n");
+
+const verifyUser = (key, address, past) => {
+  if (key && address && past) {
+    const now = new Date().getTime();
+    if (now - past < delay) {
+      const signs = etherUtil.fromRpcSig(key);
+      const pastHashed = etherUtil.sha3(past);
+      const origin = Buffer.concat([prefix, new Buffer(String(pastHashed.length)), etherUtil.toBuffer(pastHashed)]);
+      const originHashed = etherUtil.sha3(origin);
+
+      const pub = etherUtil.ecrecover(originHashed, signs.v, signs.r, signs.s);
+      const decryptedxs = etherUtil.bufferToHex(etherUtil.pubToAddress(pub));
+      if (decryptedxs === address) {
+        return true
+
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  } else {
+    return false
+  }
+};
+
 router.post("/grid_avatar/upload", function(req, res, next) {
-  var form = new formidable.IncomingForm();
+  const form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
-    console.log("receive avatar from grid");
-    var address = fields.grid_idx;
-    var image = files.upload;
-    var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, address));
-    return res.sendStatus(200);
+    console.log("receive avatar from grid")
+
+    const {
+      grid_idx,
+      signature,
+    } = fields
+    const {
+      key,
+      address: addr,
+      timestamp: past,
+    } = JSON.parse(signature)
+
+    const isOK = verifyUser(key, addr, past);
+    if (isOK === true) {
+      const image = files.upload
+      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, grid_idx));
+      res.send(JSON.stringify({
+        isOK: true,
+        msg: 'You are lucky :)',
+      }));
+
+    } else {
+      res.send(JSON.stringify({
+        isOK: false,
+        msg: 'Looks upload failed',
+      }));
+    }
   });
 });
+// End upload image together with validation address from user agent
 
 router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
   if (fs.existsSync(path.join(grid_avatar_save_path, req.params.grid_idx))) {
@@ -60,55 +111,6 @@ router.post('/locale', function(req, res) {
     httpOnly: true
   });
   return res.sendStatus(200);
-});
-
-const prefix = new Buffer("\x19Ethereum Signed Message:\n");
-
-router.post("/sign", function(req, res){
-  res.setHeader('Content-Type', 'application/json');
-
-  if (req.body && req.body.key && req.body.timestamp && req.body.address){
-    const {
-      key,
-      address,
-      timestamp: past,
-    } = req.body
-
-    const now = new Date().getTime();
-    if (now - past < delay) {
-      const signature = etherUtil.fromRpcSig(key);
-      const pastHashed = etherUtil.sha3(past);
-      const origin = Buffer.concat([prefix, new Buffer(String(pastHashed.length)), etherUtil.toBuffer(pastHashed)]);
-      const originHashed = etherUtil.sha3(origin);
-
-      const pub = etherUtil.ecrecover(originHashed, signature.v, signature.r, signature.s);
-      const decryptedxs = etherUtil.bufferToHex(etherUtil.pubToAddress(pub));
-      if (decryptedxs === address) {
-        res.send(JSON.stringify({
-          isOK: true,
-          msg: 'You are lucky :)',
-        }));
-
-      } else {
-        res.send(JSON.stringify({
-          isOK: false,
-          msg: 'Different address from agent',
-        }));
-      }
-
-    } else {
-      res.send(JSON.stringify({
-        isOK: false,
-        msg: 'Request timeout',
-      }));
-    }
-
-  } else  {
-    res.send(JSON.stringify({
-      isOK: false,
-      msg: 'Lack required arguments',
-    }));
-  }
 });
 
 /* GET home page. */

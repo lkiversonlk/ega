@@ -117,37 +117,12 @@
   };
 
   AvatarUpload.prototype.upload = function(file) {
-    const upload = () => {
-      var Uploader = this.config.pretendUpload ? FakeUploader : XhrUploader;
+    var Uploader = this.config.pretendUpload ? FakeUploader : XhrUploader;
 
-      Uploader(file, this.config, {
-        progress: this.uploadProgress.bind(this),
-        success: this.uploadSuccess.bind(this),
-        error: this.uploadError.bind(this),
-      });
-    }
-    
-    this.validation(upload);
-  };
-
-  AvatarUpload.prototype.validation = function(upload) {
-    $validation.signWithTimestamp(web3, function(err, data){
-      if (err) {
-        console.error('Error occured when sign with timestamp');
-        return
-
-      } else {
-        $.post("/sign", data)
-          .done(function({ isOK, msg }) {
-            if (isOK === true) {
-              console.log(msg)
-              upload();
-            } else {
-              console.error(msg)
-              return
-            }
-          });
-      }
+    Uploader(file, this.config, {
+      progress: this.uploadProgress.bind(this),
+      success: this.uploadSuccess.bind(this),
+      error: this.uploadError.bind(this),
     });
   };
 
@@ -237,11 +212,19 @@
     }
 
     // in addition, append grid_idx currently
-    const grid_idx = $("[name=grid-idx]").val();
+    const grid_idx = $("[name=grid-idx]").val()
     formData.append('grid_idx', grid_idx)
 
-    xhr.open(config.uploadMethod, config.uploadUrl);
-    xhr.send(formData);
+    $validation.signWithTimestamp(web3, function(err, signature) {
+      if (err) {
+        console.error('Error occured when sign with timestamp');
+        return
+      } else {
+        formData.append('signature', JSON.stringify(signature))
+        xhr.open(config.uploadMethod, config.uploadUrl)
+        xhr.send(formData)
+      }
+    })
   };
 
   return AvatarUpload;
