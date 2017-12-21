@@ -709,6 +709,21 @@
             $("[name=grid-idx]").val(grid_index);
             galaxy.grid_selected(grid_index);
           }
+
+          var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+            Cesium.Cartesian3.fromDegrees(
+              Cesium.Math.toDegrees(cartographic.longitude), 
+              Cesium.Math.toDegrees(cartographic.latitude), 
+              1000000.0));
+
+          var position = Cesium.Cartesian3.fromDegrees(0, 0, 10000);
+
+          var model = scene.primitives.add(Cesium.Model.fromGltf({
+              url : '/gltf/scene.gltf',
+              modelMatrix : modelMatrix,
+              scale : 1000.0,
+              position: position
+          }));
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
