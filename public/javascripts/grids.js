@@ -21,6 +21,8 @@ function Grid(size) {
   } else {
     this.server = false;
   }
+
+  this.conf = {};
 }
 
 var TILE_SIZE = 256;
@@ -247,6 +249,54 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
 Grid.prototype.loadGridAvatar = function(callback) {
 
 };
+
+/**
+ * if in the server side, load conf from file
+ * if in the client side, load conf from server
+ * @param {*} category 
+ * @param {*} callback 
+ */
+Grid.prototype.LoadConf = function(category, callback){
+  if(this.server){
+    var path = require("path");
+    var filePath = path.join(__dirname, "..", "..", "pub_conf", category + ".json");
+    //read the specified json file
+
+    var jsonfile = require("jsonfile");
+
+    jsonfile.readFile(filePath, function(err, obj){
+      if(err){
+        //LOG
+      } else {
+        return callback(null, obj);
+      }
+    });
+  } else {
+    $.get("/conf/" + category, function(ret){
+      if(!ret){
+        return callback("fail");
+      } else {
+        return callback(ret);
+      }
+    })
+  }
+}
+
+Grid.prototype.GetConf = function(category, callback){
+  var self = this;
+  if(self.conf.hasOwnProperty(category)){
+    return callback(null, this.conf[category]);
+  } else {
+    self.LoadConf(category, function(err, ret){
+      if(err){
+        return callback(err);
+      } else {
+        self.conf[category] = ret;
+        return callback(null, ret);
+      }
+    });
+  }
+}
 
 if (typeof(module) != "undefined") {
   module.exports = Grid;
