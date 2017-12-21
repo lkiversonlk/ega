@@ -35,5 +35,6 @@
 	"unknown network": "未知或尚不支持的网路",
 	"not connected to ETH": "未接入以太坊网络，请检查metamask插件",
 	"please enter price in ETH": "请输入以太坊价格",
-	"non grid selected": "未选中领地"
+	"non grid selected": "未选中领地",
+	"finding...": "检测中..."
 }

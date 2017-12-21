@@ -518,6 +518,7 @@
           $("#player-address").prop('title', web3.eth.coinbase);
           $("#player-grids-count").html(count);
 
+          $("#player-grids-list").find("option").remove();
           for (var i = 0; i < count; i++) {
             earth.ownedGrids(web3.eth.coinbase, i, function(err, grid_idx) {
               if (err) {
@@ -863,6 +864,10 @@
         }
       });
     })
+
+    $("#player-refresh").click(function(){
+      galaxy.refresh_player_stauts();
+    });
 
     $("#set-grid-label").click(function() {
       var text = $("#grid-label").val();

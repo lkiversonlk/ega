@@ -5,7 +5,9 @@
 <link rel="stylesheet" href="/stylesheets/style.css">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
   rel="stylesheet">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
 <link rel="stylesheet" href="/javascripts/avatar.css">
+
 <style>
   @import url(cesium/Widgets/widgets.css);
   #galaxy {
@@ -56,7 +58,12 @@
     <div class="col-md-2">
       <div class="panel panel-default panel-transparent">
         <div class="panel-heading">
-          {{t "status"}}
+          <span>
+            {{t "status"}}
+          </span>
+          <div class="pull-right">
+            <a id="status-refresh" class="button button-tiny button-circle"><i class="fa fa-refresh"></i></a>
+          </div>
         </div>
 
         <div class="panel-body">
@@ -101,8 +108,14 @@
 
       <div class="panel panel-default panel-transparent">
         <div class="panel-heading">
-          <span id="player-address"></span>
-          <span class="glyphicon glyphicon-screenshot pull-right" id="player-location"></span>
+          <span id="player-address">
+            {{t "finding..."}}
+          </span>
+          <div class="pull-right">
+            <a id="player-location" class="button button-tiny button-circle"><i class="fa fa-refresh"></i></a>
+          </div>
+          <!-- <span class="glyphicon glyphicon-screenshot pull-right clickable" id="player-location"></span> -->
+          <!-- <span class="glyphicon glyphicon-refresh pull-right clickable" id="player-refresh"></span> -->
         </div>
 
         <div class="panel-body">
@@ -114,9 +127,14 @@
               {{t "earns"}}
             </label>
             <span id="player-earns"></span>
+            <div class="pull-right">
+              <a id="player-claim" href="#" class="button button-small button-glow button-highlight">{{t "claim"}}</a>
+            </div>
+            <!--
             <button id="player-claim" class="btn btn-primary">
               {{t "claim"}}
             </button>
+            -->
           </div>
 
           <div>
@@ -124,7 +142,7 @@
               {{t "owned grids"}}
             </label>
             <span id="player-grids-count"></span>
-            <select id="player-grids-list" class="form-control"></select>
+            <select id="player-grids-list" class="form-control"xs></select>
           </div>
         </div>
       </div>
@@ -225,7 +243,7 @@
         <div class="panel-body">
           <button class="btn btn-primary" id="sign">Sign Test</button>
         </div>
-        -->
+        -->x
       </div>
     </div>
   </div>
