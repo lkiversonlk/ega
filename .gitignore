@@ -25,6 +25,7 @@ npm-debug.log
 *.swp
 *.~
 Session.vim
+.tern-project
 
 # tmux
 #
