@@ -1,5 +1,9 @@
 /**
  * grids.js handle the calculation between (longitude, latitude) and grids
+ * 
+ * 主要包含grid配置信息的获取，保存和地图引擎上grid相关的交互。
+ * 
+ * 
  */
 
 /**
@@ -14,15 +18,15 @@ function Grid(size) {
   this.lng_per_grid = 360 / size;
 
   this.grid_lines = [];
-  this.grid_avatar = {};
 
   if (typeof(window) == "undefined") {
     this.server = true;
   } else {
-    this.server = false;
+    this.server = false;    
   }
 
   this.conf = {};
+  this.grid_avatars = {};
 }
 
 var TILE_SIZE = 256;
@@ -75,9 +79,16 @@ Grid.prototype.fromLatLngToGrid = function(lat, lng) {
 }
 
 Grid.prototype.showGrids = function(show) {
-  this.grid_lines.forEach(function(line) {
+  var self = this;
+  self.grid_lines.forEach(function(line) {
     line.show = show;
   });
+
+
+  Object.keys(self.grid_avatars).forEach(function(grid){
+    self.grid_avatars[grid].polygon.show = show;
+  })
+
 }
 
 Grid.prototype.drawGrids = function(viewer) {
@@ -126,6 +137,22 @@ Grid.prototype.drawGrids = function(viewer) {
   }
 }
 
+Grid.prototype.drawGridAvatars = function(viewer, callback){
+  var self = this;
+  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
+    if(err){
+      return callback && callback(err);
+    } else {
+      Object.keys(conf).forEach(function(grid){
+        var grid_conf = conf[grid];
+
+        self.DrawGridAvatar(grid, viewer, function(err){
+
+        });
+      });
+    }
+  });
+}
 /**
  * get the edge points of a specified grid 
  * @param {*} index 
@@ -212,11 +239,12 @@ Grid.prototype.destory = function() {
 
 }
 
+/*
 //Grid.prototype.
 Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
-  if (this.grid_avatar.hasOwnProperty(grid)) {
+  if (this.grid_avatars.hasOwnProperty(grid)) {
     //change the material
-    this.grid_avatar[grid].polygon.material = image_url;
+    this.grid_avatars[grid].polygon.material = image_url;
   } else {
     var points = gridService.fromGridIndexToDegrees(grid);
     var gridPic = viewer.entities.add({
@@ -228,9 +256,10 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
         hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
       }
     });
-    this.grid_avatar[grid] = gridPic;
+    this.grid_avatars[grid] = gridPic;
   }
 };
+*/
 
 /**
  * Grid Service will both work in server side and client side
@@ -276,7 +305,7 @@ Grid.prototype.LoadConf = function(category, callback){
       if(!ret){
         return callback("fail");
       } else {
-        return callback(ret);
+        return callback(null, ret);
       }
     })
   }
@@ -298,6 +327,40 @@ Grid.prototype.GetConf = function(category, callback){
   }
 }
 
+const GRID_CONF_CATEGORY = "grid";
+const GRID_PIC_URL_BASE = "/grid_avatar/get/";
+Grid.prototype.DrawGridAvatar = function(grid_idx, viewer, callback){
+  var self = this;
+  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
+    if(err){
+      return callback(err);
+    } else {
+      if(conf.hasOwnProperty(grid_idx)){
+        var avatar = conf[grid_idx].avatar;
+        if(self.grid_avatars.hasOwnProperty(grid_idx)){
+          self.grid_avatars[grid_idx].polygon.material = GRID_PIC_URL_BASE + avatar;
+        } else {
+          var points = gridService.fromGridIndexToDegrees(grid_idx);
+          var gridPic = viewer.entities.add({
+            name: "grid_picture",
+            polygon: {
+              height: 10000,
+              material: GRID_PIC_URL_BASE + avatar,
+              outline: true,
+              hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
+            }
+          });
+        
+          self.grid_avatars[grid_idx] = gridPic;
+        }
+      } else {
+        return callback();
+      }
+    }
+  })
+}
+
 if (typeof(module) != "undefined") {
   module.exports = Grid;
 }
+

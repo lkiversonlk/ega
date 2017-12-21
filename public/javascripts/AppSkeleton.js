@@ -553,6 +553,7 @@
 
           var gridService = window.gridService = new Grid(size);
           gridService.drawGrids(viewer);
+          gridService.drawGridAvatars(viewer);
         }
       })
     }
@@ -570,6 +571,7 @@
     galaxy.draw_mark = function(grid_idx) {
       if (!window.gridService) {
         showError("grid server uninitialized");
+        
       } else {
         var points = gridService.fromGridIndexToDegrees(grid_index);
         gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
