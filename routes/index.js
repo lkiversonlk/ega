@@ -4,6 +4,7 @@ var formidable = require("formidable");
 var path = require("path");
 var fs = require("fs");
 var etherUtil = require("ethereumjs-util");
+var Grid = require("../public/javascripts/grids");
 
 const avatar_save_path = path.join(__dirname, "..", "avatars");
 const grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
@@ -40,7 +41,7 @@ const prefix = new Buffer("\x19Ethereum Signed Message:\n");
 const verifyUser = (key, address, past) => {
   if (key && address && past) {
     const now = new Date().getTime();
-    if (now - past < delay) {
+    if (now - past < delay && past - now < delay) {
       const signs = etherUtil.fromRpcSig(key);
       const pastHashed = etherUtil.sha3(past);
       const origin = Buffer.concat([prefix, new Buffer(String(pastHashed.length)), etherUtil.toBuffer(pastHashed)]);
@@ -80,12 +81,63 @@ router.post("/grid_avatar/upload", function(req, res, next) {
     const isOK = verifyUser(key, addr, past);
     if (isOK === true) {
       const image = files.upload
-      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, grid_idx));
-      res.send(JSON.stringify({
-        isOK: true,
-        msg: 'You are lucky :)',
-      }));
 
+      var gridServ = req.app.get("grid");
+      if(!gridServ){
+        res.send(JSON.stringify({
+          isOK: false,
+          msg: 'Server Error',
+        }));
+        return;
+      }
+      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, grid_idx));
+
+      if (err) {
+        res.send(JSON.stringify({
+          isOK: false,
+          msg: 'Server Error',
+        }));
+        return;
+      } else {
+        gridServ.GetConf("grid", function(err, conf){
+          if(err){
+            res.send(JSON.stringify({
+              isOK: false,
+              msg: 'Server Error',
+            }));
+            return;
+          } else {
+            if(conf.hasOwnProperty(grid_idx)){
+              //do nothing
+              res.send(JSON.stringify({
+                isOK: true,
+                msg: 'You are lucky :)',
+              }));
+              return
+            } else {
+              conf[grid_idx] = {
+                avatar: grid_idx
+              };
+
+              gridServ.SaveConf("grid", conf, function(err){
+                if(err){
+                  res.send(JSON.stringify({
+                    isOK: false,
+                    msg: 'Server Error',
+                  }));
+                  return;
+                } else {
+                  res.send(JSON.stringify({
+                    isOK: true,
+                    msg: 'You are lucky :)',
+                  }));
+                  return;
+                }
+              })
+            }
+          }
+        })
+      }
     } else {
       res.send(JSON.stringify({
         isOK: false,

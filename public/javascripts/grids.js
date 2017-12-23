@@ -280,6 +280,21 @@ Grid.prototype.loadGridAvatar = function(callback) {
 
 };
 
+Grid.prototype.SaveConf = function(category, conf, callback){
+  if(this.server){
+    if(typeof(path) == "undefined"){
+      var path = require("path");
+    }
+    var filePath = path.join(__dirname, "..", "..", "pub_conf", category + ".json");
+    if(typeof(jsonfile) == "undefined") {
+      var jsonfile = require("jsonfile");
+    }
+    return jsonfile.writeFile(filePath, conf, callback);
+  } else {
+    return callback("client side not suppored yet");
+  }
+};
+
 /**
  * if in the server side, load conf from file
  * if in the client side, load conf from server
@@ -288,7 +303,9 @@ Grid.prototype.loadGridAvatar = function(callback) {
  */
 Grid.prototype.LoadConf = function(category, callback){
   if(this.server){
-    var path = require("path");
+    if(typeof(path) == "undefined"){
+      path = require("path");
+    }
     var filePath = path.join(__dirname, "..", "..", "pub_conf", category + ".json");
     //read the specified json file
 
