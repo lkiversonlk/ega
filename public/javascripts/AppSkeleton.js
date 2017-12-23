@@ -347,6 +347,11 @@
     });
   }
 
+  function showInfo(msg_key){
+
+  };
+
+
   function getEtherAddress(network, address) {
     switch (network) {
       case "1":
@@ -617,14 +622,17 @@
           $("#oper-grid-owner").html(owner);
           $("#oper-grid-state").html(GridStateEng[gridState]);
 
-          if (gridState == 0 && owner != web3.eth.coinbase) {
+          if (owner == web3.eth.coinbase) {
+            $("#buy-grid-btn").addClass("disabled");
+            $("#sell-grid-btn").removeClass("disabled");
+          } else if(gridState == 0){
             $("#buy-grid-btn").removeClass("disabled");
             $("#sell-grid-btn").addClass("disabled");
           } else {
+            $("#sell-grid-btn").addClass("disabled");
             $("#buy-grid-btn").addClass("disabled");
-            $("#sell-grid-btn").removeClass("disabled");
-
           }
+          
           //adjust the camera
           if (window.gridService) {
             window.gridService.gridAvatar(grid_idx, function(err, avatar_url){
@@ -692,6 +700,7 @@
                   $("#grid-status").html(GridStateEng[gridState]);
                   $("#grid-owner").html(shortSpellAddress(owner));
                   $("#grid-owner").prop("title", owner);
+                  $("#oper-grid-price").html(web3.fromWei(result[2]));
                 }
               })
 
@@ -760,7 +769,10 @@
 
       $("#buy-grid-btn").click(function() {
         var grid_idx = parseInt($("[name=grid-idx]").val());
-        if (isNaN(grid_idx)) return;
+        if (isNaN(grid_idx)) {
+          showError("non grid selected");
+          return;
+        };
 
         if (window.gridService) {
           var point = window.gridService.fromGridIndexToXY(grid_idx);
@@ -771,6 +783,13 @@
             } else {
               var gridState = result[0];
               if (gridState == 0) {
+                var owner = result[1];
+
+                if(owner == web3.eth.coinbase){
+                  showError("you are already the owner");
+                  return ;
+                }
+
                 var price = result[2];
                 if (price == 0) {
                   earth.minimalPrice(function(err, price) {
@@ -788,6 +807,7 @@
                             showError("contract call error");
                           } else {
                             //TODO: about tx
+                            showError("transaction id: " + res);
                           }
                           console.log(err, res);
                         }
@@ -821,6 +841,8 @@
 
               } else {
                 // can't buy mean can't trigger follow-up actions
+                showError("grid is not on sell");
+                return ;
               }
             }
           })
@@ -858,37 +880,69 @@
         showError("non grid selected");
         return;
       }
+
+      if(window.gridService){
+        earth.grids(grid_idx, function(err, result){
+          if(err){
+            showError("contract call error");
+            console.log(err);
+          } else {
+            var owner = result[1];
+            if(owner != web3.eth.coinbase){
+              showError("you are not the owner of this grid");
+              return;
+            }
+
+            vex.dialog.prompt({
+              message: 'Set the sell price in ETH',
+              placeholder: 'Price',
+              callback: function (sell) {
+                if(!sell){
+                  return;
+                }
+      
+                var price = parseFloat(sell);
+      
+                if(isNaN(price)){
+                  showError("price invalid");
+                  return;
+                }
+      
+                var point = gridService.fromGridIndexToXY(grid_idx);
+                earth.grids(grid_idx, function(err, result) {
+                  if (err) {
+                    showError("contract call error");
+                  } else {
+                    var owner = result[1];
+      
+                    if (owner != web3.eth.coinbase) {
+                      //TODO: error
+                      showError("not owner of this grid");
+                    } else {
+                      earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {
+                          gas: 470000
+                        }, function(err, txid) {
+                          if (err) {
+                            showError("contract call error");
+                          } else {
+                            showError("transaction id: " + txid);
+                          }
+                        });
+                      }
+                    }
+                  });
+              }
+            });
+          }
+        })
+      }
+      
+      /*
       var price = parseFloat($("[name=grid-sell-price]").val());
       if (isNaN(price)) {
         showError("please enter price in ETH");
         return;
-      }
-
-      var point = gridService.fromGridIndexToXY(grid_idx);
-
-      earth.grids(grid_idx, function(err, result) {
-        if (err) {
-          showError("contract call error");
-        } else {
-          var owner = result[1];
-
-          if (owner != web3.eth.coinbase) {
-            //TODO: error
-            showError("not owner of this grid");
-          } else {
-            earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {
-              gas: 470000
-            }, function(err, txid) {
-              if (err) {
-                showError("contract call error");
-              } else {
-
-              }
-            });
-          }
-        }
-      })
-
+      }*/
     });
 
     $("#check-show-grids").change(function() {
