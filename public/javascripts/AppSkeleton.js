@@ -510,6 +510,11 @@
     }
 
     galaxy.refresh_player_stauts = function() {
+
+      if(!galaxy.hasOwnProperty('player')){
+        galaxy.player = {};
+      }
+
       earth.GridsCount(web3.eth.coinbase, function(err, count) {
         if (err) {
           showError("contract call error");
@@ -518,16 +523,30 @@
           $("#player-address").prop('title', web3.eth.coinbase);
           $("#player-grids-count").html(count);
 
+          galaxy.player.grids_count = count;
+          galaxy.player.grids = [];
+
           $("#player-grids-list").find("option").remove();
-          for (var i = 0; i < count; i++) {
-            earth.ownedGrids(web3.eth.coinbase, i, function(err, grid_idx) {
+          async.times(count, function(i, next){
+            let idx = i;
+            earth.ownedGrids(web3.eth.coinbase, idx, function(err, grid_idx) {
               if (err) {
                 showError("contract call error");
+                return next("contract call error");
               } else {
+                galaxy.player.grids.push(grid_idx);
                 $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');
+                return next();
               }
             });
-          }
+          }, function(err){
+            if(err){
+
+            } else {
+              galaxy.init_user_ship();
+
+            }
+          });
         }
       });
 
@@ -592,34 +611,30 @@
             owner = "None";
           }
 
-          $("#selected-grid-avatar").attr("src", "/avatar/get/" + owner);
           $("#selected-grid-status").html($.i18n(GridStateEng[gridState]));
-          $("#selected-grid-price").html(price + "ETH");
+          $("#selected-grid-price").html(price);
 
           $("#oper-grid-owner").html(owner);
           $("#oper-grid-state").html(GridStateEng[gridState]);
 
           if (gridState == 0 && owner != web3.eth.coinbase) {
-            $("#buy-grid").show();
+            $("#buy-grid-btn").removeClass("disabled");
+            $("#sell-grid-btn").addClass("disabled");
           } else {
-            $("#buy-grid").hide();
+            $("#buy-grid-btn").addClass("disabled");
+            $("#sell-grid-btn").removeClass("disabled");
+
           }
-
-          if (owner == web3.eth.coinbase) {
-            $("#sell-grid").show();
-            $("#oper-grid").show();
-            $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
-
-          } else {
-            $("#sell-grid").hide();
-            $("#oper-grid").hide();
-          }
-          $("#oper-grid-price").html(price + " ETH");
-
           //adjust the camera
           if (window.gridService) {
-            var center = window.gridService.gridCenterInDegree(grid_idx);
+            window.gridService.gridAvatar(grid_idx, function(err, avatar_url){
+              if(err){
 
+              } else {
+                $("#selected-grid-avatar").attr("src", avatar_url);
+              }
+            })
+            var center = window.gridService.gridCenterInDegree(grid_idx);
             viewer.camera.flyTo({
               destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 4000000.0)
             })
@@ -710,6 +725,7 @@
             galaxy.grid_selected(grid_index);
           }
 
+          /*
           var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
             Cesium.Cartesian3.fromDegrees(
               Cesium.Math.toDegrees(cartographic.longitude), 
@@ -723,7 +739,7 @@
               modelMatrix : modelMatrix,
               scale : 1000.0,
               position: position
-          }));
+          }));*/
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
@@ -810,6 +826,30 @@
           })
         }
       });
+    }
+
+    galaxy.init_user_ship = function() {
+      if(galaxy.player.hasOwnProperty("starship")){
+        //already have one
+      } else {
+        if(galaxy.player.grids_count > 0){
+          if(window.gridService){
+            var center = window.gridService.gridCenterInDegree(galaxy.player.grids[0]);
+            var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+              Cesium.Cartesian3.fromDegrees(
+                center.lng, 
+                center.lat, 
+                1000000.0));
+            var model = scene.primitives.add(Cesium.Model.fromGltf({
+                  url : '/gltf/scene.gltf',
+                  modelMatrix : modelMatrix,
+                  scale : 1000.0
+              }));
+      
+            galaxy.player.starship = model;
+          }
+        }
+      }
     }
 
     $("#sell-grid-btn").click(function() {
@@ -904,6 +944,7 @@
       }
     });
 
+    /*
     $("#sign").click(function() {
       $validation.signWithTimestamp(web3, function(err, ret){
         if(err){
@@ -917,13 +958,14 @@
           });
         }
       });
-    });
+    });*/
 
     galaxy.refresh_earth_status();
     galaxy.refresh_player_stauts();
     galaxy.init_grid_service();
     galaxy.init_mouse_event_handler();
     galaxy.init_page_event();
+    
   }
 
 }());

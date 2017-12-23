@@ -327,6 +327,23 @@ Grid.prototype.GetConf = function(category, callback){
   }
 }
 
+Grid.prototype.gridAvatar = function(grid_idx, callback){
+  var self = this;
+  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
+    if(err){
+      return callback(err);
+    } else {
+      if(conf.hasOwnProperty(grid_idx)){
+        var avatar = conf[grid_idx].avatar;
+        return callback(null, GRID_PIC_URL_BASE + avatar);
+      } else {
+        //TODO: anonymous
+        return callback("no avatar");
+      }
+    }
+  })
+}
+
 const GRID_CONF_CATEGORY = "grid";
 const GRID_PIC_URL_BASE = "/grid_avatar/get/";
 Grid.prototype.DrawGridAvatar = function(grid_idx, viewer, callback){

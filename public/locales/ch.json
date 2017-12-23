@@ -39,5 +39,9 @@
 	"finding...": "检测中...",
 	"On Sell": "出售中",
 	"Owned": "私人领地",
-	"Forbidden":"禁区"
+	"Forbidden": "禁区",
+	"buy grid": "buy grid",
+	"buy": "buy",
+	"BUY": "BUY",
+	"BUYXS": "BUYXS"
 }

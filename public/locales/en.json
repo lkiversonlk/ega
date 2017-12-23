@@ -32,5 +32,9 @@
 	"enter sell price": "enter sell price",
 	"unknown network": "unknown or unsupported network",
 	"not connected to ETH": "not connected to ethereum, please check metamask",
-	"finding...": "finding..."
+	"finding...": "finding...",
+	"BUY": "BUY",
+	"SELL": "SELL",
+	"NEW PIC": "NEW PIC",
+	"starship": "starship"
 }
