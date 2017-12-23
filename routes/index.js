@@ -115,17 +115,16 @@ router.post('/locale', function(req, res) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home', {
-    title: '===TEST==='
-  });
-});
+  let env = req.app.get('env')
 
-router.post('/test', function(req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({
-    isOK: false,
-    msg: 'Miao MiMi',
-  }));
+  if (!env || env === 'development')
+    env = false
+  else
+    env = true
+
+  res.render('home', {
+    production: env,
+  });
 });
 
 module.exports = router;

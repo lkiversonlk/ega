@@ -1019,7 +1019,7 @@
     galaxy.init_grid_service();
     galaxy.init_mouse_event_handler();
     galaxy.init_page_event();
-    
+
   }
 
 }());

@@ -9,6 +9,12 @@ var debug = require('debug')('eegalaxy:server');
 var http = require('http');
 
 /**
+ * Set env from node start command.
+ */
+
+app.set('env', process.argv[2]);
+
+/**
  * Get port from environment and store in Express.
  */
 
