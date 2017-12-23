@@ -339,7 +339,7 @@ Grid.prototype.gridAvatar = function(grid_idx, callback){
         return callback(null, GRID_PIC_URL_BASE + avatar);
       } else {
         //TODO: anonymous
-        return callback("no avatar");
+        return callback(null, "/images/logo.png");
       }
     }
   })

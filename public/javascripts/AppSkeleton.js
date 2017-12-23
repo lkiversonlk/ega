@@ -388,9 +388,10 @@
           if (window.gridService) {
             window.gridService.gridAvatar(grid_idx, function(err, avatar_url){
               if(err){
-
+                showError("fail to load grid avatar");
+                console.log("fail to retrive grid avatar :" + err);
               } else {
-                $("#selected-grid-avatar").attr("src", avatar_url);
+                //$("#grid-avatar img").attr("src", avatar_url);
               }
             })
             var center = window.gridService.gridCenterInDegree(grid_idx);
