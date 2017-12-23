@@ -38,271 +38,7 @@
     mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
   }));
 
-//////////////////////////////////////////////////////////////////////////
-// Loading Terrain
-//////////////////////////////////////////////////////////////////////////
-
-  // Load STK World Terrain
-  viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-    url: 'https://assets.agi.com/stk-terrain/world',
-    requestWaterMask: true, // required for water effects
-    requestVertexNormals: false // required for terrain lighting
-  });
-  // Enable depth testing so things behind the terrain disappear.
-  viewer.scene.globe.depthTestAgainstTerrain = true;
-
-//////////////////////////////////////////////////////////////////////////
-// Configuring the Scene
-//////////////////////////////////////////////////////////////////////////
-
-// // Enable lighting based on sun/moon positions
-// viewer.scene.globe.enableLighting = true;
-//
-// // Create an initial camera view
-// var initialPosition = new Cesium.Cartesian3.fromDegrees(-73.998114468289017509, 40.674512895646692812, 2631.082799425431);
-// var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(7.1077496389876024807, -31.987223091598949054, 0.025883251314954971306);
-// var homeCameraView = {
-//     destination : initialPosition,
-//     orientation : {
-//         heading : initialOrientation.heading,
-//         pitch : initialOrientation.pitch,
-//         roll : initialOrientation.roll
-//     }
-// };
-// // Set the initial view
-// viewer.scene.camera.setView(homeCameraView);
-//
-// // Add some camera flight animation options
-// homeCameraView.duration = 2.0;
-// homeCameraView.maximumHeight = 2000;
-// homeCameraView.pitchAdjustHeight = 2000;
-// homeCameraView.endTransform = Cesium.Matrix4.IDENTITY;
-// // Override the default home button
-// viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
-//     e.cancel = true;
-//     viewer.scene.camera.flyTo(homeCameraView);
-// });
-//
-// // Set up clock and timeline.
-// viewer.clock.shouldAnimate = true; // default
-// viewer.clock.startTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:00:00Z");
-// viewer.clock.stopTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:20:00Z");
-// viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2017-07-11T16:00:00Z");
-// viewer.clock.multiplier = 2; // sets a speedup
-// viewer.clock.clockStep = Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER; // tick computation mode
-// viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // loop at the end
-// viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime); // set visible range
-
-//////////////////////////////////////////////////////////////////////////
-// Loading and Styling Entity Data
-//////////////////////////////////////////////////////////////////////////
-
-// var kmlOptions = {
-//     camera : viewer.scene.camera,
-//     canvas : viewer.scene.canvas,
-//     clampToGround : true
-// };
-// // Load geocache points of interest from a KML file
-// // Data from : http://catalog.opendata.city/dataset/pediacities-nyc-neighborhoods/resource/91778048-3c58-449c-a3f9-365ed203e914
-// var geocachePromise = Cesium.KmlDataSource.load('./Source/SampleData/sampleGeocacheLocations.kml', kmlOptions);
-//
-// // Add geocache billboard entities to scene and style them
-// geocachePromise.then(function(dataSource) {
-//     // Add the new data as entities to the viewer
-//     viewer.dataSources.add(dataSource);
-//
-//     // Get the array of entities
-//     var geocacheEntities = dataSource.entities.values;
-//
-//     for (var i = 0; i < geocacheEntities.length; i++) {
-//         var entity = geocacheEntities[i];
-//         if (Cesium.defined(entity.billboard)) {
-//             // Adjust the vertical origin so pins sit on terrain
-//             entity.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM;
-//             // Disable the labels to reduce clutter
-//             entity.label = undefined;
-//             // Add distance display condition
-//             entity.billboard.distanceDisplayCondition = new Cesium.DistanceDisplayCondition(10.0, 20000.0);
-//             // Compute latitude and longitude in degrees
-//             var cartographicPosition = Cesium.Cartographic.fromCartesian(entity.position.getValue(Cesium.JulianDate.now()));
-//             var latitude = Cesium.Math.toDegrees(cartographicPosition.latitude);
-//             var longitude = Cesium.Math.toDegrees(cartographicPosition.longitude);
-//             // Modify description
-//             var description = '<table class="cesium-infoBox-defaultTable cesium-infoBox-defaultTable-lighter"><tbody>';
-//             description += '<tr><th>' + "Latitude" + '</th><td>' + latitude + '</td></tr>';
-//             description += '<tr><th>' + "Longitude" + '</th><td>' + longitude + '</td></tr>';
-//             description += '</tbody></table>';
-//             entity.description = description;
-//         }
-//     }
-// });
-//
-// var geojsonOptions = {
-//     clampToGround : true
-// };
-// // Load neighborhood boundaries from a GeoJson file
-// // Data from : https://data.cityofnewyork.us/City-Government/Neighborhood-Tabulation-Areas/cpf4-rkhq
-// var neighborhoodsPromise = Cesium.GeoJsonDataSource.load('./Source/SampleData/sampleNeighborhoods.geojson', geojsonOptions);
-//
-// // Save an new entity collection of neighborhood data
-// var neighborhoods;
-// neighborhoodsPromise.then(function(dataSource) {
-//     // Add the new data as entities to the viewer
-//     viewer.dataSources.add(dataSource);
-//     neighborhoods = dataSource.entities;
-//
-//     // Get the array of entities
-//     var neighborhoodEntities = dataSource.entities.values;
-//     for (var i = 0; i < neighborhoodEntities.length; i++) {
-//         var entity = neighborhoodEntities[i];
-//
-//         if (Cesium.defined(entity.polygon)) {
-//             // Use kml neighborhood value as entity name
-//             entity.name = entity.properties.neighborhood;
-//             // Set the polygon material to a random, translucent color
-//             entity.polygon.material = Cesium.Color.fromRandom({
-//                 red : 0.1,
-//                 maximumGreen : 0.5,
-//                 minimumBlue : 0.5,
-//                 alpha : 0.6
-//             });
-//             // Generate Polygon center
-//             var polyPositions = entity.polygon.hierarchy.getValue(Cesium.JulianDate.now()).positions;
-//             var polyCenter = Cesium.BoundingSphere.fromPoints(polyPositions).center;
-//             polyCenter = Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(polyCenter);
-//             entity.position = polyCenter;
-//             // Generate labels
-//             entity.label = {
-//                 text : entity.name,
-//                 showBackground : true,
-//                 scale : 0.6,
-//                 horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-//                 verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-//                 distanceDisplayCondition : new Cesium.DistanceDisplayCondition(10.0, 8000.0),
-//                 disableDepthTestDistance : Number.POSITIVE_INFINITY
-//             };
-//         }
-//     }
-// });
-//
-// // Load a drone flight path from a CZML file
-// var dronePromise = Cesium.CzmlDataSource.load('./Source/SampleData/SampleFlight.czml');
-//
-// // Save a new drone model entity
-// var drone;
-// dronePromise.then(function(dataSource) {
-//     viewer.dataSources.add(dataSource);
-//     drone = dataSource.entities.values[0];
-//     // Attach a 3D model
-//     drone.model = {
-//         uri : './Source/SampleData/Models/CesiumDrone.gltf',
-//         minimumPixelSize : 128,
-//         maximumScale : 2000
-//     };
-//     // Add computed orientation based on sampled positions
-//     drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
-//
-//     // Smooth path interpolation
-//     drone.position.setInterpolationOptions({
-//         interpolationAlgorithm : Cesium.HermitePolynomialApproximation,
-//         interpolationDegree : 2
-//     });
-//     drone.viewFrom = new Cesium.Cartesian3(-30, 0, 0);
-// });
-
-//////////////////////////////////////////////////////////////////////////
-// Load 3D Tileset
-//////////////////////////////////////////////////////////////////////////
-
-// // Load the NYC buildings tileset
-// var city = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-//     url: 'https://beta.cesium.com/api/assets/1461?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkYWJmM2MzNS02OWM5LTQ3OWItYjEyYS0xZmNlODM5ZDNkMTYiLCJpZCI6NDQsImFzc2V0cyI6WzE0NjFdLCJpYXQiOjE0OTkyNjQ3NDN9.vuR75SqPDKcggvUrG_vpx0Av02jdiAxnnB1fNf-9f7s',
-//     maximumScreenSpaceError: 16 // default value
-// }));
-//
-// // Adjust the tileset height so it's not floating above terrain
-// var heightOffset = -32;
-// city.readyPromise.then(function(tileset) {
-//     // Position tileset
-//     var boundingSphere = tileset.boundingSphere;
-//     var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-//     var surfacePosition = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
-//     var offsetPosition = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, heightOffset);
-//     var translation = Cesium.Cartesian3.subtract(offsetPosition, surfacePosition, new Cesium.Cartesian3());
-//     tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
-// });
-
-//////////////////////////////////////////////////////////////////////////
-// Style 3D Tileset
-//////////////////////////////////////////////////////////////////////////
-
-// // Define a white, opaque building style
-// var defaultStyle = new Cesium.Cesium3DTileStyle({
-//     color : "color('white')",
-//     show : true
-// });
-//
-// // Set the tileset style to default
-// city.style = defaultStyle;
-//
-// // Define a white, transparent building style
-// var transparentStyle = new Cesium.Cesium3DTileStyle({
-//     color : "color('white', 0.3)",
-//     show : true
-// });
-//
-// // Define a style in which buildings are colored by height
-// var heightStyle = new Cesium.Cesium3DTileStyle({
-//     color : {
-//         conditions : [
-//             ["${height} >= 300", "rgba(45, 0, 75, 0.5)"],
-//             ["${height} >= 200", "rgb(102, 71, 151)"],
-//             ["${height} >= 100", "rgb(170, 162, 204)"],
-//             ["${height} >= 50", "rgb(224, 226, 238)"],
-//             ["${height} >= 25", "rgb(252, 230, 200)"],
-//             ["${height} >= 10", "rgb(248, 176, 87)"],
-//             ["${height} >= 5", "rgb(198, 106, 11)"],
-//             ["true", "rgb(127, 59, 8)"]
-//         ]
-//     }
-// });
-//
-// var tileStyle = document.getElementById('tileStyle');
-// function set3DTileStyle() {
-//     var selectedStyle = tileStyle.options[tileStyle.selectedIndex].value;
-//     if (selectedStyle === 'none') {
-//         city.style = defaultStyle;
-//     } else if (selectedStyle === 'height') {
-//         city.style = heightStyle;
-//     } else if (selectedStyle === 'transparent') {
-//         city.style = transparentStyle;
-//     }
-// }
-// tileStyle.addEventListener('change', set3DTileStyle);
-
-//////////////////////////////////////////////////////////////////////////
-// Custom mouse interaction for highlighting and selecting
-//////////////////////////////////////////////////////////////////////////
-
-// // If the mouse is over a point of interest, change the entity billboard scale and color
-// var previousPickedEntity;
-
   var scene = viewer.scene;
-  //var mercator = new Cesium.WebMercatorProjection;
-
-/*
-  var entity = viewer.entities.add({
-    label: {
-      show: false,
-      showBackground: true,
-      font: '14px monospace',
-      horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
-      verticalOrigin : Cesium.VerticalOrigin.TOP,
-      pixelOffset : new Cesium.Cartesian2(15, 0)
-    }
-  })
-*/
-
   $("#buy-grid").hide();
   $("#sell-grid").hide();
   $("#oper-grid").hide();
@@ -348,7 +84,22 @@
   }
 
   function showInfo(msg_key){
-
+    $.notify({
+      // options
+      message: $.i18n(msg_key)
+    }, {
+      // settings
+      type: 'info',
+      animate: {
+        enter: 'animated fadeInDown',
+        exit: 'animated fadeOutUp'
+      },
+      placement: {
+        align: "center"
+      },
+      timer: 1000,
+      newest_on_top: false
+    });
   };
 
 
@@ -481,7 +232,7 @@
 
   function StartEarth(earth, viewer, galaxy) {
     galaxy.refresh_earth_status = function() {
-      earth.gridSold(function(err, sold) {
+      earth.gridsSoldOut(function(err, sold) {
         if (err) {
           showError("contract call error");
         } else {
@@ -520,7 +271,7 @@
         galaxy.player = {};
       }
 
-      earth.GridsCount(web3.eth.coinbase, function(err, count) {
+      earth.gridsCount(web3.eth.coinbase, function(err, count) {
         if (err) {
           showError("contract call error");
         } else {
@@ -637,9 +388,10 @@
           if (window.gridService) {
             window.gridService.gridAvatar(grid_idx, function(err, avatar_url){
               if(err){
-
+                showError("fail to load grid avatar");
+                console.log("fail to retrive grid avatar :" + err);
               } else {
-                $("#selected-grid-avatar").attr("src", avatar_url);
+                //$("#grid-avatar img").attr("src", avatar_url);
               }
             })
             var center = window.gridService.gridCenterInDegree(grid_idx);
@@ -775,8 +527,6 @@
         };
 
         if (window.gridService) {
-          var point = window.gridService.fromGridIndexToXY(grid_idx);
-
           earth.grids(grid_idx, function(err, result) {
             if (err) {
               showError("contract call error");
@@ -796,9 +546,9 @@
                     if (err) {
                       showError("contract call error");
                     } else {
-                      earth.BuyGrid(
-                        point.x,
-                        point.y, {
+                      earth.buyGrid(
+                        grid_idx, 
+                        {
                           value: price,
                           gas: 470000
                         },
@@ -807,7 +557,7 @@
                             showError("contract call error");
                           } else {
                             //TODO: about tx
-                            showError("transaction id: " + res);
+                            showInfo("transaction id: " + res);
                           }
                           console.log(err, res);
                         }
@@ -815,9 +565,9 @@
                     }
                   })
                 } else {
-                  earth.BuyGrid(
-                    point.x,
-                    point.y, {
+                  earth.buyGrid(
+                    grid_idx,
+                    {
                       value: price,
                       gas: 470000
                     },
@@ -833,12 +583,13 @@
                 }
 
                 // after buying behaviour
+                /*
                 $("#buy-grid").hide();
                 $("#sell-grid").show();
                 $("#oper-grid").show();
                 $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
                 galaxy.set_grid_picture(grid_idx, 100000, viewer);
-
+                */
               } else {
                 // can't buy mean can't trigger follow-up actions
                 showError("grid is not on sell");
@@ -919,13 +670,13 @@
                       //TODO: error
                       showError("not owner of this grid");
                     } else {
-                      earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {
+                      earth.sellGrid(grid_idx, web3.toWei(price, "ether"), {
                           gas: 470000
                         }, function(err, txid) {
                           if (err) {
                             showError("contract call error");
                           } else {
-                            showError("transaction id: " + txid);
+                            showInfo("transaction id: " + txid);
                           }
                         });
                       }
@@ -971,7 +722,7 @@
     })
 
     $("#player-claim").click(function() {
-      earth.GetEarn(function(error, tx) {
+      earth.getEarn(function(error, tx) {
         if (error) {
           showError("contract call error");
         } else {

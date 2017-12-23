@@ -63,7 +63,7 @@ Grid.prototype.fromLatLngToXY = function(lat, lng) {
 Grid.prototype.fromXYToGrid = function(x, y) {
   var grid_x = parseInt(x / this.grid_size_pixel);
   var grid_y = parseInt(y / this.grid_size_pixel);
-  return grid_x * this.size + grid_y;
+  return grid_y * this.size + grid_x;
 }
 
 /**
@@ -75,7 +75,7 @@ Grid.prototype.fromXYToGrid = function(x, y) {
 Grid.prototype.fromLatLngToGrid = function(lat, lng) {
   x = parseInt((parseFloat(lng) + 180) / this.lng_per_grid);
   y = parseInt((parseFloat(lat) + 90) / this.lat_per_grid);
-  return x * this.size + y;
+  return y * this.size + x;
 }
 
 Grid.prototype.showGrids = function(show) {
@@ -158,9 +158,10 @@ Grid.prototype.drawGridAvatars = function(viewer, callback){
  * @param {*} index 
  */
 Grid.prototype.fromGridIndexToDegrees = function(index) {
-  var x = Math.floor(index / this.size);
-  var y = index - x * this.size;
-  //(x, y) (x + 1, y) (x + 1, y + 1) (x, y + 1)
+  var y = Math.floor(index / this.size);
+  var x = index - y * this.size;
+  //(x, y + 1) (x + 1, y + 1)
+  //(x, y) (x + 1, y)
   var points = [];
 
   var p1 = this.fromOffsetToDegrees(x, y);
@@ -211,8 +212,8 @@ Grid.prototype.fromGridIndexToXY = function(grid) {
 
   grid = Math.floor(grid);
 
-  var x = Math.floor(grid / this.size);
-  var y = grid - x * this.size;
+  var y = Math.floor(grid / this.size);
+  var x = grid - y * this.size;
   return {
     x: x,
     y: y
@@ -338,7 +339,7 @@ Grid.prototype.gridAvatar = function(grid_idx, callback){
         return callback(null, GRID_PIC_URL_BASE + avatar);
       } else {
         //TODO: anonymous
-        return callback("no avatar");
+        return callback(null, "/images/logo.png");
       }
     }
   })
