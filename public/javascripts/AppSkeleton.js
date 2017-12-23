@@ -481,7 +481,7 @@
 
   function StartEarth(earth, viewer, galaxy) {
     galaxy.refresh_earth_status = function() {
-      earth.gridSold(function(err, sold) {
+      earth.gridsSoldOut(function(err, sold) {
         if (err) {
           showError("contract call error");
         } else {
@@ -520,7 +520,7 @@
         galaxy.player = {};
       }
 
-      earth.GridsCount(web3.eth.coinbase, function(err, count) {
+      earth.gridsCount(web3.eth.coinbase, function(err, count) {
         if (err) {
           showError("contract call error");
         } else {
@@ -775,8 +775,6 @@
         };
 
         if (window.gridService) {
-          var point = window.gridService.fromGridIndexToXY(grid_idx);
-
           earth.grids(grid_idx, function(err, result) {
             if (err) {
               showError("contract call error");
@@ -796,9 +794,9 @@
                     if (err) {
                       showError("contract call error");
                     } else {
-                      earth.BuyGrid(
-                        point.x,
-                        point.y, {
+                      earth.buyGrid(
+                        grid_idx, 
+                        {
                           value: price,
                           gas: 470000
                         },
@@ -815,9 +813,9 @@
                     }
                   })
                 } else {
-                  earth.BuyGrid(
-                    point.x,
-                    point.y, {
+                  earth.buyGrid(
+                    grid_idx,
+                    {
                       value: price,
                       gas: 470000
                     },
@@ -833,12 +831,13 @@
                 }
 
                 // after buying behaviour
+                /*
                 $("#buy-grid").hide();
                 $("#sell-grid").show();
                 $("#oper-grid").show();
                 $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
                 galaxy.set_grid_picture(grid_idx, 100000, viewer);
-
+                */
               } else {
                 // can't buy mean can't trigger follow-up actions
                 showError("grid is not on sell");
@@ -919,7 +918,7 @@
                       //TODO: error
                       showError("not owner of this grid");
                     } else {
-                      earth.SellGrid(point.x, point.y, web3.toWei(price, "ether"), {
+                      earth.sellGrid(grid_idx, web3.toWei(price, "ether"), {
                           gas: 470000
                         }, function(err, txid) {
                           if (err) {
@@ -971,7 +970,7 @@
     })
 
     $("#player-claim").click(function() {
-      earth.GetEarn(function(error, tx) {
+      earth.getEarn(function(error, tx) {
         if (error) {
           showError("contract call error");
         } else {
