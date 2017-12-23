@@ -39,9 +39,9 @@
   }));
 
   var scene = viewer.scene;
-  $("#buy-grid").hide();
-  $("#sell-grid").hide();
-  $("#oper-grid").hide();
+  $("#buy-grid-btn").hide();
+  $("#sell-grid-btn").hide();
+  $('#grid-avatar').hide();
 
   function shortSpellAddress(addr) {
     if (addr) {
@@ -266,7 +266,6 @@
     }
 
     galaxy.refresh_player_stauts = function() {
-
       if(!galaxy.hasOwnProperty('player')){
         galaxy.player = {};
       }
@@ -300,7 +299,6 @@
 
             } else {
               galaxy.init_user_ship();
-
             }
           });
         }
@@ -323,7 +321,6 @@
           showError("contract call error");
         } else {
           if (window.gridService) {
-
           }
 
           var gridService = window.gridService = new Grid(size);
@@ -391,7 +388,10 @@
                 showError("fail to load grid avatar");
                 console.log("fail to retrive grid avatar :" + err);
               } else {
-                //$("#grid-avatar img").attr("src", avatar_url);
+                $('#grid-avatar').show()
+                $('#grid-avatar img').each(function() {
+                  $(this).attr("src", avatar_url);
+                })
               }
             })
             var center = window.gridService.gridCenterInDegree(grid_idx);
@@ -583,13 +583,13 @@
                 }
 
                 // after buying behaviour
-                /*
-                $("#buy-grid").hide();
-                $("#sell-grid").show();
-                $("#oper-grid").show();
-                $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
+                $("#buy-grid-btn").hide()
+                $("#sell-grid-btn").show()
+                $('grid-avatar').show()
+                $("#grid-avatar img").each(function() {
+                  $(this).attr("src", "/grid_avatar/get/" + grid_idx);
+                })
                 galaxy.set_grid_picture(grid_idx, 100000, viewer);
-                */
               } else {
                 // can't buy mean can't trigger follow-up actions
                 showError("grid is not on sell");
@@ -770,7 +770,6 @@
     galaxy.init_grid_service();
     galaxy.init_mouse_event_handler();
     galaxy.init_page_event();
-
   }
 
 }());
