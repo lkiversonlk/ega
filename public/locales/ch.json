@@ -40,8 +40,11 @@
 	"On Sell": "出售中",
 	"Owned": "私人领地",
 	"Forbidden": "禁区",
-	"buy grid": "buy grid",
-	"buy": "buy",
-	"BUY": "BUY",
-	"BUYXS": "BUYXS"
+	"buy grid": "购买领地",
+	"buy": "购买",
+	"BUY": "购买",
+	"howtoplay": "howtoch.html",
+	"How to play": "游戏说明",
+	"SELL": "出售",
+	"starship": "星舰"
 }
