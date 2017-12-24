@@ -44,9 +44,6 @@
 
   //viewer.scene.globe.enableLighting = false;
   var scene = viewer.scene;
-  $("#buy-grid-btn").hide();
-  $("#sell-grid-btn").hide();
-  $('#grid-avatar').hide();
 
   function shortSpellAddress(addr) {
     if (addr) {
@@ -148,22 +145,6 @@
       uploadUrl: '/avatar/upload',
       uploadData: {
         address: web3.eth.coinbase
-      },
-    });
-
-    new AvatarUpload({
-      el: document.querySelector('#grid-avatar'),
-      uploadUrl: '/grid_avatar/upload',
-      uploadData: {
-        address: web3.eth.coinbase,
-      },
-      onSuccess: function() {
-        let grid_idx = parseInt($("[name=grid-idx]").val())
-        if (isNaN(grid_idx)) {
-          showError("non grid selected");
-          grid_idx = '';
-        }
-        galaxy.set_grid_picture(grid_idx, 100000, viewer);
       },
     });
 
@@ -369,19 +350,46 @@
             owner = "None";
           }
 
-          $("#selected-grid-status").html($.i18n(GridStateEng[gridState]));
-          $("#selected-grid-price").html(price);
+          $("#selected-grid-status").html($.i18n(GridStateEng[gridState]))
+          $("#selected-grid-price").html(price)
 
-          $("#oper-grid-owner").html(owner);
-          $("#oper-grid-state").html(GridStateEng[gridState]);
+          $("#oper-grid-owner").html(owner)
+          $("#oper-grid-state").html(GridStateEng[gridState])
+
+          $('#buy-grid-btn').show()
+          $('#sell-grid-btn').show()
+
+          let gridAvatar = $('#grid-avatar')
+          const imgAppend = '<img id="grid-avatar-img">'
 
           if (owner == web3.eth.coinbase) {
+            new AvatarUpload({
+              el: document.querySelector(gridAvatar),
+              uploadUrl: '/grid_avatar/upload',
+              uploadData: {
+                address: web3.eth.coinbase,
+              },
+              onSuccess: function(xhr, json) {
+                let grid_idx = parseInt($("[name=grid-idx]").val())
+                if (isNaN(grid_idx)) {
+                  showError("non grid selected");
+                  grid_idx = '';
+                }
+                galaxy.set_grid_picture(grid_idx, 100000, viewer);
+              },
+            });
             $("#buy-grid-btn").addClass("disabled");
             $("#sell-grid-btn").removeClass("disabled");
-          } else if(gridState == 0){
+
+          } else if (gridState == 0) {
+            gridAvatar.empty()
+            gridAvatar.append(imgAppend)
             $("#buy-grid-btn").removeClass("disabled");
             $("#sell-grid-btn").addClass("disabled");
+
           } else {
+            gridAvatar.empty()
+            gridAvatar.append(imgAppend)
             $("#sell-grid-btn").addClass("disabled");
             $("#buy-grid-btn").addClass("disabled");
           }
@@ -420,6 +428,7 @@
       entity.label.scale = 1.0
     };
 
+    // TODO After upload grid img, currently func cannot update local display
     galaxy.set_grid_picture = function(grid_idx, height, picture_url) {
       if (!window.gridService) {
         showError("grid service uninitialized");
