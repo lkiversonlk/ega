@@ -2,30 +2,26 @@
   "use strict";
 
   Cesium.BingMapsApi.defaultKey = 'At36HWsCzUCdp9mDZXKXChHywJ4Rzt7OHdw-VLodUMknjJVR5VVS-E-BCanlX8W-'; // For use with this application only
-
+  Cesium.MapboxApi.defaultAccessToken = 'pk.eyJ1IjoibGtpdmVyc29ubGsiLCJhIjoiY2piazI1M3J3NDZjdzJycWZpdHlxemkxYiJ9.P2vygQ0KUl5QdnL6GQ60AA';
 //////////////////////////////////////////////////////////////////////////
 // Creating the Viewer
 //////////////////////////////////////////////////////////////////////////
 
 // var viewer = new Cesium.Viewer('cesiumContainer');
 //
-/*
- var viewer = new Cesium.Viewer('galaxy', {
- imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
- url : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
- }),
- scene3DOnly: true,
- selectionIndicator: false,
- baseLayerPicker: false,
- animation: false,
- timeline: false
- });*/
+  /*
   var viewer = new Cesium.Viewer('galaxy', {
     //scene3DOnly: true,
     selectionIndicator: false,
-    baseLayerPicker: false,
+    baseLayerPicker: true,
     animation: false,
     timeline: false
+  });*/
+  var viewer = new Cesium.Viewer('galaxy', {
+    imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+        url : '//services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+    }),
+    baseLayerPicker : true
   });
 
   //////////////////////////////////////////////////////////////////////////
@@ -33,11 +29,19 @@
   //////////////////////////////////////////////////////////////////////////
 
   // Add Bing imagery
+  /*
   viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
     url: 'https://dev.virtualearth.net',
     mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
   }));
 
+  viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
+    url : 'https://assets.agi.com/stk-terrain/world',
+    requestWaterMask : true, // required for water effects
+    requestVertexNormals : true // required for terrain lighting
+  });*/
+
+  //viewer.scene.globe.enableLighting = false;
   var scene = viewer.scene;
   $("#buy-grid").hide();
   $("#sell-grid").hide();
@@ -486,21 +490,21 @@
             galaxy.grid_selected(grid_index);
           }
 
-          /*
+          
           var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
             Cesium.Cartesian3.fromDegrees(
               Cesium.Math.toDegrees(cartographic.longitude), 
               Cesium.Math.toDegrees(cartographic.latitude), 
-              1000000.0));
+              0.0));
 
           var position = Cesium.Cartesian3.fromDegrees(0, 0, 10000);
 
           var model = scene.primitives.add(Cesium.Model.fromGltf({
               url : '/gltf/scene.gltf',
               modelMatrix : modelMatrix,
-              scale : 1000.0,
+              scale : 80000.0,
               position: position
-          }));*/
+          }));
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
