@@ -240,7 +240,6 @@ Grid.prototype.destory = function() {
 
 }
 
-/*
 //Grid.prototype.
 Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
   if (this.grid_avatars.hasOwnProperty(grid)) {
@@ -260,7 +259,6 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
     this.grid_avatars[grid] = gridPic;
   }
 };
-*/
 
 /**
  * Grid Service will both work in server side and client side

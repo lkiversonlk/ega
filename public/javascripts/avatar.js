@@ -55,8 +55,11 @@
     }
 
     this.el = this.config.el;
-    this.renderInput();
-    this.bindInput();
+
+    if (this.el.getElementsByClassName('avatar-upload__shell').length === 0) {
+      this.renderInput();
+      this.bindInput();
+    }
 
     this.progressText = this.el.querySelector('span');
     this.imageWrapper = this.el.querySelector('.avatar-upload__image-wrapper');

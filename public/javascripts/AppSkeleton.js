@@ -35,9 +35,6 @@
 
   //viewer.scene.globe.enableLighting = false;
   var scene = viewer.scene;
-  $("#buy-grid").hide();
-  $("#sell-grid").hide();
-  $("#oper-grid").hide();
 
   function shortSpellAddress(addr) {
     if (addr) {
@@ -139,22 +136,6 @@
       uploadUrl: '/avatar/upload',
       uploadData: {
         address: web3.eth.coinbase
-      },
-    });
-
-    new AvatarUpload({
-      el: document.querySelector('#grid-avatar'),
-      uploadUrl: '/grid_avatar/upload',
-      uploadData: {
-        address: web3.eth.coinbase,
-      },
-      onSuccess: function() {
-        let grid_idx = parseInt($("[name=grid-idx]").val())
-        if (isNaN(grid_idx)) {
-          showError("non grid selected");
-          grid_idx = '';
-        }
-        galaxy.set_grid_picture(grid_idx, 100000, viewer);
       },
     });
 
@@ -262,7 +243,6 @@
     }
 
     galaxy.refresh_player_stauts = function() {
-
       if(!galaxy.hasOwnProperty('player')){
         galaxy.player = {};
       }
@@ -296,7 +276,6 @@
 
             } else {
               galaxy.init_user_ship();
-
             }
           });
         }
@@ -319,7 +298,6 @@
           showError("contract call error");
         } else {
           if (window.gridService) {
-
           }
 
           var gridService = window.gridService = new Grid(size);
@@ -363,19 +341,47 @@
             owner = "None";
           }
 
-          $("#selected-grid-status").html($.i18n(GridStateEng[gridState]));
-          $("#selected-grid-price").html(price);
+          $("#selected-grid-status").html($.i18n(GridStateEng[gridState]))
+          $("#selected-grid-price").html(price)
 
-          $("#oper-grid-owner").html(owner);
-          $("#oper-grid-state").html(GridStateEng[gridState]);
+          $("#oper-grid-owner").html(owner)
+          $("#oper-grid-state").html(GridStateEng[gridState])
+
+          $('#buy-grid-btn').show()
+          $('#sell-grid-btn').show()
+          $('#del-grid-img-btn').show().addClass('disabled')
+
+          let gridAvatar = $('#grid-avatar')
+          const imgAppend = '<img id="grid-avatar-img">'
 
           if (owner == web3.eth.coinbase) {
+            new AvatarUpload({
+              el: document.querySelector('#grid-avatar'),
+              uploadUrl: '/grid_avatar/upload',
+              uploadData: {
+                address: web3.eth.coinbase,
+              },
+              onSuccess: function(xhr, json) {
+                let grid_idx = parseInt($("[name=grid-idx]").val())
+                if (isNaN(grid_idx)) {
+                  showError("non grid selected");
+                  grid_idx = '';
+                }
+                galaxy.set_grid_picture(grid_idx, 100000, viewer);
+              },
+            });
             $("#buy-grid-btn").addClass("disabled");
             $("#sell-grid-btn").removeClass("disabled");
-          } else if(gridState == 0){
+
+          } else if (gridState == 0) {
+            gridAvatar.empty()
+            gridAvatar.append(imgAppend)
             $("#buy-grid-btn").removeClass("disabled");
             $("#sell-grid-btn").addClass("disabled");
+
           } else {
+            gridAvatar.empty()
+            gridAvatar.append(imgAppend)
             $("#sell-grid-btn").addClass("disabled");
             $("#buy-grid-btn").addClass("disabled");
           }
@@ -387,7 +393,14 @@
                 showError("fail to load grid avatar");
                 console.log("fail to retrive grid avatar :" + err);
               } else {
-                //$("#grid-avatar img").attr("src", avatar_url);
+                $('#grid-avatar').show()
+                $('#grid-avatar img').each(function() {
+                  $(this).attr("src", avatar_url);
+                })
+
+                if (avatar_url !== '/images/logo.png') {
+                  $('#del-grid-img-btn').removeClass('disabled')
+                }
               }
             })
             var center = window.gridService.gridCenterInDegree(grid_idx);
@@ -411,6 +424,7 @@
       entity.label.scale = 1.0
     };
 
+    // TODO After upload grid img, currently func cannot update local display
     galaxy.set_grid_picture = function(grid_idx, height, picture_url) {
       if (!window.gridService) {
         showError("grid service uninitialized");
@@ -579,13 +593,13 @@
                 }
 
                 // after buying behaviour
-                /*
-                $("#buy-grid").hide();
-                $("#sell-grid").show();
-                $("#oper-grid").show();
-                $("#grid-avatar img").attr("src", "/grid_avatar/get/" + grid_idx);
+                $("#buy-grid-btn").hide()
+                $("#sell-grid-btn").show()
+                $('grid-avatar').show()
+                $("#grid-avatar img").each(function() {
+                  $(this).attr("src", "/grid_avatar/get/" + grid_idx);
+                })
                 galaxy.set_grid_picture(grid_idx, 100000, viewer);
-                */
               } else {
                 // can't buy mean can't trigger follow-up actions
                 showError("grid is not on sell");
@@ -594,6 +608,37 @@
             }
           })
         }
+      });
+
+      $('#del-grid-img-btn').click(function() {
+        let grid_idx = parseInt($("[name=grid-idx]").val())
+        if (isNaN(grid_idx)) {
+          showError("non grid selected");
+          grid_idx = '';
+        }
+        $.ajax({
+          url: '/grid_avatar/del',
+          method: 'POST',
+          data: {
+            grid_idx,
+          }
+        })
+          .done(function(data) {
+            console.log(data)
+            const {
+              isOK,
+              urlDeleted,
+            } = JSON.parse(data)
+
+            if (isOK === true) {
+              $('#del-grid-img-btn').addClass('disabled')
+              $("#grid-avatar img").each(function() {
+                $(this).attr('src', '/images/logo.png');
+              })
+            } else {
+              console.error('Delete grid image failed')
+            }
+          })
       });
     }
 
@@ -766,7 +811,6 @@
     galaxy.init_grid_service();
     galaxy.init_mouse_event_handler();
     galaxy.init_page_event();
-
   }
 
 }());
