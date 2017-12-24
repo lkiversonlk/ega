@@ -169,7 +169,7 @@ router.post('/locale', function(req, res) {
 router.get('/', function(req, res, next) {
   let env = req.app.get('env')
 
-  if (!env || env === 'development')
+  if (env === 'development')
     env = false
   else
     env = true
