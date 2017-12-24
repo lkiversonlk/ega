@@ -23,6 +23,7 @@ body {
 
 .avatar-upload {
   width: 100%;
+  padding-left: 10px;
   height: 150px;
 }
 

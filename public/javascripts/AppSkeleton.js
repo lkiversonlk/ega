@@ -391,6 +391,10 @@
                     $("#del-grid-img-btn").removeClass("disabled");
                   } else {
                     $('#del-grid-img-btn').addClass('disabled')
+                    /*
+                    $('#grid-avatar img').each(function() {
+                      $(this).attr("src", UPLOAD_IMAGE);
+                    })*/
                   }
                 }
               });
@@ -669,7 +673,7 @@
                       if (isOK === true) {
                         $('#del-grid-img-btn').addClass('disabled')
                         $("#grid-avatar img").each(function() {
-                          $(this).attr('src', '');
+                          $(this).attr('src', NO_IMAGE);
                         })
                       } else {
                         console.error('Delete grid image failed')

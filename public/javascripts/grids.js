@@ -101,7 +101,7 @@ Grid.prototype.drawGrids = function(viewer) {
   for (i = 0; i < this.size; i++) {
     var lng = this.lng_per_grid * i;
     var pos = [];
-    for (var lat = -90; lat <= 90; lat++) {
+    for (var lat = -89.5; lat <= 89.5; lat++) {
       pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
     }
     var line = viewer.entities.add({
@@ -121,7 +121,7 @@ Grid.prototype.drawGrids = function(viewer) {
   for (i = 1; i < this.size; i++) {
     var lat = this.lat_per_grid * (i - this.size / 2);
     var pos = [];
-    for (var lng = -180; lng < 180; lng++) {
+    for (var lng = -179.5; lng < 179.5; lng++) {
       pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
     }
 
@@ -355,7 +355,7 @@ Grid.prototype.gridAvatar = function(grid_idx, callback){
         return callback(null, GRID_PIC_URL_BASE + avatar);
       } else {
         //TODO: anonymous
-        return callback(null, "");
+        return callback(null, NO_IMAGE);
       }
     }
   })
