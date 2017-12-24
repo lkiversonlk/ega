@@ -157,15 +157,34 @@ router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
 });
 
 router.post('/grid_avatar/del', function(req, res, next) {
-  const { grid_idx } = req.body
-  if (fs.existsSync(path.join(grid_avatar_save_path, grid_idx))) {
-    fs.unlinkSync(path.join(grid_avatar_save_path, grid_idx))
-  }
+  const {
+    grid_idx,
+    signature,
+  } = req.body
 
-  return res.send(JSON.stringify({
-    isOK: true,
-    urlDeleted: `grid_avatar/get/${grid_idx}`
-  }));
+  const {
+    key,
+    address: addr,
+    timestamp: past,
+  } = JSON.parse(signature)
+
+  const isOK = verifyUser(key, addr, past);
+
+  if (isOK === true) {
+    if (fs.existsSync(path.join(grid_avatar_save_path, grid_idx))) {
+      fs.unlinkSync(path.join(grid_avatar_save_path, grid_idx))
+    }
+
+    return res.send(JSON.stringify({
+      isOK: true,
+      urlDeleted: `grid_avatar/get/${grid_idx}`
+    }));
+
+  } else {
+    return res.send(JSON.stringify({
+      isOK: false,
+    }));
+  }
 })
 
 router.post('/locale', function(req, res) {
