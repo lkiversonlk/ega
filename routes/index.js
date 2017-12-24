@@ -156,6 +156,18 @@ router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
   }
 });
 
+router.post('/grid_avatar/del', function(req, res, next) {
+  const { grid_idx } = req.body
+  if (fs.existsSync(path.join(grid_avatar_save_path, grid_idx))) {
+    fs.unlinkSync(path.join(grid_avatar_save_path, grid_idx))
+  }
+
+  return res.send(JSON.stringify({
+    isOK: true,
+    urlDeleted: `grid_avatar/get/${grid_idx}`
+  }));
+})
+
 router.post('/locale', function(req, res) {
   var lan = req.param('lan');
   res.cookie('locale', lan || 'ch', {

@@ -358,13 +358,14 @@
 
           $('#buy-grid-btn').show()
           $('#sell-grid-btn').show()
+          $('#del-grid-img-btn').show().addClass('disabled')
 
           let gridAvatar = $('#grid-avatar')
           const imgAppend = '<img id="grid-avatar-img">'
 
           if (owner == web3.eth.coinbase) {
             new AvatarUpload({
-              el: document.querySelector(gridAvatar),
+              el: document.querySelector('#grid-avatar'),
               uploadUrl: '/grid_avatar/upload',
               uploadData: {
                 address: web3.eth.coinbase,
@@ -405,6 +406,10 @@
                 $('#grid-avatar img').each(function() {
                   $(this).attr("src", avatar_url);
                 })
+
+                if (avatar_url !== '/images/logo.png') {
+                  $('#del-grid-img-btn').removeClass('disabled')
+                }
               }
             })
             var center = window.gridService.gridCenterInDegree(grid_idx);
@@ -612,6 +617,37 @@
             }
           })
         }
+      });
+
+      $('#del-grid-img-btn').click(function() {
+        let grid_idx = parseInt($("[name=grid-idx]").val())
+        if (isNaN(grid_idx)) {
+          showError("non grid selected");
+          grid_idx = '';
+        }
+        $.ajax({
+          url: '/grid_avatar/del',
+          method: 'POST',
+          data: {
+            grid_idx,
+          }
+        })
+          .done(function(data) {
+            console.log(data)
+            const {
+              isOK,
+              urlDeleted,
+            } = JSON.parse(data)
+
+            if (isOK === true) {
+              $('#del-grid-img-btn').addClass('disabled')
+              $("#grid-avatar img").each(function() {
+                $(this).attr('src', '/images/logo.png');
+              })
+            } else {
+              console.error('Delete grid image failed')
+            }
+          })
       });
     }
 
