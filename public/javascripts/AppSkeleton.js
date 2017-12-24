@@ -9,14 +9,6 @@
 
 // var viewer = new Cesium.Viewer('cesiumContainer');
 //
-
-  var viewer = new Cesium.Viewer('galaxy', {
-    //scene3DOnly: true,
-    selectionIndicator: false,
-    baseLayerPicker: true,
-    animation: false,
-    timeline: false
-  });
   /*
   var viewer = new Cesium.Viewer('galaxy', {
     imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
@@ -25,22 +17,21 @@
     baseLayerPicker : false
   });*/
 
-  //////////////////////////////////////////////////////////////////////////
-  // Loading Imagery
-  //////////////////////////////////////////////////////////////////////////
 
-  // Add Bing imagery
-  /*
-  viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
-    url: 'https://dev.virtualearth.net',
-    mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROAD
-  }));
+  var viewer = new Cesium.Viewer('galaxy', {
+    //scene3DOnly: true,
+    selectionIndicator: false,
+    baseLayerPicker: true,
+    animation: false,
+    timeline: false,
+    imageProvider: new Cesium.BingMapsImageryProvider({
+      url: 'https://dev.virtualearth.net',
+      mapStyle: Cesium.BingMapsStyle.CANVAS_LIGHT // Can also use Cesium.BingMapsStyle.ROAD
+    })
+  });
 
-  viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-    url : 'https://assets.agi.com/stk-terrain/world',
-    requestWaterMask : true, // required for water effects
-    requestVertexNormals : true // required for terrain lighting
-  });*/
+  var baseLayerPickerViewModel = viewer.baseLayerPicker.viewModel;
+  baseLayerPickerViewModel.selectedImagery = baseLayerPickerViewModel.imageryProviderViewModels[2];
 
   //viewer.scene.globe.enableLighting = false;
   var scene = viewer.scene;
