@@ -9,20 +9,21 @@
 
 // var viewer = new Cesium.Viewer('cesiumContainer');
 //
-  /*
+
   var viewer = new Cesium.Viewer('galaxy', {
     //scene3DOnly: true,
     selectionIndicator: false,
     baseLayerPicker: true,
     animation: false,
     timeline: false
-  });*/
+  });
+  /*
   var viewer = new Cesium.Viewer('galaxy', {
     imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
         url : '//services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
     }),
-    baseLayerPicker : true
-  });
+    baseLayerPicker : false
+  });*/
 
   //////////////////////////////////////////////////////////////////////////
   // Loading Imagery
@@ -774,7 +775,7 @@
     galaxy.init_grid_service();
     galaxy.init_mouse_event_handler();
     galaxy.init_page_event();
-    
+
   }
 
 }());
