@@ -332,6 +332,7 @@
       earth.grids(grid_idx, function(err, result) {
         if (err) {
           showError("contract call error");
+          return
         } else {
           var gridState = result[0];
           var owner = result[1];
@@ -347,10 +348,8 @@
           $("#oper-grid-owner").html(owner)
           $("#oper-grid-state").html(GridStateEng[gridState])
 
-          $('#buy-grid-btn').show()
-          $('#sell-grid-btn').show()
-          $('#del-grid-img-btn').show().addClass('disabled')
-
+          //$('#buy-grid-btn').show()
+          //$('#sell-grid-btn').show()
           let isOwner = false
           let gridAvatar = $('#grid-avatar')
           const imgAppend = '<img id="grid-avatar-img">'
@@ -364,28 +363,53 @@
                 address: web3.eth.coinbase,
               },
               onSuccess: function(xhr, json) {
-                let grid_idx = parseInt($("[name=grid-idx]").val())
-                if (isNaN(grid_idx)) {
-                  showError("non grid selected");
-                  grid_idx = '';
+                //reload conf from server, current 
+                if(window.gridService){
+                  window.gridService.LoadConf(GRID_CONF_CATEGORY, function(err, conf){
+                    if(err){
+                      showError("fail load conf");
+                      console.log("fail to load grid configuration: " + err);
+                    } else {
+                      galaxy.set_grid_picture(grid_idx, 100000, viewer);
+                      $("#del-grid-img-btn").removeClass("disabled");
+                    }
+                  });
                 }
-                galaxy.set_grid_picture(grid_idx, 100000, viewer);
               },
             });
             $("#buy-grid-btn").addClass("disabled");
             $("#sell-grid-btn").removeClass("disabled");
 
+            if(window.gridService){
+              window.gridService.GetConf(GRID_CONF_CATEGORY, function(err, conf){
+                if(err){
+                  showError("fail load conf");
+                  console.log("fail to load grid configuration: " + err);
+                } else {
+                  /* 如果有配置grid avatar才可以去除 */
+                  if(conf.hasOwnProperty(grid_idx) && conf[grid_idx].avatar){
+                    $("#del-grid-img-btn").removeClass("disabled");
+                  } else {
+                    $('#del-grid-img-btn').addClass('disabled')
+                  }
+                }
+              });
+            }
           } else if (gridState == 0) {
             gridAvatar.empty()
             gridAvatar.append(imgAppend)
             $("#buy-grid-btn").removeClass("disabled");
             $("#sell-grid-btn").addClass("disabled");
-
+            $('#del-grid-img-btn').addClass('disabled')
           } else {
+            /**
+             * forbidden land or owned by other
+             */
             gridAvatar.empty()
             gridAvatar.append(imgAppend)
             $("#sell-grid-btn").addClass("disabled");
             $("#buy-grid-btn").addClass("disabled");
+            $('#del-grid-img-btn').addClass('disabled')
           }
           
           //adjust the camera
@@ -399,10 +423,6 @@
                 $('#grid-avatar img').each(function() {
                   $(this).attr("src", avatar_url);
                 })
-
-                if (isOwner === true) {
-                  $('#del-grid-img-btn').removeClass('disabled')
-                }
               }
             })
             var center = window.gridService.gridCenterInDegree(grid_idx);
@@ -498,7 +518,7 @@
             galaxy.grid_selected(grid_index);
           }
 
-          
+          /*          
           var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
             Cesium.Cartesian3.fromDegrees(
               Cesium.Math.toDegrees(cartographic.longitude), 
@@ -512,7 +532,7 @@
               modelMatrix : modelMatrix,
               scale : 80000.0,
               position: position
-          }));
+          }));*/
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
@@ -587,21 +607,20 @@
                       if (err) {
                         showError("contract call error");
                       } else {
-                        //TODO:
+                        showInfo("transaction id: " + res);
                       }
                       console.log(err, res);
                     }
                   );
                 }
 
+                /*
                 // after buying behaviour
-                $("#buy-grid-btn").hide()
-                $("#sell-grid-btn").show()
-                $('grid-avatar').show()
                 $("#grid-avatar img").each(function() {
                   $(this).attr("src", "/grid_avatar/get/" + grid_idx);
                 })
                 galaxy.set_grid_picture(grid_idx, 100000, viewer);
+                */
               } else {
                 // can't buy mean can't trigger follow-up actions
                 showError("grid is not on sell");
@@ -613,40 +632,52 @@
       });
 
       $('#del-grid-img-btn').click(function() {
-        $validation.signWithTimestamp(web3, function(err, signature) {
-          if (err) {
-            console.error('Error occured when sign with timestamp when remove grid img');
-            return
+        let grid_idx = parseInt($("[name=grid-idx]").val());
+        if (isNaN(grid_idx)) {
+          showError("non grid selected");
+          returnn
+        }
+        earth.grids(grid_idx, function(err, result){
+          if(err){
+            showError("contract call error");
           } else {
-            let grid_idx = parseInt($("[name=grid-idx]").val())
-            if (isNaN(grid_idx)) {
-              showError("non grid selected");
-              grid_idx = '';
-            }
-            $.ajax({
-              url: '/grid_avatar/del',
-              method: 'POST',
-              data: {
-                grid_idx,
-                signature,
-              }
-            })
-              .done(function(data) {
-                console.log(data)
-                const {
-                  isOK,
-                  urlDeleted,
-                } = JSON.parse(data)
-
-                if (isOK === true) {
-                  $('#del-grid-img-btn').addClass('disabled')
-                  $("#grid-avatar img").each(function() {
-                    $(this).attr('src', '/images/logo.png');
-                  })
+             var owner = result[1];
+             if(web3.eth.coinbase != owner){
+               showError("you are not the owner of this grids");
+             } else {
+              $validation.signWithTimestamp(web3, function(err, signature) {
+                if (err) {
+                  showError("contract call error");
+                  console.error('Error occured when sign with timestamp when remove grid img' + err);
+                  return
                 } else {
-                  console.error('Delete grid image failed')
+                  $.ajax({
+                    url: '/grid_avatar/del',
+                    method: 'POST',
+                    data: {
+                      grid_idx,
+                      signature,
+                    }
+                  })
+                    .done(function(data) {
+                      console.log(data);
+                      const {
+                        isOK,
+                        urlDeleted,
+                      } = JSON.parse(data)
+      
+                      if (isOK === true) {
+                        $('#del-grid-img-btn').addClass('disabled')
+                        $("#grid-avatar img").each(function() {
+                          $(this).attr('src', '');
+                        })
+                      } else {
+                        console.error('Delete grid image failed')
+                      }
+                    })
                 }
               })
+             }
           }
         })
       });
@@ -659,6 +690,7 @@
         if(galaxy.player.grids_count > 0){
           if(window.gridService){
             var center = window.gridService.gridCenterInDegree(galaxy.player.grids[0]);
+            /*
             var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
               Cesium.Cartesian3.fromDegrees(
                 center.lng, 
@@ -670,7 +702,7 @@
                   scale : 1000.0
               }));
       
-            galaxy.player.starship = model;
+            galaxy.player.starship = model;*/
           }
         }
       }

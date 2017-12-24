@@ -317,7 +317,8 @@ Grid.prototype.LoadConf = function(category, callback){
       }
     });
   } else {
-    $.get("/conf/" + category, function(ret){
+    var n = (new Date()).getTime();
+    $.get("/conf/" + category + "?t=" + n, function(ret){
       if(!ret){
         return callback("fail");
       } else {
@@ -354,7 +355,7 @@ Grid.prototype.gridAvatar = function(grid_idx, callback){
         return callback(null, GRID_PIC_URL_BASE + avatar);
       } else {
         //TODO: anonymous
-        return callback(null, "/images/logo.png");
+        return callback(null, "");
       }
     }
   })
