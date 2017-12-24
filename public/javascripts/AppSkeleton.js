@@ -351,10 +351,12 @@
           $('#sell-grid-btn').show()
           $('#del-grid-img-btn').show().addClass('disabled')
 
+          let isOwner = false
           let gridAvatar = $('#grid-avatar')
           const imgAppend = '<img id="grid-avatar-img">'
 
           if (owner == web3.eth.coinbase) {
+            isOwner = true
             new AvatarUpload({
               el: document.querySelector('#grid-avatar'),
               uploadUrl: '/grid_avatar/upload',
@@ -398,7 +400,7 @@
                   $(this).attr("src", avatar_url);
                 })
 
-                if (avatar_url !== '/images/logo.png') {
+                if (isOwner === true) {
                   $('#del-grid-img-btn').removeClass('disabled')
                 }
               }
@@ -611,34 +613,42 @@
       });
 
       $('#del-grid-img-btn').click(function() {
-        let grid_idx = parseInt($("[name=grid-idx]").val())
-        if (isNaN(grid_idx)) {
-          showError("non grid selected");
-          grid_idx = '';
-        }
-        $.ajax({
-          url: '/grid_avatar/del',
-          method: 'POST',
-          data: {
-            grid_idx,
+        $validation.signWithTimestamp(web3, function(err, signature) {
+          if (err) {
+            console.error('Error occured when sign with timestamp when remove grid img');
+            return
+          } else {
+            let grid_idx = parseInt($("[name=grid-idx]").val())
+            if (isNaN(grid_idx)) {
+              showError("non grid selected");
+              grid_idx = '';
+            }
+            $.ajax({
+              url: '/grid_avatar/del',
+              method: 'POST',
+              data: {
+                grid_idx,
+                signature,
+              }
+            })
+              .done(function(data) {
+                console.log(data)
+                const {
+                  isOK,
+                  urlDeleted,
+                } = JSON.parse(data)
+
+                if (isOK === true) {
+                  $('#del-grid-img-btn').addClass('disabled')
+                  $("#grid-avatar img").each(function() {
+                    $(this).attr('src', '/images/logo.png');
+                  })
+                } else {
+                  console.error('Delete grid image failed')
+                }
+              })
           }
         })
-          .done(function(data) {
-            console.log(data)
-            const {
-              isOK,
-              urlDeleted,
-            } = JSON.parse(data)
-
-            if (isOK === true) {
-              $('#del-grid-img-btn').addClass('disabled')
-              $("#grid-avatar img").each(function() {
-                $(this).attr('src', '/images/logo.png');
-              })
-            } else {
-              console.error('Delete grid image failed')
-            }
-          })
       });
     }
 
