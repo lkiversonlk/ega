@@ -82,22 +82,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
       //already have one
     } else {
       if(galaxy.player.grids_count > 0){
-        if(window.gridService){
-          var center = window.gridService.gridCenterInDegree(galaxy.player.grids[0]);
-          /*
-          var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
-            Cesium.Cartesian3.fromDegrees(
-              center.lng, 
-              center.lat, 
-              1000000.0));
-          var model = scene.primitives.add(Cesium.Model.fromGltf({
-                url : '/gltf/scene.gltf',
-                modelMatrix : modelMatrix,
-                scale : 1000.0
-            }));
-    
-          galaxy.player.starship = model;*/
-        }
+        var center = gridService.gridCenterInDegree(galaxy.player.grids[0]);
       }
     }
   }

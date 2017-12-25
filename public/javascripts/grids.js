@@ -253,7 +253,8 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
     //change the material
     this.grid_avatars[grid].polygon.material = image_url;
   } else {
-    var points = gridService.fromGridIndexToDegrees(grid);
+    var self = this;
+    var points = self.fromGridIndexToDegrees(grid);
     var gridPic = viewer.entities.add({
       name: "grid_picture",
       polygon: {

@@ -112,6 +112,7 @@ router.post("/grid_avatar/upload", function(req, res, next) {
               res.send(JSON.stringify({
                 isOK: true,
                 msg: 'You are lucky :)',
+                id: grid_idx,
               }));
               return
             } else {
@@ -130,6 +131,7 @@ router.post("/grid_avatar/upload", function(req, res, next) {
                   res.send(JSON.stringify({
                     isOK: true,
                     msg: 'You are lucky :)',
+                    id: grid_idx,
                   }));
                   return;
                 }
