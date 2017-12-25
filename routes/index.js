@@ -171,6 +171,9 @@ router.post('/grid_avatar/del', function(req, res, next) {
   const isOK = verifyUser(key, addr, past);
 
   if (isOK === true) {
+    /**
+     * MDZZ
+     */
     if (fs.existsSync(path.join(grid_avatar_save_path, grid_idx))) {
       fs.unlinkSync(path.join(grid_avatar_save_path, grid_idx))
     }

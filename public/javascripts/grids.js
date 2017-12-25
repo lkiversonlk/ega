@@ -12,7 +12,7 @@
 function Grid(size) {
 
   this.size = size;
-  this.grid_size_pixel = TILE_SIZE / this.size;
+  //this.grid_size_pixel = TILE_SIZE / this.size;
 
   this.lat_per_grid = 180 / size;
   this.lng_per_grid = 360 / size;
@@ -25,15 +25,21 @@ function Grid(size) {
     this.server = false;    
   }
 
+  //store configurations 
+  //including:
+  //grid conf
+  //user conf
   this.conf = {};
   this.grid_avatars = {};
 }
 
+/*
 var TILE_SIZE = 256;
 var pixelOrigin = {
   x: TILE_SIZE / 2,
   y: TILE_SIZE / 2
 };
+
 var pixelsPerLngDegree = TILE_SIZE / 360;
 var pixelsPerLngRadian = TILE_SIZE / (2 * Math.PI);
 
@@ -41,7 +47,7 @@ function _bound(value, opt_min, opt_max) {
   if (opt_min != null) value = Math.max(value, opt_min);
   if (opt_max != null) value = Math.min(value, opt_max);
   return value;
-}
+} */
 
 Grid.prototype.degreeToRadians = function(degree) {
   return degree * (Math.PI / 180);
@@ -51,6 +57,7 @@ Grid.prototype.radiansToDegree = function(rad) {
   return rad / (Math.PI / 180);
 }
 
+/*
 Grid.prototype.fromLatLngToXY = function(lat, lng) {
   x = parseInt((parseFloat(lng) + 180) / this.lng_per_grid);
   y = parseInt((parseFloat(lat) + 90) / this.lat_per_grid);
@@ -64,7 +71,7 @@ Grid.prototype.fromXYToGrid = function(x, y) {
   var grid_x = parseInt(x / this.grid_size_pixel);
   var grid_y = parseInt(y / this.grid_size_pixel);
   return grid_y * this.size + grid_x;
-}
+}*/
 
 /**
  * lat range from -90 to 90
@@ -374,7 +381,7 @@ Grid.prototype.DrawGridAvatar = function(grid_idx, viewer, callback){
         if(self.grid_avatars.hasOwnProperty(grid_idx)){
           self.grid_avatars[grid_idx].polygon.material = GRID_PIC_URL_BASE + avatar;
         } else {
-          var points = gridService.fromGridIndexToDegrees(grid_idx);
+          var points = self.fromGridIndexToDegrees(grid_idx);
           var gridPic = viewer.entities.add({
             name: "grid_picture",
             polygon: {
