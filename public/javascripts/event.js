@@ -278,67 +278,58 @@ function init_grid_oper_event(earth, gridService, galaxy){
       return;
     }
 
-    if(window.gridService){
-      earth.grids(grid_idx, function(err, result){
-        if(err){
-          showError("contract call error");
-          console.log(err);
-        } else {
-          var owner = result[1];
-          if(owner != web3.eth.coinbase){
-            showError("you are not the owner of this grid");
-            return;
-          }
-
-          vex.dialog.prompt({
-            message: 'Set the sell price in ETH',
-            placeholder: 'Price',
-            callback: function (sell) {
-              if(!sell){
-                return;
-              }
-    
-              var price = parseFloat(sell);
-    
-              if(isNaN(price)){
-                showError("price invalid");
-                return;
-              }
-    
-              var point = gridService.fromGridIndexToXY(grid_idx);
-              earth.grids(grid_idx, function(err, result) {
-                if (err) {
-                  showError("contract call error");
-                } else {
-                  var owner = result[1];
-    
-                  if (owner != web3.eth.coinbase) {
-                    //TODO: error
-                    showError("not owner of this grid");
-                  } else {
-                    earth.sellGrid(grid_idx, web3.toWei(price, "ether"), {
-                        gas: 470000
-                      }, function(err, txid) {
-                        if (err) {
-                          showError("contract call error");
-                        } else {
-                          showInfo("transaction id: " + txid);
-                        }
-                      });
-                    }
-                  }
-                });
-            }
-          });
+    earth.grids(grid_idx, function(err, result){
+      if(err){
+        showError("contract call error");
+        console.log(err);
+      } else {
+        var owner = result[1];
+        if(owner != web3.eth.coinbase){
+          showError("you are not the owner of this grid");
+          return;
         }
-      })
-    }
-    
-    /*
-    var price = parseFloat($("[name=grid-sell-price]").val());
-    if (isNaN(price)) {
-      showError("please enter price in ETH");
-      return;
-    }*/
+
+        vex.dialog.prompt({
+          message: 'Set the sell price in ETH',
+          placeholder: 'Price',
+          callback: function (sell) {
+            if(!sell){
+              return;
+            }
+  
+            var price = parseFloat(sell);
+  
+            if(isNaN(price)){
+              showError("price invalid");
+              return;
+            }
+  
+            var point = gridService.fromGridIndexToXY(grid_idx);
+            earth.grids(grid_idx, function(err, result) {
+              if (err) {
+                showError("contract call error");
+              } else {
+                var owner = result[1];
+  
+                if (owner != web3.eth.coinbase) {
+                  //TODO: error
+                  showError("not owner of this grid");
+                } else {
+                  earth.sellGrid(grid_idx, web3.toWei(price, "ether"), {
+                      gas: 470000
+                    }, function(err, txid) {
+                      if (err) {
+                        showError("contract call error");
+                      } else {
+                        showInfo("transaction id: " + txid);
+                      }
+                    });
+                  }
+                }
+              });
+          }
+        });
+      }
+    });
   });
 }

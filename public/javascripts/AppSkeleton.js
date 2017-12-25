@@ -86,6 +86,7 @@
         galaxy.refresh_earth_status(earth);
         galaxy.refresh_player_status(earth);
 
+        init_navbar_event();
         init_mouse_event(galaxy, viewer, gridService);
         init_galay_status_event(viewer, gridService);
         init_player_status_event(earth, galaxy);

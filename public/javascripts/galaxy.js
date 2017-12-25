@@ -231,12 +231,8 @@ function init_galaxy(galaxy, gridService, earth, viewer){
 
   // TODO After upload grid img, currently func cannot update local display
   galaxy.set_grid_picture = function(grid_idx, height, picture_url) {
-    if (!window.gridService) {
-      showError("grid service uninitialized");
-    } else {
-      const url = "/grid_avatar/get/" + grid_idx;
-      window.gridService.setGridImageTmp(grid_idx, url, viewer);
-    }
+    const url = "/grid_avatar/get/" + grid_idx;
+    gridService.setGridImageTmp(grid_idx, url, viewer);
   };
 
   galaxy.init_mouse_event_handler = function() {
