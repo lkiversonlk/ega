@@ -12,12 +12,8 @@
 function Grid(size) {
 
   this.size = size;
-  //this.grid_size_pixel = TILE_SIZE / this.size;
-
   this.lat_per_grid = 180 / size;
   this.lng_per_grid = 360 / size;
-
-  this.grid_lines = [];
 
   if (typeof(window) == "undefined") {
     this.server = true;
@@ -25,29 +21,14 @@ function Grid(size) {
     this.server = false;    
   }
 
-  //store configurations 
-  //including:
-  //grid conf
-  //user conf
+  //configuration cache
   this.conf = {};
+
+  //grid lines
+  this.grid_lines = [];
+  //grid avatars
   this.grid_avatars = {};
 }
-
-/*
-var TILE_SIZE = 256;
-var pixelOrigin = {
-  x: TILE_SIZE / 2,
-  y: TILE_SIZE / 2
-};
-
-var pixelsPerLngDegree = TILE_SIZE / 360;
-var pixelsPerLngRadian = TILE_SIZE / (2 * Math.PI);
-
-function _bound(value, opt_min, opt_max) {
-  if (opt_min != null) value = Math.max(value, opt_min);
-  if (opt_max != null) value = Math.min(value, opt_max);
-  return value;
-} */
 
 Grid.prototype.degreeToRadians = function(degree) {
   return degree * (Math.PI / 180);
@@ -57,24 +38,8 @@ Grid.prototype.radiansToDegree = function(rad) {
   return rad / (Math.PI / 180);
 }
 
-/*
-Grid.prototype.fromLatLngToXY = function(lat, lng) {
-  x = parseInt((parseFloat(lng) + 180) / this.lng_per_grid);
-  y = parseInt((parseFloat(lat) + 90) / this.lat_per_grid);
-  return {
-    x: x,
-    y: y
-  };
-}
-
-Grid.prototype.fromXYToGrid = function(x, y) {
-  var grid_x = parseInt(x / this.grid_size_pixel);
-  var grid_y = parseInt(y / this.grid_size_pixel);
-  return grid_y * this.size + grid_x;
-}*/
-
 /**
- * lat range from -90 to 90
+ * lat range from -89.5 to 89.5
  * lng range from -180 to 180
  * @param {*} lat 
  * @param {*} lng 
@@ -319,7 +284,7 @@ Grid.prototype.LoadConf = function(category, callback){
 
     jsonfile.readFile(filePath, function(err, obj){
       if(err){
-        //LOG
+        //TODO: error handling
       } else {
         return callback(null, obj);
       }
@@ -327,12 +292,10 @@ Grid.prototype.LoadConf = function(category, callback){
   } else {
     var n = (new Date()).getTime();
     $.get("/conf/" + category + "?t=" + n, function(ret){
-      if(!ret){
-        return callback("fail");
-      } else {
-        return callback(null, ret);
-      }
-    })
+      return callback(null, ret);
+    }).fail(function(){
+      console.log("what");
+    });
   }
 }
 

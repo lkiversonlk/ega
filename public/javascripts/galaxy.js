@@ -1,7 +1,9 @@
+//TODO: use async to organize behavior
 function init_galaxy(galaxy, gridService, earth, viewer){
   galaxy.refresh_earth_status = function(earth) {
     earth.gridsSoldOut(function(err, sold) {
       if (err) {
+        return;
       } else {
         $("#status-sold-grids").html(sold);
       }
@@ -9,6 +11,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
 
     earth.mapSize(function(err, size) {
       if (err) {
+        return;
       } else {
         $("#status-total-grids").html(size * size);
       }
@@ -16,6 +19,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
 
     earth.fee(function(err, fee) {
       if (err) {
+        return;
       } else {
         $("#status-tran-fee").html(fee / 1000);
       }
@@ -23,6 +27,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
 
     earth.minimalPrice(function(err, price) {
       if (err) {
+        return;
       } else {
         $("#status-min-price").html(web3.fromWei(price) + " ETH");
       }
@@ -36,6 +41,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
 
     earth.gridsCount(web3.eth.coinbase, function(err, count) {
       if (err) {
+        return;
       } else {
         $("#player-address").html(shortSpellAddress(web3.eth.coinbase));
         $("#player-address").prop('title', web3.eth.coinbase);
@@ -49,7 +55,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
           let idx = i;
           earth.ownedGrids(web3.eth.coinbase, idx, function(err, grid_idx) {
             if (err) {
-              return next("contract call error");
+              return next(CONTRACT_CALL_ERROR);
             } else {
               galaxy.player.grids.push(grid_idx);
               $("#player-grids-list").append('<option value=' + grid_idx + '>' + grid_idx + '</option>');
@@ -58,7 +64,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
           });
         }, function(err){
           if(err){
-
+            console.log("grid list initial failed: " + err);
           } else {
             galaxy.init_user_ship();
           }
@@ -68,7 +74,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
 
     earth.earns(web3.eth.coinbase, function(err, earn) {
       if (err) {
-        showError("contract call error");
+        return;
       } else {
         $("#player-earns").html(web3.fromWei(earn) + "ETH");
       }

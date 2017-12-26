@@ -145,7 +145,6 @@ function init_grid_oper_event(earth, gridService, galaxy){
 
     earth.grids(grid_idx, function(err, result) {
       if (err) {
-        showError(CONTRACT_CALL_ERROR);
       } else {
         var gridState = result[0];
         if (gridState == 0) {
@@ -160,7 +159,6 @@ function init_grid_oper_event(earth, gridService, galaxy){
           if (price == 0) {
             earth.minimalPrice(function(err, price) {
               if (err) {
-                showError(CONTRACT_CALL_ERROR);
               } else {
                 earth.buyGrid(
                   grid_idx, 
@@ -170,7 +168,6 @@ function init_grid_oper_event(earth, gridService, galaxy){
                   },
                   function(err, res) {
                     if (err) {
-                      showError(CONTRACT_CALL_ERROR);
                     } else {
                       showInfo("transaction id: " + res);
                       console.log(err, res);
@@ -188,7 +185,6 @@ function init_grid_oper_event(earth, gridService, galaxy){
               },
               function(err, res) {
                 if (err) {
-                  showError(CONTRACT_CALL_ERROR);
                 } else {
                   showInfo("transaction id: " + res);
                   console.log(err, res);
@@ -229,6 +225,7 @@ function init_grid_oper_event(earth, gridService, galaxy){
     }
     earth.grids(grid_idx, function(err, result){
       if(err){
+        return;
       } else {
          var owner = result[1];
          if(web3.eth.coinbase != owner){
@@ -280,8 +277,7 @@ function init_grid_oper_event(earth, gridService, galaxy){
 
     earth.grids(grid_idx, function(err, result){
       if(err){
-        showError("contract call error");
-        console.log(err);
+        return;
       } else {
         var owner = result[1];
         if(owner != web3.eth.coinbase){
@@ -307,7 +303,7 @@ function init_grid_oper_event(earth, gridService, galaxy){
             var point = gridService.fromGridIndexToXY(grid_idx);
             earth.grids(grid_idx, function(err, result) {
               if (err) {
-                showError("contract call error");
+                return;
               } else {
                 var owner = result[1];
   
