@@ -133,7 +133,7 @@ function init_player_status_event(earth, galaxy){
 }
 
 
-function init_grid_oper_event(earth, gridService, galaxy){
+function init_grid_oper_event(earth, gridService, galaxy, confService, viewer){
 
   //buy grid
   $("#buy-grid-btn").click(function() {
@@ -239,16 +239,15 @@ function init_grid_oper_event(earth, gridService, galaxy){
                 url: '/grid_avatar/del',
                 method: 'POST',
                 data: {
-                  grid_idx,
-                  signature,
+                  grid_idx: grid_idx,
+                  signature: JSON.stringify(signature),
                 }
               })
                 .done(function(data) {
                   console.log(data);
                   const {
                     isOK,
-                    urlDeleted,
-                  } = JSON.parse(data)
+                  } = data
   
                   if (isOK === true) {
                     $('#del-grid-img-btn').addClass('disabled')
@@ -256,7 +255,21 @@ function init_grid_oper_event(earth, gridService, galaxy){
                     //remove image mark on earth
                     $("#grid-avatar img").each(function() {
                       $(this).attr('src', NO_IMAGE);
-                    })
+                    });
+
+                    confService.forceReloadConf(
+                      confService.CATEGORY["GRID_CONF_CATEGORY"],
+                      grid_idx,
+                      (err, conf) => {
+                      if(err){
+                        showError("fail load conf");
+                        console.log("fail to load grid configuration: " + err);
+                      } else {
+                        gridService.updateGridAvatar(grid_idx, viewer);
+                        $("#del-grid-img-btn").removeClass("disabled");
+                      }
+                    });
+
                   } else {
                     console.error('Delete grid image failed')
                   }

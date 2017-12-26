@@ -145,6 +145,13 @@ router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
   }
 });
 
+function delFail(res){
+  return res.json(
+    {
+      isOK: false,
+    });
+}
+
 router.post('/grid_avatar/del', function(req, res, next) {
   const {
     grid_idx,
@@ -158,24 +165,44 @@ router.post('/grid_avatar/del', function(req, res, next) {
   } = JSON.parse(signature)
 
   const isOK = verifyUser(key, addr, past);
+  var confService = req.app.get("configuration");
 
   if (isOK === true) {
-    /**
-     * MDZZ
-     */
-    if (fs.existsSync(path.join(grid_avatar_save_path, grid_idx))) {
-      fs.unlinkSync(path.join(grid_avatar_save_path, grid_idx))
-    }
-
-    return res.send(JSON.stringify({
-      isOK: true,
-      urlDeleted: `grid_avatar/get/${grid_idx}`
-    }));
+    //just remove the config
+    confService.forceReloadConf(
+      confService.CATEGORY["GRID_CONF_CATEGORY"],
+      grid_idx,
+      (err, conf) => {
+        if(err){
+          console.log("fail err" + err);
+          return delFail(res);
+        } else {
+          if(!conf) conf = {};
+          delete conf.avatar;
+          confService.saveConf(
+            confService.CATEGORY["GRID_CONF_CATEGORY"],
+            grid_idx,
+            conf,
+            (err, conf) => {
+              if(err) {
+                console.log("del fail " + err);
+                return delFail(res);
+              } else {
+                return res.json(
+                  {
+                    isOK: true
+                  }
+                );
+              }
+            }
+          )
+        }
+      }
+    )
+    
 
   } else {
-    return res.send(JSON.stringify({
-      isOK: false,
-    }));
+    return delFail(res);
   }
 })
 

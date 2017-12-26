@@ -91,7 +91,7 @@
         init_mouse_event(galaxy, viewer, gridService);
         init_galay_status_event(viewer, gridService);
         init_player_status_event(earth, galaxy);
-        init_grid_oper_event(earth, gridService, galaxy);
+        init_grid_oper_event(earth, gridService, galaxy, confService, viewer);
       }
     });
   }

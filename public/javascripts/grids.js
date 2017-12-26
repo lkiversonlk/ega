@@ -129,9 +129,11 @@ Grid.prototype.drawGridAvatars = function(viewer, callback){
           if(err){
 
           } else {
-            self.drawGridAvatar(grid, url, viewer, (err) => {
+            if(url){
+              self.drawGridAvatar(grid, url, viewer, (err) => {
 
-            })
+              })
+            }            
           }
         });
       });
@@ -373,12 +375,24 @@ Grid.prototype.drawGridAvatar = function(grid_idx, url, viewer){
 Grid.prototype.updateGridAvatar = function(grid_idx, viewer){
   var self = this;
   self.gridAvatar(grid_idx, (err, url) => {
-    if(err || !url){
-
+    if(err){
+      //TODO:
     } else {
-      self.drawGridAvatar(grid_idx, url, viewer)
+      if(!url){
+        self.removeGridAvatar(grid_idx, viewer);
+      } else {
+        self.drawGridAvatar(grid_idx, url, viewer)
+      }
     }
   })
+}
+
+Grid.prototype.removeGridAvatar = function(grid_idx, viewer){
+  var self = this;
+  if(self.grid_avatars.hasOwnProperty(grid_idx)){
+    viewer.entities.remove(self.grid_avatars[grid_idx]);
+    delete self.grid_avatars[grid_idx];
+  }
 }
 
 if (typeof(module) != "undefined") {

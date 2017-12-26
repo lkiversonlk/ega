@@ -182,7 +182,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
             console.log("fail to retrive grid avatar :" + err);
           } else {
             if(!avatar_url){
-              avatar_url = "/images/no-img-lager.jpg";
+              avatar_url = NO_IMAGE;
             } else {
               if(isOwner){
                 $("#del-grid-img-btn").removeClass("disabled");
