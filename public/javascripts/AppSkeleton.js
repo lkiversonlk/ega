@@ -24,6 +24,8 @@
     baseLayerPicker: true,
     animation: false,
     timeline: false,
+    infoBox: false,
+    geocoder: false,
     imageProvider: new Cesium.BingMapsImageryProvider({
       url: 'https://dev.virtualearth.net',
       mapStyle: Cesium.BingMapsStyle.CANVAS_LIGHT // Can also use Cesium.BingMapsStyle.ROAD
@@ -37,6 +39,7 @@
   var scene = viewer.scene;
   
   initI18n();
+  init_navbar_event();
 
   window.addEventListener('load', function() {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -87,7 +90,6 @@
         galaxy.refresh_earth_status(earth);
         galaxy.refresh_player_status(earth);
 
-        init_navbar_event();
         init_mouse_event(galaxy, viewer, gridService);
         init_galay_status_event(viewer, gridService);
         init_player_status_event(earth, galaxy);
