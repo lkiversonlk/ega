@@ -26,14 +26,11 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
+var config = require("../config/config.json");
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-var url = "mongodb://localhost";
-
-DB.connect(url, (err) => {
+DB.connect(config.db_url, (err) => {
   if(err){
     console.log("connect mongo db " + url + " failed");
     process.exit(-1);
