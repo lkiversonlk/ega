@@ -30,7 +30,7 @@
 	"enter grid index": "enter grid index",
 	"sell grid": "sell grid",
 	"enter sell price": "enter sell price",
-	"unknown network": "unknown or unsupported network",
+	"unknown network": "Currently we only support ropsten testnet, please check your net configuration",
 	"not connected to ETH": "not connected to ethereum, please check metamask",
 	"finding...": "finding...",
 	"BUY": "BUY",

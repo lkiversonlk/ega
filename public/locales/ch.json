@@ -32,7 +32,7 @@
 	"grid owner": "领主",
 	"sell grid": "出售",
 	"enter sell price": "输入卖出价格",
-	"unknown network": "未知或尚不支持的网路",
+	"unknown network": "目前只支持Ropsten testnet，请检查网络设置",
 	"not connected to ETH": "未接入以太坊网络，请检查metamask插件",
 	"please enter price in ETH": "请输入以太坊价格",
 	"non grid selected": "未选中领地",
