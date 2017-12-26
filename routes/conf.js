@@ -30,7 +30,7 @@ router.get("/:category", pre, function(req, res, next){
     confService.loadConf(category, req.query.id, (err, conf) => {
       if(err){
         //TODO: logging
-        console.log("fail to load conf: " + utli.inspect(err));
+        console.log("fail to load conf: " + util.inspect(err));
         return res.sendStatus(500);
       } else {
         console.log("get conf: " + JSON.stringify(conf));
@@ -41,7 +41,7 @@ router.get("/:category", pre, function(req, res, next){
     confService.loadAllConf(category, (err, conf) => {
       if(err){
         //TODO: logging
-        console.log("fail to load conf: " + utli.inspect(err));
+        console.log("fail to load conf: " + util.inspect(err));
         return res.sendStatus(500);
       } else {
         return res.json(conf);
