@@ -35,9 +35,9 @@
                   <ul class="navigation">
                      <li><a href="#brief" class="selected">简介</a></li>
                      <li><a href="#about">玩法</a></li>
-                     <li><a href="#services">交易系统</a></li>
-                     <li><a href="#gallery">开发中的功能</a></li>
-                     <li><a href="#contact">合约地址</a></li>
+                     <li><a href="#trade">交易</a></li>
+                     <li><a href="#contract">合约地址</a></li>
+                     <li><a href="#coming">即将到来</a></li>
                   </ul>
                </div>
 
@@ -115,19 +115,72 @@
                     <em>领地编号</em> 里表示当前你选定的领地号码，也可以直接输入编号点击对勾锁定领地
                   </p>
                   <p>
-                    <em>领地图片</em> 锁定领地后，这里会显示玩家设置的领地图片，当领地可以购买/调整出售价格时，对应的购买，出售按钮会被激活。
-                    出售领地时，您需要指定出售价格
-                  </p>
-                  <p>
-                    <em>领地图片</em> 当您是领地owner时，可以点击图片部分设置领地图片，同样您需要sign这个操作来通过验证。
+                    <em>领地图片</em> 锁定领地后，这里会显示玩家设置的领地图片。<br/>
+                    当你<em>拥有</em> 这块土地时，点击图片区域可以上传新的领地图片,也可以点击出售按钮，设置该领地的出售价格.<br/>
+                    当你<em>不拥有</em> 该块土地时，如果该块土地在出售中，则你可以购买该块土地
+                    
                   </p>
               </div>
               <div class="col-md-4 ">
-                  <img src="/images/howto-status.png" style="width:70%" class="image_wrapper">
+                  <img src="/images/howto-oper.png" style="width:70%" class="image_wrapper">
               </div>                       
             </div>
+            
+            <div class="row">
+              <div class="col-md-offset-2">
+                <p>请注意，<em>上传logo，修改领地图片等</em> 操作并不需要花费ETH，只是需要调用一个验证函数证明您是地址的所有人</p>
+              </div>
+            </div>
 
+            <div class="row" >
+              <div class="col-md-offset-2 col-md-10">
+                  <h1 id="trade">交易</h1>
+                  <p>
+                    整个星球被划分成领地，领地在初始状态时是<em>无主</em> 的。您只需要用<em>最低价格</em> 购买领地。
+                    <br/>
+                    当领地被玩家购买后，则变成了<em>私有</em> ，无法被购买，玩家可以修建自己的领地。
+                    <br/>
+                    玩家可以设置一个价格，将领地变成<em>出售中</em> 状态，这时领地可以被其它玩家买走。
+                  </p>
+
+                  <p>
+                    当一个<em>无主 </em>的领地被卖出时，其收益会被分给系统和当前世界的领主们(<em>不包括</em> 本次的买家，即使他之前已经拥有了领地)。
+                  </p>
+                  <p>
+                    当一个<em>出售中 </em>的土地被买走时，扣除交易手续费后的部分会被划给卖家，手续费会被分给系统和当前世界的领主们(<em>不包括</em> 本次的买家，即使他之前已经拥有了领地)。
+                  </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-offset-2 col-md-5">
+                <img src="/images/howto-earn.png" style="width:70%" class="image_wrapper">
+              </div>
+              <div class="col-md-5">
+                <p>
+                  <em>领取收益</em> 玩家在这个世界的收益都记录在合约中，数额参见左边玩家状态栏的<em>收益</em> 。
+                </p>
+                <p>
+                  点击<em>领取</em> 则可以将收益转到您自己的地址上。
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-offset-2 col-md-10">
+                <h1 id="contract">合约地址</h1>
+                <p>
+                  <em>合约地址</em> 显示在游戏顶部的网络下拉菜单里，点击可以跳到源码。
+                </p>
+              </div>
+            </div>
+
+            <div class="row" >
+                <div class="col-md-offset-2 col-md-10">
+                    <h1 id="coming">即将到来</h1>
+                    
+                </div>
+              </div>
             <div id="footer">
+              <!--
                <div id="social_box">
                   <a href="#"><img src="/howto/images/facebook.png" alt="facebook" /></a>
                   <a href="#"><img src="/howto/images/flickr.png" alt="flickr" /></a>
@@ -135,10 +188,11 @@
                   <a href="#"><img src="/howto/images/twitter.png" alt="twitter" /></a>
                   <a href="#"><img src="/howto/images/youtube.png" alt="youtube" /></a>
                </div>
-               <div id="footer_left">
-                  Copyright © 2048 <a href="#">Company Name</a><br />
-                  <!-- Galaxy by <a rel="nofollow" href="http://www.tooplate.com">Templates</a><br /> -->
+              -->
+               <div id="footer_left" class="col-md-offset-8">
+                  Copyright © 2048 <a href="#">EEGalaxy</a><br />
                </div>
+              
                <div class="cleaner"></div>
             </div>
          </div>

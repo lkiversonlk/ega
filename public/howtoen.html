@@ -35,9 +35,9 @@
                   <ul class="navigation">
                      <li><a href="#brief" class="selected">Introduction</a></li>
                      <li><a href="#about">Operation</a></li>
-                     <li><a href="#services">Trading</a></li>
-                     <li><a href="#gallery">In Dev</a></li>
-                     <li><a href="#contact">About Contract</a></li>
+                     <li><a href="#trade">Trading</a></li>
+                     <li><a href="#contract">Contract</a></li>
+                     <li><a href="#coming">Coming</a></li>
                   </ul>
                </div>
 
@@ -50,7 +50,8 @@
 
                   <p>
                     EEGalaxy is a virtual world game based on ethereum, this planet is divided into many grids that player could buy, sell and upgrade it, and even build your own fleet。
-                    Every land owner can share the revenue of this world.
+                    <br/>
+                    Every land owner can <em>share</em> the revenue of this world.
                   </p>  
                   <img src="/images/howto-brief-en.png" alt="Image 01" class="image_wrapper" style="width:90%"/>
               </div>
@@ -58,10 +59,10 @@
             <!-- end of brief -->
 
             <div class="row" >
-              <div class="col-md-offset-2 col-md-4 ">
+              <div class="col-md-offset-2 col-md-5 ">
                   <img src="/images/howto-status-en.png" style="width:70%" class="image_wrapper">
                 </div>
-              <div class="col-md-6  ">
+              <div class="col-md-5  ">
                   <h1 id="about">Operation</h1>
                   <p>
                     after loading the game, the status panel is in the left side, which consist of world status and player status.
@@ -83,51 +84,119 @@
                   </p>
 
                   <p>
-                    <em>玩家状态栏</em> 会显示当前玩家的地址，logo，在当前世界的收益以及拥有的领土信息
+                    <em>player status</em> shows player's logo, address and how much he earns, how many lands he owns.
                   </p>
                   <p>
-                    点击头像以上传新的logo，这里需要调用sign来做用户验证，该步骤不需要花费任何ether，也没有安全风险。
+                    click your logo to upload new logo, this requires a sign to verify your identity, it doesn't cost ETH.
                   </p>
                   <p>
-                    系统会记录您当前的收益，点击<em>领取</em> 可以将收益领取到您当前地址上
+                    click <em>Claim</em> to get your earnings in the world.
                   </p>
               </div>
               
             </div>
+
             <div class="row" >
 
-              <div class="col-md-offset-2 col-md-6  ">
+              <div class="col-md-offset-2 col-md-5  ">
                   <p>
-                    右边区域为操作栏，顶上部分是当前鼠标所指网格的信息，中间是网格交易和配置框，下面部分是星舰配置框。
+                    Operation panel on the right side. <br/>
+                    On top is the status of grid that mouse poining <br/>
+                  </p>
+                  <p>
+                      <em>grid </em> mark the No. of grid you're pointing.
+                  </p>
+                  <p>
+                    <em>lon lat</em> longitude, latitude of your mouse
+                  </p>
+                  <p>
+                    <em>logo</em> the logo of the owner of the grid you're pointing.
+                  </p>
 
-                    你可以通过鼠标点击锁定领地。
+                  <p>
+                    you may <em>click</em> on the planet to choose land.<br/>
+                    or enter grid No. in the search input and click ok.
+                  </p>
+                  
+                  <p>
+                    <em>Search</em> display the Grid No. you selected. <br/>
+                    you can use it to select grid, too.
                   </p>
                   <p>
-                      <em>领地</em> 标识出了当前鼠标所指领地的编号
-                  </p>
-                  <p>
-                    <em>经度纬度</em> 表示当前鼠标的位置
-                  </p>
-                  <p>
-                    <em>图片</em> 是该领地owner的logo，图片下面显示了该owner的地址
-                  </p>
-                  <p>
-                    <em>领地编号</em> 里表示当前你选定的领地号码，也可以直接输入编号点击对勾锁定领地
-                  </p>
-                  <p>
-                    <em>领地图片</em> 锁定领地后，这里会显示玩家设置的领地图片，当领地可以购买/调整出售价格时，对应的购买，出售按钮会被激活。
-                    出售领地时，您需要指定出售价格
-                  </p>
-                  <p>
-                    <em>领地图片</em> 当您是领地owner时，可以点击图片部分设置领地图片，同样您需要sign这个操作来通过验证。
-                  </p>
+                    <em>Grid</em> <br/>
+                    once grid is selected, it will display the picture set by the grid owner <br/>
+                    if you <em>own</em> the land，<em>click</em> the picture to load new pic.<br/>
+                    you can click sell to set a price for the land. <br/>
+                    if you <em>do not own</em> the land and if it's on sell, you may <em>buy</em> this land.
+                    </p>
               </div>
-              <div class="col-md-4 ">
-                  <img src="/images/howto-status.png" style="width:70%" class="image_wrapper">
+              <div class="col-md-5 ">
+                  <img src="/images/howto-oper-en.png" style="width:70%" class="image_wrapper">
               </div>                       
             </div>
+            
+            <div class="row">
+              <div class="col-md-offset-2">
+                <p>Notice <em>uploading logo, change grid pic</em> doesn't cost your ETH, it only needs a <em>sign</em> operation to verify you're the owner.
+              </div>
+            </div>
 
-            <div id="footer">
+            <div class="row" >
+              <div class="col-md-offset-2 col-md-10">
+                  <h1 id="trade">Trading</h1>
+                  <p>
+                    the whole planet is devided into lands, every land is <em>ownerless</em> .<br/>
+                    you can buy it at <em>minimal price</em>. <br/>
+                    if a land is bought by some player, it becomes <em>owned</em> , it can't be bought, player can decorate their lands
+                    <br/>
+                    you can also set a price to <em>sell</em> your lands.
+                  </p>
+
+                  <p>
+                    when a <em>ownerless</em> land is sold out, the money will be <em>distributed</em> to the galaxy and <em>current land owners</em> of the world. (<em>exclude</em> the buyer)。
+                  </p>
+                  <p>
+                    when one player's land is bought by others, the money except the fee will go to the <em>seller's account</em>. <br/>
+                    the fee will be <em>distributed</em> to the galaxy and <em>current land owners</em> of the world. (<em>exclude</em> the buyer)。
+                  </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-offset-2 col-md-5">
+                <img src="/images/howto-earn-en.png" style="width:70%" class="image_wrapper">
+              </div>
+              <div class="col-md-5">
+                <p>
+                  <em>Claim</em> the money player earns is in the contract, you may find the value in the <em>earns</em>.
+                </p>
+                <p>
+                  click <em>Claim</em> to transfer the ETH to your account.
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-offset-2 col-md-10">
+                <h1 id="contract">Contract</h1>
+                <p>
+                  <em>Contract</em> is displayed in the dropdown list of the network button in the navbar.
+                </p>
+              </div>
+            </div>
+
+            <div class="row" >
+                <div class="col-md-offset-2 col-md-10">
+                    <h1 id="coming">Coming</h1>
+                    <p>
+                      every player will have a <em>startship</em> . <br/>
+                      also you can build <em>architectures</em> on your land. <br/>
+                      we hope that soon player can <em>sell</em> different <em>building models</em> in the game.
+
+                    </p>
+                </div>
+            </div>
+            
+            <div id="footer" class="col-md-offset-2">
+              <!--
                <div id="social_box">
                   <a href="#"><img src="/howto/images/facebook.png" alt="facebook" /></a>
                   <a href="#"><img src="/howto/images/flickr.png" alt="flickr" /></a>
@@ -135,8 +204,9 @@
                   <a href="#"><img src="/howto/images/twitter.png" alt="twitter" /></a>
                   <a href="#"><img src="/howto/images/youtube.png" alt="youtube" /></a>
                </div>
+              -->
                <div id="footer_left">
-                  Copyright © 2048 <a href="#">Company Name</a><br />
+                  Copyright © 2048 <a href="/">EEGalaxy</a><br />
                   <!-- Galaxy by <a rel="nofollow" href="http://www.tooplate.com">Templates</a><br /> -->
                </div>
                <div class="cleaner"></div>

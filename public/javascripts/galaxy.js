@@ -89,6 +89,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
     } else {
       if(galaxy.player.grids_count > 0){
         var center = gridService.gridCenterInDegree(galaxy.player.grids[0]);
+        
       }
     }
   }
