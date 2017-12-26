@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('eegalaxy:server');
 var http = require('http');
 var DB = require("../db");
+var util = require("util");
 /**
  * Set env from node start command.
  */
@@ -32,7 +33,7 @@ var config = require("../config/config.json");
  */
 DB.connect(config.db_url, (err) => {
   if(err){
-    console.log("connect mongo db " + url + " failed");
+    console.log("connect mongo db failed: " + util.inspect(err));
     process.exit(-1);
   } else {
     server.listen(port);
