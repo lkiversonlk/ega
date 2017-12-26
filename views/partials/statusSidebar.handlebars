@@ -5,11 +5,14 @@
         {{t "status"}}
       </span>
       <div class="pull-right">
-        <a id="status-refresh" class="button button-tiny button-circle"><i class="fa fa-refresh"></i></a>
+        <a class="button button-tiny button-circle" data-toggle="collapse" data-target="#galaxy-status-panel">
+          <i class="fa fa-angle-double-down"></i>
+        </a>
+        
       </div>
     </div>
 
-    <div class="panel-body">
+    <div id="galaxy-status-panel" class="panel-body collapse in" aria-expanded="true">
       <!--
         <div>
           <label>{{t "contract"}}</label>

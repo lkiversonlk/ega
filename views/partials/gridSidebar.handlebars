@@ -3,11 +3,16 @@
     <div class="panel-heading">
       {{t "grid panel"}}
       <span id="mouse-grid"></span>
+      <div class="pull-right">
+        <a class="button button-tiny button-circle" data-toggle="collapse" data-target="#mouse-status-panel">
+          <i class="fa fa-angle-double-down"></i>
+        </a>
+        
+      </div>
+      
     </div>
 
-    <div class="panel-body">
-      <div class="row">
-      </div>
+    <div id="mouse-status-panel" class="panel-body collapse in" aria-expanded="true">
       <div class="row">
         <div class="col-xs-5">
           <img id="grid-lord-avatar">
