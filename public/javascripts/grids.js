@@ -9,7 +9,8 @@
 /**
  * size is the number of grids on each side of the network
  */
-function Grid(size) {
+
+function Grid(size, confService) {
 
   this.size = size;
   this.lat_per_grid = 180 / size;
@@ -18,7 +19,11 @@ function Grid(size) {
   if (typeof(window) == "undefined") {
     this.server = true;
   } else {
-    this.server = false;    
+    this.server = false;
+    if(typeof(confService) == "undefined"){
+      throw "confSerivce is null";
+    }
+    this.confService = confService;
   }
 
   //configuration cache
@@ -29,6 +34,8 @@ function Grid(size) {
   //grid avatars
   this.grid_avatars = {};
 }
+
+
 
 Grid.prototype.degreeToRadians = function(degree) {
   return degree * (Math.PI / 180);
@@ -111,15 +118,21 @@ Grid.prototype.drawGrids = function(viewer) {
 
 Grid.prototype.drawGridAvatars = function(viewer, callback){
   var self = this;
-  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
+  self.confService.loadAllConf(self.confService.CATEGORY["GRID_CONF_CATEGORY"], (err, conf) => {
     if(err){
       return callback && callback(err);
     } else {
       Object.keys(conf).forEach(function(grid){
         var grid_conf = conf[grid];
 
-        self.DrawGridAvatar(grid, viewer, function(err){
+        self.gridAvatar(grid, (err, url) => {
+          if(err){
 
+          } else {
+            self.drawGridAvatar(grid, url, viewer, (err) => {
+
+            })
+          }
         });
       });
     }
@@ -213,6 +226,7 @@ Grid.prototype.destory = function() {
 }
 
 //Grid.prototype.
+/*
 Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
   if (this.grid_avatars.hasOwnProperty(grid)) {
     //change the material
@@ -231,7 +245,7 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
     });
     this.grid_avatars[grid] = gridPic;
   }
-};
+};*/
 
 /**
  * Grid Service will both work in server side and client side
@@ -247,10 +261,12 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
  * * save configuration to database
  * @param {*} callback 
  */
+/*
 Grid.prototype.loadGridAvatar = function(callback) {
 
-};
+};*/
 
+/*
 Grid.prototype.SaveConf = function(category, conf, callback){
   if(this.server){
     if(typeof(path) == "undefined"){
@@ -264,7 +280,7 @@ Grid.prototype.SaveConf = function(category, conf, callback){
   } else {
     return callback("client side not suppored yet");
   }
-};
+};*/
 
 /**
  * if in the server side, load conf from file
@@ -272,6 +288,7 @@ Grid.prototype.SaveConf = function(category, conf, callback){
  * @param {*} category 
  * @param {*} callback 
  */
+/*
 Grid.prototype.LoadConf = function(category, callback){
   if(this.server){
     if(typeof(path) == "undefined"){
@@ -297,8 +314,9 @@ Grid.prototype.LoadConf = function(category, callback){
       console.log("what");
     });
   }
-}
+}*/
 
+/*
 Grid.prototype.GetConf = function(category, callback){
   var self = this;
   if(self.conf.hasOwnProperty(category)){
@@ -313,54 +331,52 @@ Grid.prototype.GetConf = function(category, callback){
       }
     });
   }
-}
+}*/
 
 Grid.prototype.gridAvatar = function(grid_idx, callback){
   var self = this;
-  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
-    if(err){
-      return callback(err);
-    } else {
-      if(conf.hasOwnProperty(grid_idx)){
-        var avatar = conf[grid_idx].avatar;
-        return callback(null, GRID_PIC_URL_BASE + avatar);
-      } else {
-        //TODO: anonymous
-        return callback(null, NO_IMAGE);
-      }
-    }
-  })
-}
-
-const GRID_CONF_CATEGORY = "grid";
-const GRID_PIC_URL_BASE = "/grid_avatar/get/";
-Grid.prototype.DrawGridAvatar = function(grid_idx, viewer, callback){
-  var self = this;
-  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
-    if(err){
-      return callback(err);
-    } else {
-      if(conf.hasOwnProperty(grid_idx)){
-        var avatar = conf[grid_idx].avatar;
-        if(self.grid_avatars.hasOwnProperty(grid_idx)){
-          self.grid_avatars[grid_idx].polygon.material = GRID_PIC_URL_BASE + avatar;
-        } else {
-          var points = self.fromGridIndexToDegrees(grid_idx);
-          var gridPic = viewer.entities.add({
-            name: "grid_picture",
-            polygon: {
-              height: 10000,
-              material: GRID_PIC_URL_BASE + avatar,
-              outline: true,
-              hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
-            }
-          });
-        
-          self.grid_avatars[grid_idx] = gridPic;
-        }
+  self.confService.getConf(
+    self.confService.CATEGORY["GRID_CONF_CATEGORY"], 
+    grid_idx,
+    (err, conf) => {
+      if(err){
+        return callback(err);
+      } else if(conf && conf.avatar){
+        return callback(null, self.confService.Params["GRID_PIC_URL_BASE"] + conf.avatar);
       } else {
         return callback();
       }
+  })
+}
+
+//Draw grid avatar on earth
+Grid.prototype.drawGridAvatar = function(grid_idx, url, viewer){
+  var self = this;
+  if(self.grid_avatars.hasOwnProperty(grid_idx)){
+    self.grid_avatars[grid_idx].polygon.material = url;
+  } else {
+    var points = self.fromGridIndexToDegrees(grid_idx);
+    var gridPic = viewer.entities.add({
+      name: "grid_picture",
+      polygon: {
+        height: 10000,
+        material: url, 
+        outline: false,
+        hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
+      }
+    });
+  
+    self.grid_avatars[grid_idx] = gridPic;
+  }
+}
+
+Grid.prototype.updateGridAvatar = function(grid_idx, viewer){
+  var self = this;
+  self.gridAvatar(grid_idx, (err, url) => {
+    if(err || !url){
+
+    } else {
+      self.drawGridAvatar(grid_idx, url, viewer)
     }
   })
 }

@@ -19,6 +19,7 @@
     "i18n": "^0.8.3",
     "jsonfile": "^4.0.0",
     "mercator-projection": "0.0.2",
+    "mongodb": "^3.0.1",
     "morgan": "~1.9.0",
     "serve-favicon": "~2.4.5",
     "web3": "^1.0.0-beta.26"

@@ -78,11 +78,12 @@
     earth.mapSize(function(err, size) {
       if (err) {
       } else {
-        var gridService = new Grid(size);
+        var confService = new Configuration();
+        var gridService = new Grid(size, confService);
         gridService.drawGrids(viewer);
         gridService.drawGridAvatars(viewer);
 
-        init_galaxy(galaxy, gridService, earth, viewer);
+        init_galaxy(galaxy, gridService, earth, viewer, confService);
         galaxy.refresh_earth_status(earth);
         galaxy.refresh_player_status(earth);
 

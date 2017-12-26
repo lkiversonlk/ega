@@ -8,6 +8,10 @@ GRID_NOT_ON_SELL="grid is not on sell";
 FAIL_INIT_GRID_SERVIE="fail to init grid service";
 UNKNOWN_NETWORK="unknown network"
 NOT_CONNECTED_TO_ETH="ethereum network not connected";
+FAIL_LOAD_CONF="fail to load configuration";
+FAIL_SAVE_CONF="fail to save configuration";
+
+
 GridStateEng = [
   "On Sell",
   "Owned",

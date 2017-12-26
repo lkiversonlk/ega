@@ -63,8 +63,24 @@ const verifyUser = (key, address, past) => {
   }
 };
 
-router.post("/grid_avatar/upload", function(req, res, next) {
+function uplodFail(res){
+  res.send(JSON.stringify({
+    isOK: false,
+    msg: 'Server Error',
+  }));
+}
+
+function uploadSuccess(res, ret){
+  res.send(JSON.stringify({
+    isOK: true,
+    msg: 'You are lucky :)',
+    data: ret,
+  }));
+}
+
+router.post("/grid_avatar/upload", function(req, res, next) {  
   const form = new formidable.IncomingForm();
+  var confService = req.app.get("configuration");
   form.parse(req, function(err, fields, files) {
     console.log("receive avatar from grid")
 
@@ -81,73 +97,44 @@ router.post("/grid_avatar/upload", function(req, res, next) {
     const isOK = verifyUser(key, addr, past);
     if (isOK === true) {
       const image = files.upload
+      
+      var filename = grid_idx + "-" + (new Date()).getTime();
+      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, filename));
 
-      var gridServ = req.app.get("grid");
-      if(!gridServ){
-        res.send(JSON.stringify({
-          isOK: false,
-          msg: 'Server Error',
-        }));
-        return;
-      }
-      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, grid_idx));
-
-      if (err) {
-        res.send(JSON.stringify({
-          isOK: false,
-          msg: 'Server Error',
-        }));
-        return;
+      if(err){
+        return uplodFail(res);
       } else {
-        gridServ.GetConf("grid", function(err, conf){
-          if(err){
-            res.send(JSON.stringify({
-              isOK: false,
-              msg: 'Server Error',
-            }));
-            return;
-          } else {
-            if(conf.hasOwnProperty(grid_idx)){
-              //do nothing
-              res.send(JSON.stringify({
-                isOK: true,
-                msg: 'You are lucky :)',
-                id: grid_idx,
-              }));
-              return
+        confService.loadConf(
+          confService.CATEGORY["GRID_CONF_CATEGORY"],
+          grid_idx,
+          (err, conf) => {
+            if(err){
+              return uplodFail(res);
             } else {
-              conf[grid_idx] = {
-                avatar: grid_idx
-              };
-
-              gridServ.SaveConf("grid", conf, function(err){
-                if(err){
-                  res.send(JSON.stringify({
-                    isOK: false,
-                    msg: 'Server Error',
-                  }));
-                  return;
-                } else {
-                  res.send(JSON.stringify({
-                    isOK: true,
-                    msg: 'You are lucky :)',
-                    id: grid_idx,
-                  }));
-                  return;
+              if(!conf) conf = {};
+              conf.avatar = filename;
+              confService.saveConf(
+                confService.CATEGORY["GRID_CONF_CATEGORY"],
+                grid_idx,
+                conf,
+                (err, ret) => {
+                  if(err){
+                    return uplodFail(res);
+                  } else {
+                    return uplodFail(res, ret);
+                  }
                 }
-              })
+              )
             }
           }
-        })
+        )
       }
     } else {
-      res.send(JSON.stringify({
-        isOK: false,
-        msg: 'Looks upload failed',
-      }));
+      return uplodFail(res);
     }
-  });
+  })
 });
+
 // End upload image together with validation address from user agent
 
 router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {

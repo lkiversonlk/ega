@@ -9,6 +9,7 @@ var i18n = require("i18n");
 var index = require('./routes/index');
 var confRouter = require("./routes/conf");
 var GridService = require("./public/javascripts/grids");
+var Configuration = require("./public/javascripts/configuration");
 
 //var Web3 = require("web3");
 //var web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/vAugb8H4cG1bOuFMZj3y"));
@@ -17,6 +18,9 @@ var app = express();
 //the number doesn't mean anything
 var gridServ = new GridService(10);
 app.set("grid", gridServ);
+
+var configuration = new Configuration();
+app.set("configuration", configuration);
 
 //app.set("web3", web3);
 

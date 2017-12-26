@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('eegalaxy:server');
 var http = require('http');
-
+var DB = require("../db");
 /**
  * Set env from node start command.
  */
@@ -31,9 +31,19 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+var url = "mongodb://localhost";
+
+DB.connect(url, (err) => {
+  if(err){
+    console.log("connect mongo db " + url + " failed");
+    process.exit(-1);
+  } else {
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  }
+});
+
 
 /**
  * Normalize a port into a number, string, or false.

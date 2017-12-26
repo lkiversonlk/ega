@@ -1,5 +1,5 @@
 //TODO: use async to organize behavior
-function init_galaxy(galaxy, gridService, earth, viewer){
+function init_galaxy(galaxy, gridService, earth, viewer, confService){
   galaxy.refresh_earth_status = function(earth) {
     earth.gridsSoldOut(function(err, sold) {
       if (err) {
@@ -130,6 +130,7 @@ function init_galaxy(galaxy, gridService, earth, viewer){
         let gridAvatar = $('#grid-avatar')
         const imgAppend = '<img id="grid-avatar-img">'
 
+        $('#del-grid-img-btn').addClass('disabled')
         if (owner == web3.eth.coinbase) {
           isOwner = true
           new AvatarUpload({
@@ -140,12 +141,16 @@ function init_galaxy(galaxy, gridService, earth, viewer){
             },
             onSuccess: function(xhr, json) {
               //reload conf from server, current 
-              gridService.LoadConf(GRID_CONF_CATEGORY, function(err, conf){
+                            
+              confService.forceReloadConf(
+                confService.CATEGORY["GRID_CONF_CATEGORY"],
+                grid_idx,
+                (err, conf) => {
                 if(err){
                   showError("fail load conf");
                   console.log("fail to load grid configuration: " + err);
                 } else {
-                  galaxy.set_grid_picture(grid_idx, 100000, viewer);
+                  gridService.updateGridAvatar(grid_idx, viewer);
                   $("#del-grid-img-btn").removeClass("disabled");
                 }
               });
@@ -153,24 +158,6 @@ function init_galaxy(galaxy, gridService, earth, viewer){
           });
           $("#buy-grid-btn").addClass("disabled");
           $("#sell-grid-btn").removeClass("disabled");
-
-          gridService.GetConf(GRID_CONF_CATEGORY, function(err, conf){
-            if(err){
-              showError("fail load conf");
-              console.log("fail to load grid configuration: " + err);
-            } else {
-              /* 如果有配置grid avatar才可以去除 */
-              if(conf.hasOwnProperty(grid_idx) && conf[grid_idx].avatar){
-                $("#del-grid-img-btn").removeClass("disabled");
-              } else {
-                $('#del-grid-img-btn').addClass('disabled')
-                /*
-                $('#grid-avatar img').each(function() {
-                  $(this).attr("src", UPLOAD_IMAGE);
-                })*/
-              }
-            }
-          });
         } else if (gridState == 0) {
           gridAvatar.empty()
           gridAvatar.append(imgAppend)
@@ -194,6 +181,14 @@ function init_galaxy(galaxy, gridService, earth, viewer){
             showError("fail to load grid avatar");
             console.log("fail to retrive grid avatar :" + err);
           } else {
+            if(!avatar_url){
+              avatar_url = "/images/no-img-lager.jpg";
+            } else {
+              if(isOwner){
+                $("#del-grid-img-btn").removeClass("disabled");
+              }
+            }
+
             $('#grid-avatar').show()
             $('#grid-avatar img').each(function() {
               $(this).attr("src", avatar_url);
