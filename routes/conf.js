@@ -5,6 +5,7 @@ var path = require("path");
 var fs = require("fs");
 var jsonfile = require("jsonfile");
 var etherUtil = require("ethereumjs-util");
+var util = require("util");
 
 var avatar_save_path = path.join(__dirname, "..", "avatars");
 var grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
@@ -15,6 +16,7 @@ function pre(req, res, next){
   var confService = req.app.get("configuration");
   if(!confService){
     //TODO: logging
+    console.log("conf service not found");
     return res.sendStatus(500);
   } else {
     return next();
@@ -28,6 +30,7 @@ router.get("/:category", pre, function(req, res, next){
     confService.loadConf(category, req.query.id, (err, conf) => {
       if(err){
         //TODO: logging
+        console.log("fail to load conf: " + utli.inspect(err));
         return res.sendStatus(500);
       } else {
         console.log("get conf: " + JSON.stringify(conf));
@@ -38,6 +41,7 @@ router.get("/:category", pre, function(req, res, next){
     confService.loadAllConf(category, (err, conf) => {
       if(err){
         //TODO: logging
+        console.log("fail to load conf: " + utli.inspect(err));
         return res.sendStatus(500);
       } else {
         return res.json(conf);
