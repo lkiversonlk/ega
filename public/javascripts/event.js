@@ -348,7 +348,7 @@ var speedVector = new Cesium.Cartesian3();
 var fixedFrameTransform = Cesium.Transforms.localFrameToFixedFrameGenerator('north', 'west');
 
 //var hpRange = new Cesium.HeadingPitchRange();
-var speed = -8000;
+var speed = -10000;
 //var deltaRadians = Cesium.Math.toRadians(3.0);  //doesn't change yet
 
 var starship = null;
@@ -360,7 +360,7 @@ function init_starship_event(viewer, position){
     url: "/gltf/red_baron/scene.gltf",
     modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
     minimumPixelPriceSize: 128,
-    scale: 400
+    scale: 1000
   }));
 
   
