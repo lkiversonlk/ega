@@ -89,7 +89,8 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
     } else {
       if(galaxy.player.grids_count > 0){
         var center = gridService.gridCenterInDegree(galaxy.player.grids[0]);
-        
+        var position = Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 10000);
+        init_starship_event(viewer, position);
       }
     }
   }
