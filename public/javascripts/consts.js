@@ -1,5 +1,6 @@
 NO_IMAGE="/images/no-img-lager.jpg";
 UPLOAD_IMAGE="/images/upload-img.png";
+UPLOAD_IMAGE="/images/upload-img-en.png";
 NON_GRID_SELECTED="non grid selected";
 CONTRACT_CALL_ERROR="contract call error";
 NOT_GRID_OWNER="your are not the owner of the grid";

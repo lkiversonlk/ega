@@ -130,7 +130,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
         //$('#sell-grid-btn').show()
         let isOwner = false
         let gridAvatar = $('#grid-avatar')
-        const imgAppend = '<img id="grid-avatar-img">'
+        const imgAppend = '<a id="grid-link"><img id="grid-avatar-img"></a>'
 
         $('#del-grid-img-btn').addClass('disabled')
         if (owner == web3.eth.coinbase) {
@@ -160,12 +160,14 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
           });
           $("#buy-grid-btn").addClass("disabled");
           $("#sell-grid-btn").removeClass("disabled");
+          $("#set-grid-link").show();
         } else if (gridState == 0) {
           gridAvatar.empty()
           gridAvatar.append(imgAppend)
           $("#buy-grid-btn").removeClass("disabled");
           $("#sell-grid-btn").addClass("disabled");
           $('#del-grid-img-btn').addClass('disabled')
+          $("#set-grid-link").hide();
         } else {
           /**
            * forbidden land or owned by other
@@ -175,16 +177,20 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
           $("#sell-grid-btn").addClass("disabled");
           $("#buy-grid-btn").addClass("disabled");
           $('#del-grid-img-btn').addClass('disabled')
+          $("#set-grid-link").hide();
         }
         
-        //adjust the camera
         gridService.gridAvatar(grid_idx, function(err, avatar_url){
           if(err){
             showError("fail to load grid avatar");
             console.log("fail to retrive grid avatar :" + err);
           } else {
             if(!avatar_url){
-              avatar_url = NO_IMAGE;
+              if(isOwner){
+                avatar_url = UPLOAD_IMAGE;
+              } else {
+                avatar_url = NO_IMAGE;
+              }
             } else {
               if(isOwner){
                 $("#del-grid-img-btn").removeClass("disabled");
@@ -194,9 +200,23 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
             $('#grid-avatar').show()
             $('#grid-avatar img').each(function() {
               $(this).attr("src", avatar_url);
-            })
+            });
           }
-        })
+        });
+
+        confService.getConf(confService.CATEGORY["GRID_CONF_CATEGORY"], grid_idx, (err, conf) => {
+          if(err){
+            showError(FAIL_LOAD_CONF);
+            console.log("fail to load conf: " + err);
+          } else {
+            var url = "";
+            if(conf && conf.link){
+              url = conf.link;
+            }
+            $("#grid-link").attr("href", url);
+          }
+        });
+
         var center = gridService.gridCenterInDegree(grid_idx);
         viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 4000000.0)

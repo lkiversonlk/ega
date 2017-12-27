@@ -41,7 +41,7 @@ Configuration.prototype.getConf = function(category, id, callback){
     return callback();
   }
 }
-
+ 
 /**
  * loadConf will try to read from cache, if not exists, reload and update cache
  * @param {*} category 

@@ -218,6 +218,10 @@
     const grid_idx = $("[name=grid-idx]").val()
     formData.append('grid_idx', grid_idx)
 
+    // append grid link
+    const grid_link = $("#set-grid-link").val()
+    formData.append('grid_link', grid_link)
+
     $validation.signWithTimestamp(web3, function(err, signature) {
       if (err) {
         console.error('Error occured when sign with timestamp');

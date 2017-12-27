@@ -16,12 +16,12 @@
 	"earns": "earns",
 	"claim": "claim",
 	"owned grids": "owned grids",
-	"grid status": "grid status",
+	"grid status": "status",
 	"latitude": "latitude",
 	"operation board": "operation board",
 	"current owner": "current owner",
 	"current state": "current state",
-	"current price": "current price",
+	"current price": "price",
 	"set grid label": "set grid label",
 	"SET": "SET",
 	"set grid picture": "set grid picture",
@@ -41,5 +41,7 @@
 	"tutorial": "tutorial",
 	"How to play": "How to play",
 	"DEL LOGO": "DEL LOGO",
-	"DELETE": "DELETE"
+	"DELETE": "DELETE",
+	"you may provide a link here": "you may provide a link here",
+	"grid link": "grid link"
 }

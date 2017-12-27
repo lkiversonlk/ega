@@ -86,6 +86,7 @@ router.post("/grid_avatar/upload", function(req, res, next) {
 
     const {
       grid_idx,
+      grid_link,
       signature,
     } = fields
     const {
@@ -113,6 +114,7 @@ router.post("/grid_avatar/upload", function(req, res, next) {
             } else {
               if(!conf) conf = {};
               conf.avatar = filename;
+              conf.link = grid_link;
               confService.saveConf(
                 confService.CATEGORY["GRID_CONF_CATEGORY"],
                 grid_idx,
