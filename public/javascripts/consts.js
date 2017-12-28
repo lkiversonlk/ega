@@ -11,7 +11,7 @@ UNKNOWN_NETWORK="unknown network"
 NOT_CONNECTED_TO_ETH="ethereum network not connected";
 FAIL_LOAD_CONF="fail to load configuration";
 FAIL_SAVE_CONF="fail to save configuration";
-
+ACCOUNT_NOT_CONNECTED="no ether account connected";
 
 GridStateEng = [
   "On Sell",

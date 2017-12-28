@@ -42,6 +42,7 @@
 	"How to play": "How to play",
 	"DEL LOGO": "DEL LOGO",
 	"DELETE": "DELETE",
-	"you may provide a link here": "you may provide a link here",
-	"grid link": "grid link"
+	"you may provide a link here": "you may provide a click link here",
+	"grid link": "grid link",
+	"no ether account connected": "ether account not connected, please check your metamask or mist configuration"
 }

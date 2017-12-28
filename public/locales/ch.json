@@ -48,5 +48,7 @@
 	"SELL": "出售",
 	"starship": "星舰",
 	"DEL LOGO": "移除领地旗帜",
-	"DELETE": "删除"
+	"DELETE": "删除",
+	"no ether account connected": "没有连接到以太账户，请检查metamask或者mist设置",
+	"you may provide a link here": "设置一个点击链接"
 }

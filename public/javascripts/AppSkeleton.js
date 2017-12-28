@@ -74,7 +74,12 @@
     });
 
     var galaxy = window._galaxyApis = {};
-    StartEarth(earth, viewer, galaxy);
+
+    if(web3.eth.coinbase){
+      StartEarth(earth, viewer, galaxy);
+    } else {
+      showError(ACCOUNT_NOT_CONNECTED);
+    }
   });
 
   function StartEarth(earth, viewer, galaxy) {
