@@ -360,7 +360,9 @@ function init_starship_event(viewer, position){
     url: "/gltf/red_baron/scene.gltf",
     modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
     minimumPixelPriceSize: 128,
-    scale: 1000
+    castShadows: false,
+    receiveShadows: false,
+    scale: 600
   }));
 
   
