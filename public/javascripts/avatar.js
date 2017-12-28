@@ -222,6 +222,10 @@
     const grid_link = $("#set-grid-link").val()
     formData.append('grid_link', grid_link)
 
+    xhr.onerror = (err) => {
+      showError("upload Error:" + err);
+    }
+
     $validation.signWithTimestamp(web3, function(err, signature) {
       if (err) {
         console.error('Error occured when sign with timestamp');
