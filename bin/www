@@ -31,7 +31,7 @@ var config = require("../config/config.json");
 /**
  * Listen on provided port, on all network interfaces.
  */
-DB.connect(config.db_url, (err) => {
+DB.connect(config.db_url, config.database, (err) => {
   if(err){
     console.log("connect mongo db failed: " + util.inspect(err));
     process.exit(-1);
