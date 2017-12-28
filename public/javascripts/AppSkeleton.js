@@ -32,6 +32,7 @@
     })
   });
 
+  viewer.scene.globe.enableLighting = false;
   var baseLayerPickerViewModel = viewer.baseLayerPicker.viewModel;
   baseLayerPickerViewModel.selectedImagery = baseLayerPickerViewModel.imageryProviderViewModels[2];
 

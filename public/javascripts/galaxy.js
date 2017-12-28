@@ -187,7 +187,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
           } else {
             if(!avatar_url){
               if(isOwner){
-                avatar_url = UPLOAD_IMAGE;
+                avatar_url = $.i18n(UPLOAD_IMAGE);
               } else {
                 avatar_url = NO_IMAGE;
               }
