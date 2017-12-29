@@ -66,7 +66,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
           if(err){
             console.log("grid list initial failed: " + err);
           } else {
-            galaxy.init_user_ship();
+            //galaxy.init_user_ship();
           }
         });
       }
@@ -253,5 +253,12 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
         destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 10000000.0)
       });
     });
+  }
+
+  galaxy.init_satelite = function(){
+    var position = gridService.gridCenterInDegree(497);
+    position = Cesium.Cartesian3.fromDegrees(position.lng, position.lat, 1000000);
+
+    init_satelite(viewer, position, -1000);
   }
 }

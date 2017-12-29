@@ -102,6 +102,7 @@
         init_grid_oper_event(earth, gridService, galaxy, confService, viewer);
 
         galaxy.locate_user();
+        //galaxy.init_satelite();
         /*
         gridService.gridBuilding(546, "/gltf/building/scene.gltf", 4000, 0, viewer);
         */

@@ -343,18 +343,15 @@ function init_grid_oper_event(earth, gridService, galaxy, confService, viewer){
   });
 }
 
-var hpRoll = new Cesium.HeadingPitchRoll();  //heading, pitch, roll
-var speedVector = new Cesium.Cartesian3();
 var fixedFrameTransform = Cesium.Transforms.localFrameToFixedFrameGenerator('north', 'west');
 
 //var hpRange = new Cesium.HeadingPitchRange();
-var speed = -10000;
 //var deltaRadians = Cesium.Math.toRadians(3.0);  //doesn't change yet
-
-var starship = null;
-
 function init_starship_event(viewer, position){
   var scene = viewer.scene;
+  var speed = -10000;
+  var speedVector = new Cesium.Cartesian3();
+  var hpRoll = new Cesium.HeadingPitchRoll();  //heading, pitch, roll
 
   var plane = scene.primitives.add(Cesium.Model.fromGltf({
     url: "/gltf/red_baron/scene.gltf",
@@ -371,4 +368,31 @@ function init_starship_event(viewer, position){
 
     Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform, plane.modelMatrix);
   });
+
+  return plane;
 }
+
+function init_satelite(viewer, position, speed){
+  var scene = viewer.scene;
+  var speedVector = new Cesium.Cartesian3();
+  var hpRoll = new Cesium.HeadingPitchRoll();  //heading, pitch, roll
+
+  var sitelite = scene.primitives.add(Cesium.Model.fromGltf({
+    url: "/gltf/satelite/scene.gltf",
+    modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
+    minimumPixelPriceSize: 128,
+    shadows: Cesium.ShadowMode.DISABLED,
+    scale: 600
+  }));
+
+  
+  viewer.scene.preRender.addEventListener(function(scene, time){
+    speedVector = Cesium.Cartesian3.multiplyByScalar(Cesium.Cartesian3.UNIT_Y, speed, speedVector);
+    position = Cesium.Matrix4.multiplyByPoint(sitelite.modelMatrix, speedVector, position);
+
+    Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform, sitelite.modelMatrix);
+  });
+
+  return sitelite;
+}
+
