@@ -32,8 +32,8 @@ var networkMap = {
   "3": "ropsten"
 }
 
-var Web3 = require("web3");
-var web3 = new Web3(new Web3.providers.HttpProvider("https://" + networkMap[config.network] + ".infura.io/vAugb8H4cG1bOuFMZj3y"));
+//var Web3 = require("web3");
+//var web3 = new Web3(new Web3.providers.HttpProvider("https://" + networkMap[config.network] + ".infura.io/vAugb8H4cG1bOuFMZj3y"));
 
 if(Earth.contractAddrs.hasOwnProperty(config.network)){
   var contractAddr = Earth.contractAddrs[config.network];
