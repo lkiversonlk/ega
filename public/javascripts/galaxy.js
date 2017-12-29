@@ -246,4 +246,12 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
   galaxy.init_mouse_event_handler = function() {
     
   };
+
+  galaxy.locate_user = function(){
+    navigator.geolocation.getCurrentPosition(function(position) {
+      viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 10000000.0)
+      });
+    });
+  }
 }
