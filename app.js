@@ -10,9 +10,8 @@ var index = require('./routes/index');
 var confRouter = require("./routes/conf");
 var GridService = require("./public/javascripts/grids");
 var Configuration = require("./public/javascripts/configuration");
-
-//var Web3 = require("web3");
-//var web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/vAugb8H4cG1bOuFMZj3y"));
+var Earth = require("./public/javascripts/Earth");
+var config = require("./config/config.json");
 
 var app = express();
 //the number doesn't mean anything
@@ -22,6 +21,29 @@ app.set("grid", gridServ);
 var configuration = new Configuration();
 app.set("configuration", configuration);
 
+if(!config.hasOwnProperty("network")){
+  //TODO: log
+  //default use ropsten
+  config.network = "3";
+}
+
+var networkMap = {
+  "1": "mainnet",
+  "3": "ropsten"
+}
+
+var Web3 = require("web3");
+var web3 = new Web3(new Web3.providers.HttpProvider("https://" + networkMap[config.network] + ".infura.io/vAugb8H4cG1bOuFMZj3y"));
+
+if(Earth.contractAddrs.hasOwnProperty(config.network)){
+  var contractAddr = Earth.contractAddrs[config.network];
+  var contractAbi  = Earth.abi;
+  //var ins = new web3.eth.Contract(contractAbi, contractAddr);
+} else {
+  //TODO: error
+  console.log("network not suppored");
+  process.exit(-1);
+}
 //app.set("web3", web3);
 
 i18n.configure({

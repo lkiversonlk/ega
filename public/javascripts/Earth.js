@@ -321,48 +321,9 @@ function InitEarthContract(web3, address){
     return new Contract(earthInstance);
 }
 
-/*
-function Earth(instance){
-    this.ins = instance;
+var registryAddresses = {
+  "3": "0xf6366d46ce03ffc7afa2f029ccbeb9a45be7fccb"
 }
-
-[
-    'mapSize',
-    'minimalPrice',
-    'owner',
-    'gridSold',
-    'fee'
-].forEach(function(fname){
-    Earth.prototype[fname] = function(callback){
-        return this.ins[fname].call(getSingleVal(callback));
-    }
-});
-
-Earth.prototype.grids = function(idx, callback){
-    return this.ins.grids(idx, callback);
-}
-
-Earth.prototype.BuyGrid = function(x, y, opt, callback){
-    return this.ins.BuyGrid(x, y, opt, callback);
-}
-
-function getSingleVal(callback){
-    return function(err, result){
-        if(err){
-            return callback(err);
-        } else if(result.hasOwnProperty('c')) {
-            var c = result.c;
-
-            if(Array.isArray(c) && c.length == 1){
-                return callback(null, c[0]);
-            } else {
-                return callback(c);
-            }
-        } else {
-            return callback(null, result);
-        }
-    }
-}*/
 
 var networkName = {
     "1": "Mainnet",
@@ -370,12 +331,7 @@ var networkName = {
     "4": "Rinkeby testnet",
 };
 
-
-var registryAddresses = {
-    // Mainnet
-//    "1": "0x314159265dd8dbb310642f98f50c066173c1259b",
-    // Ropsten
-    "3": "0xf6366d46ce03ffc7afa2f029ccbeb9a45be7fccb"
-    // Rinkeby
-//    "4": "0xe7410170f87102DF0055eB195163A03B7F2Bff4A",
+if(typeof(exports) != "undefined"){
+	exports.abi = EarthContractAbi;
+	exports.contractAddrs = registryAddresses;
 }

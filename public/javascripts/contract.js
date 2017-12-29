@@ -80,5 +80,5 @@ function _paserOutput(raw, type) {
 }
 
 if (typeof(module) != "undefined") {
-  module.export = Contract;
+  module.exports = Contract;
 }
