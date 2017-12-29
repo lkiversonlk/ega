@@ -6,6 +6,7 @@ function init_navbar_event(){
 function init_mouse_event(galaxy, viewer, gridService){
   //on move
   var scene = viewer.scene;
+  var last_grid_id = -1;
   var handler = viewer.screenSpaceEventHandler;
       handler.setInputAction(
         function(movement) {
@@ -20,26 +21,32 @@ function init_mouse_event(galaxy, viewer, gridService){
 
             var grid_index = gridService.fromLatLngToGrid(lat, lon);
 
-            earth.grids(grid_index, function(err, result) {
-              if (err) {
-                showError("contract call error");
-              } else {
-                var owner = result[1];
-                $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
-                var gridState = result[0];
-                $("#grid-status").html(GridStateEng[gridState]);
-                $("#grid-owner").html(shortSpellAddress(owner));
-                $("#grid-owner").prop("title", owner);
-                $("#oper-grid-price").html(web3.fromWei(result[2]));
+            if(last_grid_id == -1 || last_grid_id != grid_index){
+              $("#grid-owner").html($.i18n(FINDING_OWNER));
+
+              earth.grids(grid_index, function(err, result) {
+                if (err) {
+                  showError("contract call error");
+                } else {
+
+                  last_grid_id = grid_index;
+                  var owner = result[1];
+                  $("#grid-lord-avatar").attr("src", "/avatar/get/" + owner);
+                  var gridState = result[0];
+                  $("#grid-status").html(GridStateEng[gridState]);
+                  $("#grid-owner").html(shortSpellAddress(owner));
+                  $("#grid-owner").prop("title", owner);
+                  $("#oper-grid-price").html(web3.fromWei(result[2]));
+                }
+              });
+
+              $("#mouse-grid").html(grid_index);
+
+              if (show_grid_mark) {
+                var points = gridService.fromGridIndexToDegrees(grid_index);
+                gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
+                gridMark.polygon.show = true;
               }
-            })
-
-            $("#mouse-grid").html(grid_index);
-
-            if (show_grid_mark) {
-              var points = gridService.fromGridIndexToDegrees(grid_index);
-              gridMark.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray(points);
-              gridMark.polygon.show = true;
             }
           } else {
             gridMark.polygon.show = false;
