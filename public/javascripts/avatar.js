@@ -55,8 +55,11 @@
     }
 
     this.el = this.config.el;
-    this.renderInput();
-    this.bindInput();
+
+    if (this.el.getElementsByClassName('avatar-upload__shell').length === 0) {
+      this.renderInput();
+      this.bindInput();
+    }
 
     this.progressText = this.el.querySelector('span');
     this.imageWrapper = this.el.querySelector('.avatar-upload__image-wrapper');
@@ -214,6 +217,14 @@
     // in addition, append grid_idx currently
     const grid_idx = $("[name=grid-idx]").val()
     formData.append('grid_idx', grid_idx)
+
+    // append grid link
+    const grid_link = $("#set-grid-link").val()
+    formData.append('grid_link', grid_link)
+
+    xhr.onerror = (err) => {
+      showError("upload Error:" + err);
+    }
 
     $validation.signWithTimestamp(web3, function(err, signature) {
       if (err) {

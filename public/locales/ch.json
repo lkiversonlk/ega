@@ -32,7 +32,7 @@
 	"grid owner": "领主",
 	"sell grid": "出售",
 	"enter sell price": "输入卖出价格",
-	"unknown network": "未知或尚不支持的网路",
+	"unknown network": "目前只支持Ropsten testnet，请检查网络设置",
 	"not connected to ETH": "未接入以太坊网络，请检查metamask插件",
 	"please enter price in ETH": "请输入以太坊价格",
 	"non grid selected": "未选中领地",
@@ -46,5 +46,10 @@
 	"howtoplay": "howtoch.html",
 	"How to play": "游戏说明",
 	"SELL": "出售",
-	"starship": "星舰"
+	"starship": "星舰",
+	"DEL LOGO": "移除领地旗帜",
+	"DELETE": "删除",
+	"no ether account connected": "没有连接到以太账户，请检查metamask或者mist设置",
+	"you may provide a link here": "设置一个点击链接",
+	"upload_image": "/images/upload-ch.jpeg"
 }

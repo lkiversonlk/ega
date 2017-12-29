@@ -45,6 +45,8 @@ Contract.prototype.init = function() {
 
       args.push(function(err, result) {
         if (err) {
+          console.log("calling function " + signature.name + " failed :" + err.toString());
+          showError(CONTRACT_CALL_ERROR);
           return callback(err);
         } else {
           if (signature.constant) {

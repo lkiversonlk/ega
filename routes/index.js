@@ -4,6 +4,7 @@ var formidable = require("formidable");
 var path = require("path");
 var fs = require("fs");
 var etherUtil = require("ethereumjs-util");
+var Grid = require("../public/javascripts/grids");
 
 const avatar_save_path = path.join(__dirname, "..", "avatars");
 const grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
@@ -40,7 +41,7 @@ const prefix = new Buffer("\x19Ethereum Signed Message:\n");
 const verifyUser = (key, address, past) => {
   if (key && address && past) {
     const now = new Date().getTime();
-    if (now - past < delay) {
+    if (now - past < delay && past - now < delay) {
       const signs = etherUtil.fromRpcSig(key);
       const pastHashed = etherUtil.sha3(past);
       const origin = Buffer.concat([prefix, new Buffer(String(pastHashed.length)), etherUtil.toBuffer(pastHashed)]);
@@ -62,13 +63,30 @@ const verifyUser = (key, address, past) => {
   }
 };
 
-router.post("/grid_avatar/upload", function(req, res, next) {
+function uplodFail(res){
+  res.send(JSON.stringify({
+    isOK: false,
+    msg: 'Server Error',
+  }));
+}
+
+function uploadSuccess(res, ret){
+  res.send(JSON.stringify({
+    isOK: true,
+    msg: 'You are lucky :)',
+    data: ret,
+  }));
+}
+
+router.post("/grid_avatar/upload", function(req, res, next) {  
   const form = new formidable.IncomingForm();
+  var confService = req.app.get("configuration");
   form.parse(req, function(err, fields, files) {
     console.log("receive avatar from grid")
 
     const {
       grid_idx,
+      grid_link,
       signature,
     } = fields
     const {
@@ -80,20 +98,45 @@ router.post("/grid_avatar/upload", function(req, res, next) {
     const isOK = verifyUser(key, addr, past);
     if (isOK === true) {
       const image = files.upload
-      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, grid_idx));
-      res.send(JSON.stringify({
-        isOK: true,
-        msg: 'You are lucky :)',
-      }));
+      
+      var filename = grid_idx + "-" + (new Date()).getTime();
+      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, filename));
 
+      if(err){
+        return uplodFail(res);
+      } else {
+        confService.loadConf(
+          confService.CATEGORY["GRID_CONF_CATEGORY"],
+          grid_idx,
+          (err, conf) => {
+            if(err){
+              return uplodFail(res);
+            } else {
+              if(!conf) conf = {};
+              conf.avatar = filename;
+              conf.link = grid_link;
+              confService.saveConf(
+                confService.CATEGORY["GRID_CONF_CATEGORY"],
+                grid_idx,
+                conf,
+                (err, ret) => {
+                  if(err){
+                    return uplodFail(res);
+                  } else {
+                    return uplodFail(res, ret);
+                  }
+                }
+              )
+            }
+          }
+        )
+      }
     } else {
-      res.send(JSON.stringify({
-        isOK: false,
-        msg: 'Looks upload failed',
-      }));
+      return uplodFail(res);
     }
-  });
+  })
 });
+
 // End upload image together with validation address from user agent
 
 router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
@@ -103,6 +146,67 @@ router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
     return res.sendFile(anonymous_grid);
   }
 });
+
+function delFail(res){
+  return res.json(
+    {
+      isOK: false,
+    });
+}
+
+router.post('/grid_avatar/del', function(req, res, next) {
+  const {
+    grid_idx,
+    signature,
+  } = req.body
+
+  const {
+    key,
+    address: addr,
+    timestamp: past,
+  } = JSON.parse(signature)
+
+  const isOK = verifyUser(key, addr, past);
+  var confService = req.app.get("configuration");
+
+  if (isOK === true) {
+    //just remove the config
+    confService.forceReloadConf(
+      confService.CATEGORY["GRID_CONF_CATEGORY"],
+      grid_idx,
+      (err, conf) => {
+        if(err){
+          console.log("fail err" + err);
+          return delFail(res);
+        } else {
+          if(!conf) conf = {};
+          delete conf.avatar;
+          confService.saveConf(
+            confService.CATEGORY["GRID_CONF_CATEGORY"],
+            grid_idx,
+            conf,
+            (err, conf) => {
+              if(err) {
+                console.log("del fail " + err);
+                return delFail(res);
+              } else {
+                return res.json(
+                  {
+                    isOK: true
+                  }
+                );
+              }
+            }
+          )
+        }
+      }
+    )
+    
+
+  } else {
+    return delFail(res);
+  }
+})
 
 router.post('/locale', function(req, res) {
   var lan = req.param('lan');
@@ -115,17 +219,16 @@ router.post('/locale', function(req, res) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home', {
-    title: '===TEST==='
-  });
-});
+  let env = req.app.get('env')
 
-router.post('/test', function(req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({
-    isOK: false,
-    msg: 'Miao MiMi',
-  }));
+  if (env === 'development')
+    env = false
+  else
+    env = true
+
+  res.render('home', {
+    production: env,
+  });
 });
 
 module.exports = router;

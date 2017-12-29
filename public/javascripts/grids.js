@@ -9,39 +9,34 @@
 /**
  * size is the number of grids on each side of the network
  */
-function Grid(size) {
+
+function Grid(size, confService) {
 
   this.size = size;
-  this.grid_size_pixel = TILE_SIZE / this.size;
-
   this.lat_per_grid = 180 / size;
   this.lng_per_grid = 360 / size;
-
-  this.grid_lines = [];
 
   if (typeof(window) == "undefined") {
     this.server = true;
   } else {
-    this.server = false;    
+    this.server = false;
+    if(typeof(confService) == "undefined"){
+      throw "confSerivce is null";
+    }
+    this.confService = confService;
   }
 
+  //configuration cache
   this.conf = {};
+
+  //grid lines
+  this.grid_lines = [];
+  //grid avatars
   this.grid_avatars = {};
+  this.grid_buildings = {};
 }
 
-var TILE_SIZE = 256;
-var pixelOrigin = {
-  x: TILE_SIZE / 2,
-  y: TILE_SIZE / 2
-};
-var pixelsPerLngDegree = TILE_SIZE / 360;
-var pixelsPerLngRadian = TILE_SIZE / (2 * Math.PI);
 
-function _bound(value, opt_min, opt_max) {
-  if (opt_min != null) value = Math.max(value, opt_min);
-  if (opt_max != null) value = Math.min(value, opt_max);
-  return value;
-}
 
 Grid.prototype.degreeToRadians = function(degree) {
   return degree * (Math.PI / 180);
@@ -51,23 +46,8 @@ Grid.prototype.radiansToDegree = function(rad) {
   return rad / (Math.PI / 180);
 }
 
-Grid.prototype.fromLatLngToXY = function(lat, lng) {
-  x = parseInt((parseFloat(lng) + 180) / this.lng_per_grid);
-  y = parseInt((parseFloat(lat) + 90) / this.lat_per_grid);
-  return {
-    x: x,
-    y: y
-  };
-}
-
-Grid.prototype.fromXYToGrid = function(x, y) {
-  var grid_x = parseInt(x / this.grid_size_pixel);
-  var grid_y = parseInt(y / this.grid_size_pixel);
-  return grid_y * this.size + grid_x;
-}
-
 /**
- * lat range from -90 to 90
+ * lat range from -89.5 to 89.5
  * lng range from -180 to 180
  * @param {*} lat 
  * @param {*} lng 
@@ -101,7 +81,7 @@ Grid.prototype.drawGrids = function(viewer) {
   for (i = 0; i < this.size; i++) {
     var lng = this.lng_per_grid * i;
     var pos = [];
-    for (var lat = -90; lat <= 90; lat++) {
+    for (var lat = -89.5; lat <= 89.5; lat++) {
       pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
     }
     var line = viewer.entities.add({
@@ -121,7 +101,7 @@ Grid.prototype.drawGrids = function(viewer) {
   for (i = 1; i < this.size; i++) {
     var lat = this.lat_per_grid * (i - this.size / 2);
     var pos = [];
-    for (var lng = -180; lng < 180; lng++) {
+    for (var lng = -179.5; lng < 179.5; lng++) {
       pos.push(Cesium.Cartesian3.fromDegrees(lng, lat));
     }
 
@@ -139,15 +119,23 @@ Grid.prototype.drawGrids = function(viewer) {
 
 Grid.prototype.drawGridAvatars = function(viewer, callback){
   var self = this;
-  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
+  self.confService.loadAllConf(self.confService.CATEGORY["GRID_CONF_CATEGORY"], (err, conf) => {
     if(err){
       return callback && callback(err);
     } else {
       Object.keys(conf).forEach(function(grid){
         var grid_conf = conf[grid];
 
-        self.DrawGridAvatar(grid, viewer, function(err){
+        self.gridAvatar(grid, (err, url) => {
+          if(err){
 
+          } else {
+            if(url){
+              self.drawGridAvatar(grid, url, viewer, (err) => {
+
+              })
+            }            
+          }
         });
       });
     }
@@ -240,14 +228,15 @@ Grid.prototype.destory = function() {
 
 }
 
-/*
 //Grid.prototype.
+/*
 Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
   if (this.grid_avatars.hasOwnProperty(grid)) {
     //change the material
     this.grid_avatars[grid].polygon.material = image_url;
   } else {
-    var points = gridService.fromGridIndexToDegrees(grid);
+    var self = this;
+    var points = self.fromGridIndexToDegrees(grid);
     var gridPic = viewer.entities.add({
       name: "grid_picture",
       polygon: {
@@ -259,8 +248,7 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
     });
     this.grid_avatars[grid] = gridPic;
   }
-};
-*/
+};*/
 
 /**
  * Grid Service will both work in server side and client side
@@ -276,9 +264,26 @@ Grid.prototype.setGridImageTmp = function(grid, image_url, viewer) {
  * * save configuration to database
  * @param {*} callback 
  */
+/*
 Grid.prototype.loadGridAvatar = function(callback) {
 
-};
+};*/
+
+/*
+Grid.prototype.SaveConf = function(category, conf, callback){
+  if(this.server){
+    if(typeof(path) == "undefined"){
+      var path = require("path");
+    }
+    var filePath = path.join(__dirname, "..", "..", "pub_conf", category + ".json");
+    if(typeof(jsonfile) == "undefined") {
+      var jsonfile = require("jsonfile");
+    }
+    return jsonfile.writeFile(filePath, conf, callback);
+  } else {
+    return callback("client side not suppored yet");
+  }
+};*/
 
 /**
  * if in the server side, load conf from file
@@ -286,9 +291,12 @@ Grid.prototype.loadGridAvatar = function(callback) {
  * @param {*} category 
  * @param {*} callback 
  */
+/*
 Grid.prototype.LoadConf = function(category, callback){
   if(this.server){
-    var path = require("path");
+    if(typeof(path) == "undefined"){
+      path = require("path");
+    }
     var filePath = path.join(__dirname, "..", "..", "pub_conf", category + ".json");
     //read the specified json file
 
@@ -296,22 +304,22 @@ Grid.prototype.LoadConf = function(category, callback){
 
     jsonfile.readFile(filePath, function(err, obj){
       if(err){
-        //LOG
+        //TODO: error handling
       } else {
         return callback(null, obj);
       }
     });
   } else {
-    $.get("/conf/" + category, function(ret){
-      if(!ret){
-        return callback("fail");
-      } else {
-        return callback(null, ret);
-      }
-    })
+    var n = (new Date()).getTime();
+    $.get("/conf/" + category + "?t=" + n, function(ret){
+      return callback(null, ret);
+    }).fail(function(){
+      console.log("what");
+    });
   }
-}
+}*/
 
+/*
 Grid.prototype.GetConf = function(category, callback){
   var self = this;
   if(self.conf.hasOwnProperty(category)){
@@ -326,56 +334,89 @@ Grid.prototype.GetConf = function(category, callback){
       }
     });
   }
-}
+}*/
 
 Grid.prototype.gridAvatar = function(grid_idx, callback){
   var self = this;
-  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
-    if(err){
-      return callback(err);
-    } else {
-      if(conf.hasOwnProperty(grid_idx)){
-        var avatar = conf[grid_idx].avatar;
-        return callback(null, GRID_PIC_URL_BASE + avatar);
+  self.confService.getConf(
+    self.confService.CATEGORY["GRID_CONF_CATEGORY"], 
+    grid_idx,
+    (err, conf) => {
+      if(err){
+        return callback(err);
+      } else if(conf && conf.avatar){
+        return callback(null, self.confService.Params["GRID_PIC_URL_BASE"] + conf.avatar);
       } else {
-        //TODO: anonymous
-        return callback(null, "/images/logo.png");
+        return callback();
+      }
+  })
+}
+
+//Draw grid avatar on earth
+Grid.prototype.drawGridAvatar = function(grid_idx, url, viewer){
+  var self = this;
+  if(self.grid_avatars.hasOwnProperty(grid_idx)){
+    self.grid_avatars[grid_idx].polygon.material = url;
+  } else {
+    var points = self.fromGridIndexToDegrees(grid_idx);
+    var gridPic = viewer.entities.add({
+      name: "grid_picture",
+      polygon: {
+        height: 10000,
+        material: url, 
+        outline: false,
+        hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
+      }
+    });
+  
+    self.grid_avatars[grid_idx] = gridPic;
+  }
+}
+
+Grid.prototype.updateGridAvatar = function(grid_idx, viewer){
+  var self = this;
+  self.gridAvatar(grid_idx, (err, url) => {
+    if(err){
+      //TODO:
+    } else {
+      if(!url){
+        self.removeGridAvatar(grid_idx, viewer);
+      } else {
+        self.drawGridAvatar(grid_idx, url, viewer)
       }
     }
   })
 }
 
-const GRID_CONF_CATEGORY = "grid";
-const GRID_PIC_URL_BASE = "/grid_avatar/get/";
-Grid.prototype.DrawGridAvatar = function(grid_idx, viewer, callback){
+Grid.prototype.removeGridAvatar = function(grid_idx, viewer){
   var self = this;
-  self.GetConf(GRID_CONF_CATEGORY, function(err, conf){
-    if(err){
-      return callback(err);
-    } else {
-      if(conf.hasOwnProperty(grid_idx)){
-        var avatar = conf[grid_idx].avatar;
-        if(self.grid_avatars.hasOwnProperty(grid_idx)){
-          self.grid_avatars[grid_idx].polygon.material = GRID_PIC_URL_BASE + avatar;
-        } else {
-          var points = gridService.fromGridIndexToDegrees(grid_idx);
-          var gridPic = viewer.entities.add({
-            name: "grid_picture",
-            polygon: {
-              height: 10000,
-              material: GRID_PIC_URL_BASE + avatar,
-              outline: true,
-              hierarchy: Cesium.Cartesian3.fromDegreesArray(points)
-            }
-          });
-        
-          self.grid_avatars[grid_idx] = gridPic;
-        }
-      } else {
-        return callback();
-      }
-    }
-  })
+  if(self.grid_avatars.hasOwnProperty(grid_idx)){
+    viewer.entities.remove(self.grid_avatars[grid_idx]);
+    delete self.grid_avatars[grid_idx];
+  }
+}
+
+Grid.prototype.gridBuilding = function(grid_idx, model_url, scale, height, viewer){
+  var self = this;
+  if(self.grid_buildings.hasOwnProperty(grid_idx)){
+    viewer.scene.primitives.remove(self.grid_buildings[grid_idx]);
+    delete self.grid_buildings[grid_idx];
+  }
+
+  var postion = self.gridCenterInDegree(grid_idx);
+  position = Cesium.Cartesian3.fromDegrees(postion.lng, postion.lat, height);
+  var hpRoll = new Cesium.HeadingPitchRoll();  //heading, pitch, roll
+  var fixedFrameTransform = Cesium.Transforms.localFrameToFixedFrameGenerator('north', 'west');
+  
+  var building = viewer.scene.primitives.add(Cesium.Model.fromGltf({
+    url: model_url,
+    modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
+    minimumPixelPriceSize: 128,
+    shadows: Cesium.ShadowMode.DISABLED,
+    scale: scale
+  }));
+
+  self.grid_buildings[grid_idx] = building;
 }
 
 if (typeof(module) != "undefined") {

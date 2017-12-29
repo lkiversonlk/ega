@@ -54,6 +54,7 @@
 
 .avatar-upload__image-wrapper img {
   width: auto;
+  height: 100%;
 }
 
 

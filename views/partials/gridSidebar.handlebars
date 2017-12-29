@@ -3,11 +3,16 @@
     <div class="panel-heading">
       {{t "grid panel"}}
       <span id="mouse-grid"></span>
+      <div class="pull-right">
+        <a class="button button-tiny button-circle" data-toggle="collapse" data-target="#mouse-status-panel">
+          <i class="fa fa-angle-double-down"></i>
+        </a>
+        
+      </div>
+      
     </div>
 
-    <div class="panel-body">
-      <div class="row">
-      </div>
+    <div id="mouse-status-panel" class="panel-body collapse in" aria-expanded="true">
       <div class="row">
         <div class="col-xs-5">
           <img id="grid-lord-avatar">
@@ -59,27 +64,31 @@
 
     <div class="panel-body">
       <div>
-        <div id="grid-avatar" class="row avatar-upload">
-          <img src="/images/logo.png">
+        <div id="grid-avatar" class="row avatar-upload" style="display:none">
+          <img id="grid-avatar-img">
         </div>
-        <div class="row">
-          <div class="col-xs-6">              
-            <div>
+        <br/>
+        <div>
+          <input type="url" id="set-grid-link" class="form-control" placeholder='{{t "you may provide a link here"}}' style="display: none">
+        </div>
+        <div class="row">              
+            <div class="col-md-6">
               <label>
                 {{t "grid status"}}
               </label>
               <span id="selected-grid-status"></span>
             </div>
-            <div>
+            <div class="col-md-6">
               <label>{{t "current price"}}</label>
               <span id="selected-grid-price"></span>
             </div>
           </div>
-          <div class="col-xs-6">
+          <div>
+              <a id="del-grid-img-btn" class="button button-small button-primary button-pill">{{t "DELETE"}}</a>
               <a id="buy-grid-btn" class="button button-small button-primary button-pill">{{t "BUY"}}</a>
               <a id="sell-grid-btn" class="button button-small button-primary button-pill">{{t "SELL"}}</a>
           </div>
-        </div>
+
       </div>
     </div>
 

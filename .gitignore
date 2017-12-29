@@ -30,3 +30,5 @@ Session.vim
 # tmux
 #
 tmux*.log
+pub_conf/grid.json
+config/*
