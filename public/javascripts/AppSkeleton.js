@@ -100,6 +100,10 @@
         init_galay_status_event(viewer, gridService);
         init_player_status_event(earth, galaxy);
         init_grid_oper_event(earth, gridService, galaxy, confService, viewer);
+
+        /*
+        gridService.gridBuilding(546, "/gltf/building/scene.gltf", 4000, 0, viewer);
+        */
       }
     });
   }

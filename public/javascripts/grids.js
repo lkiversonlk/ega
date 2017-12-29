@@ -33,6 +33,7 @@ function Grid(size, confService) {
   this.grid_lines = [];
   //grid avatars
   this.grid_avatars = {};
+  this.grid_buildings = {};
 }
 
 
@@ -393,6 +394,29 @@ Grid.prototype.removeGridAvatar = function(grid_idx, viewer){
     viewer.entities.remove(self.grid_avatars[grid_idx]);
     delete self.grid_avatars[grid_idx];
   }
+}
+
+Grid.prototype.gridBuilding = function(grid_idx, model_url, scale, height, viewer){
+  var self = this;
+  if(self.grid_buildings.hasOwnProperty(grid_idx)){
+    viewer.scene.primitives.remove(self.grid_buildings[grid_idx]);
+    delete self.grid_buildings[grid_idx];
+  }
+
+  var postion = self.gridCenterInDegree(grid_idx);
+  position = Cesium.Cartesian3.fromDegrees(postion.lng, postion.lat, height);
+  var hpRoll = new Cesium.HeadingPitchRoll();  //heading, pitch, roll
+  var fixedFrameTransform = Cesium.Transforms.localFrameToFixedFrameGenerator('north', 'west');
+  
+  var building = viewer.scene.primitives.add(Cesium.Model.fromGltf({
+    url: model_url,
+    modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
+    minimumPixelPriceSize: 128,
+    shadows: Cesium.ShadowMode.DISABLED,
+    scale: scale
+  }));
+
+  self.grid_buildings[grid_idx] = building;
 }
 
 if (typeof(module) != "undefined") {
