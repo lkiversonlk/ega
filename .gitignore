@@ -32,3 +32,5 @@ Session.vim
 tmux*.log
 pub_conf/grid.json
 config/*
+
+public/.well-known
