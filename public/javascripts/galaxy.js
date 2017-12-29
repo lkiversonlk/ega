@@ -182,7 +182,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
         
         gridService.gridAvatar(grid_idx, function(err, avatar_url){
           if(err){
-            showError("fail to load grid avatar");
+            //showError("fail to load grid avatar"); don't notice user this
             console.log("fail to retrive grid avatar :" + err);
           } else {
             if(!avatar_url){
