@@ -278,8 +278,11 @@ function init_grid_oper_event(earth, gridService, galaxy, confService, viewer){
                     });
 
                   } else {
-                    console.error('Delete grid image failed')
+                    showError(DELETE_GRID_AVATAR_FAIL);
                   }
+                })
+                .fail((err) => {
+                  showError(DELETE_GRID_AVATAR_FAIL);
                 })
             }
           })

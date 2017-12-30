@@ -189,8 +189,11 @@ function delFail(res){
 }
 
 router.post('/grid_avatar/del', function(req, res, next) {
-  var grid_idx = req.body.grid_idx;
-  var signature = req.body.signature;
+  const {
+    grid_idx,
+    signature,
+  } = req.body;
+
   const {
     key,
     address: addr,
