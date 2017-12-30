@@ -189,11 +189,8 @@ function delFail(res){
 }
 
 router.post('/grid_avatar/del', function(req, res, next) {
-  const {
-    grid_idx,
-    signature,
-  } = req.body
-
+  var grid_idx = req.body.grid_idx;
+  var signature = req.body.signature;
   const {
     key,
     address: addr,
@@ -204,9 +201,9 @@ router.post('/grid_avatar/del', function(req, res, next) {
   var confService = req.app.get("configuration");
 
   if (isOK === true) {
-    validateGridOwner(req.app.get("contract"), grid_idx, address, (err, isOwner) => {
+    validateGridOwner(req.app.get("contract"), grid_idx, addr, (err, isOwner) => {
       if(err || !isOwner){
-        logger.error(`${address} is not the owner of ${grid_idx}`);
+        logger.error(`${addr} is not the owner of ${grid_idx}`);
         return delFail(res);
       } else {
         confService.forceReloadConf(
@@ -214,7 +211,7 @@ router.post('/grid_avatar/del', function(req, res, next) {
           grid_idx,
           (err, conf) => {
             if(err){
-              logger.error(`${address} delete ${grid_idx} avatar, fail to load grid conf: ${err}`)
+              logger.error(`${addr} delete ${grid_idx} avatar, fail to load grid conf: ${err}`)
               return delFail(res);
             } else {
               if(!conf) conf = {};
@@ -225,10 +222,10 @@ router.post('/grid_avatar/del', function(req, res, next) {
                 conf,
                 (err, retConf) => {
                   if(err) {
-                    logger.error(`${address} delete ${grid_idx} avatar, fail to save grid conf ${retConf}: ${err}`);
+                    logger.error(`${addr} delete ${grid_idx} avatar, fail to save grid conf ${retConf}: ${err}`);
                     return delFail(res);
                   } else {
-                    logger.info(`${address} delete ${grid_idx} avatar, ${retConf}`);
+                    logger.info(`${addr} delete ${grid_idx} avatar, ${retConf}`);
                     return res.json(
                       {
                         isOK: true
@@ -244,7 +241,7 @@ router.post('/grid_avatar/del', function(req, res, next) {
       }
     });
   } else {
-    logger.error(`${address} delete ${grid_idx} avatar, verification fail`);
+    logger.error(`${addr} delete ${grid_idx} avatar, verification fail`);
     return delFail(res);
   }
 })
