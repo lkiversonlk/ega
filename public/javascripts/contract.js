@@ -1,6 +1,12 @@
 function Contract(instance) {
   this.instance = instance;
   this.init();
+
+  if(typeof(window) == "undefined"){
+    this.server = true;
+  } else {
+    this.server = false;
+  }
 }
 
 /**
@@ -46,7 +52,10 @@ Contract.prototype.init = function() {
       args.push(function(err, result) {
         if (err) {
           console.log("calling function " + signature.name + " failed :" + err.toString());
-          showError(CONTRACT_CALL_ERROR);
+
+          if(!self.server){
+            showError(CONTRACT_CALL_ERROR);
+          }
           return callback(err);
         } else {
           if (signature.constant) {

@@ -10,13 +10,13 @@ var index = require('./routes/index');
 var confRouter = require("./routes/conf");
 var GridService = require("./public/javascripts/grids");
 var Configuration = require("./public/javascripts/configuration");
+var Contract = require("./public/javascripts/contract");
 var Earth = require("./public/javascripts/Earth");
 var config = require("./config/config.json");
 
 const app = express();
 // init log
 const log4js = require('log4js');
-
 log4js.configure({
     appenders: {
         appLogs: {
@@ -53,15 +53,13 @@ log4js.configure({
     }
 });
 var logger = log4js.getLogger();
-// log init end
-
 app.use(log4js.connectLogger(log4js.getLogger('req'), {
     level: 'info'
 }));
 
 //the number doesn't mean anything
-var gridServ = new GridService(10);
-app.set("grid", gridServ);
+//var gridServ = new GridService(10);
+//app.set("grid", gridServ);
 
 var configuration = new Configuration();
 app.set("configuration", configuration);
@@ -77,7 +75,40 @@ var networkMap = {
     "3": "ropsten"
 };
 
-//var Web3 = require("web3");
+if(!config.hasOwnProperty("network")){
+    logger.error("network id not found in config");
+    process.exit(-1);
+}
+
+if(!networkMap.hasOwnProperty(config.network)){
+    logger.error(`network id ${config.network} is not supported`);
+    process.exit(-1);
+}
+
+if(!Earth.contractAddrs.hasOwnProperty(config.network)){
+    logger.error(`the contract is not deployed in network ${config.network}`);
+    process.exit(-1);
+}
+
+var Web3 = require("web3");
+var web3 = new Web3();
+web3.setProvider(new web3.providers.HttpProvider(`https://${networkMap[config.network]}.infura.io/vAugb8H4cG1bOuFMZj3y`));
+var contract = web3.eth.contract(Earth.abi);
+var ins = contract.at(Earth.contractAddrs[config.network]);
+var delegate = new Contract(ins);
+logger.info(`connect to network ${networkMap[config.network]}, contract address is ${Earth.contractAddrs[config.network]}`);
+
+delegate.fee((err, fee) => {
+    if(err){
+        logger.error(`fail to get contract tx fee, contract init failed, ${err}`);
+        process.exit(-1);
+    } else {
+        logger.info(`current contract tx fee is ${fee}`);
+    }
+});
+
+app.set("contract", delegate);
+
 //var web3 = new Web3(new Web3.providers.HttpProvider("https://" + networkMap[config.network] + ".infura.io/vAugb8H4cG1bOuFMZj3y"));
 
 if (Earth.contractAddrs.hasOwnProperty(config.network)) {

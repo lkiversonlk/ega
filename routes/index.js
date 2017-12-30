@@ -15,6 +15,17 @@ const delay = 5 * 60 * 1000;
 const log4js = require('log4js');
 var logger = log4js.getLogger();
 
+function validateGridOwner(delegate, grid_idx, addr, callback){
+  delegate.grids(grid_idx, (err, status) => {
+    if(err){
+      logger.error(`fail to get grid ${grid_idx} status: ${err}`)
+      return callback(null, false);
+    } else {
+      return callback(null, status[1] == addr);
+    }
+  })
+};
+
 router.post('/avatar/upload', function(req, res, next) {
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
@@ -108,44 +119,51 @@ router.post("/grid_avatar/upload", function(req, res, next) {
 
     const isOK = verifyUser(key, addr, past);
     if (isOK === true) {
-      const image = files.upload
+      validateGridOwner(req.app.get("contract"), grid_idx, addr, (err, isOwner) => {
+        if(err || !isOwner){
+          logger.error(`${addr} is not the owner of grid ${grid_idx}`)
+          return uploadFail(res);
+        } else {
+          const image = files.upload
       
-      var filename = grid_idx + "-" + (new Date()).getTime();
-      var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, filename));
+          var filename = grid_idx + "-" + (new Date()).getTime();
+          var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, filename));
 
-      if(err){
-        logger.error(`fail to rename ${image.path} in grid avatar upload: ${err}`)
-        return uploadFail(res);
-      } else {
-        confService.loadConf(
-          confService.CATEGORY["GRID_CONF_CATEGORY"],
-          grid_idx,
-          (err, conf) => {
-            if(err){
-              logger.error(`fail to load grid conf: ${grid_idx}, ${err}`)
-              return uploadFail(res);
-            } else {
-              if(!conf) conf = {};
-              conf.avatar = filename;
-              conf.link = grid_link;
-              confService.saveConf(
-                confService.CATEGORY["GRID_CONF_CATEGORY"],
-                grid_idx,
-                conf,
-                (err, ret) => {
-                  if(err){
-                    logger.error(`fail to save grid conf:${grid_idx}, ${conf}, ${err}`)
-                    return uploadFail(res);
-                  } else {
-                    logger.info(`${addr} upload grid ${grid_idx} avatar ${filename}, link ${grid_link}`)
-                    return uploadSuccess(res, ret);
-                  }
+          if(err){
+            logger.error(`fail to rename ${image.path} in grid avatar upload: ${err}`)
+            return uploadFail(res);
+          } else {
+            confService.loadConf(
+              confService.CATEGORY["GRID_CONF_CATEGORY"],
+              grid_idx,
+              (err, conf) => {
+                if(err){
+                  logger.error(`fail to load grid conf: ${grid_idx}, ${err}`)
+                  return uploadFail(res);
+                } else {
+                  if(!conf) conf = {};
+                  conf.avatar = filename;
+                  conf.link = grid_link;
+                  confService.saveConf(
+                    confService.CATEGORY["GRID_CONF_CATEGORY"],
+                    grid_idx,
+                    conf,
+                    (err, ret) => {
+                      if(err){
+                        logger.error(`fail to save grid conf:${grid_idx}, ${conf}, ${err}`)
+                        return uploadFail(res);
+                      } else {
+                        logger.info(`${addr} upload grid ${grid_idx} avatar ${filename}, link ${grid_link}`)
+                        return uploadSuccess(res, ret);
+                      }
+                    }
+                  )
                 }
-              )
-            }
+              }
+            )
           }
-        )
-      }
+        }
+      });
     } else {
       logger.error(`${addr} trying to upload grid ${grid_idx} avatar but authentication fail`);
       return uploadFail(res);
@@ -186,40 +204,45 @@ router.post('/grid_avatar/del', function(req, res, next) {
   var confService = req.app.get("configuration");
 
   if (isOK === true) {
-    //just remove the config
-    confService.forceReloadConf(
-      confService.CATEGORY["GRID_CONF_CATEGORY"],
-      grid_idx,
-      (err, conf) => {
-        if(err){
-          logger.error(`${address} delete ${grid_idx} avatar, fail to load grid conf: ${err}`)
-          return delFail(res);
-        } else {
-          if(!conf) conf = {};
-          delete conf.avatar;
-          confService.saveConf(
-            confService.CATEGORY["GRID_CONF_CATEGORY"],
-            grid_idx,
-            conf,
-            (err, retConf) => {
-              if(err) {
-                logger.error(`${address} delete ${grid_idx} avatar, fail to save grid conf ${retConf}: ${err}`);
-                return delFail(res);
-              } else {
-                logger.info(`${address} delete ${grid_idx} avatar, ${retConf}`);
-                return res.json(
-                  {
-                    isOK: true
+    validateGridOwner(req.app.get("contract"), grid_idx, address, (err, isOwner) => {
+      if(err || !isOwner){
+        logger.error(`${address} is not the owner of ${grid_idx}`);
+        return delFail(res);
+      } else {
+        confService.forceReloadConf(
+          confService.CATEGORY["GRID_CONF_CATEGORY"],
+          grid_idx,
+          (err, conf) => {
+            if(err){
+              logger.error(`${address} delete ${grid_idx} avatar, fail to load grid conf: ${err}`)
+              return delFail(res);
+            } else {
+              if(!conf) conf = {};
+              delete conf.avatar;
+              confService.saveConf(
+                confService.CATEGORY["GRID_CONF_CATEGORY"],
+                grid_idx,
+                conf,
+                (err, retConf) => {
+                  if(err) {
+                    logger.error(`${address} delete ${grid_idx} avatar, fail to save grid conf ${retConf}: ${err}`);
+                    return delFail(res);
+                  } else {
+                    logger.info(`${address} delete ${grid_idx} avatar, ${retConf}`);
+                    return res.json(
+                      {
+                        isOK: true
+                      }
+                    );
                   }
-                );
-              }
+                }
+              )
             }
-          )
-        }
-      }
-    )
+          }
+        )
     
-
+      }
+    });
   } else {
     logger.error(`${address} delete ${grid_idx} avatar, verification fail`);
     return delFail(res);
