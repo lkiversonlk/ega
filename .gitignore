@@ -34,3 +34,5 @@ pub_conf/grid.json
 config/*
 
 public/.well-known
+
+logs

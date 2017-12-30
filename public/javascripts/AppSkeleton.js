@@ -26,6 +26,7 @@
     timeline: false,
     infoBox: false,
     geocoder: false,
+    shadows: false,
     imageProvider: new Cesium.BingMapsImageryProvider({
       url: 'https://dev.virtualearth.net',
       mapStyle: Cesium.BingMapsStyle.CANVAS_LIGHT // Can also use Cesium.BingMapsStyle.ROAD

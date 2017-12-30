@@ -143,7 +143,11 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
             },
             onSuccess: function(xhr, json) {
               //reload conf from server, current 
-                            
+              if(!json.isOK){
+                showError(json.msg);
+                return
+              }
+
               confService.forceReloadConf(
                 confService.CATEGORY["GRID_CONF_CATEGORY"],
                 grid_idx,

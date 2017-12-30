@@ -12,14 +12,26 @@ const anonymous = path.join(__dirname, "..", "public", "images", "anonymous.jpg"
 const anonymous_grid = path.join(__dirname, "..", "public", "images", "flag.png");
 const delay = 5 * 60 * 1000;
 
+const log4js = require('log4js');
+var logger = log4js.getLogger();
+
 router.post('/avatar/upload', function(req, res, next) {
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
-    console.log("receive avatar");
+    if(err){
+      logger.error("fail to receive upload avatar request ", err);
+      return res.sendStatus(500);
+    }
     var address = fields.address;
     var image = files.upload;
     var err = fs.renameSync(image.path, path.join(avatar_save_path, address));
-    return res.sendStatus(200);
+    if(err){
+      logger.error(`fail to rename ${address} avatar tmp file ${image.path}, ${err}`)
+      return res.sendStatus(500);
+    } else {
+      logger.info(`user@${address} upload avatar`)
+      return res.sendStatus(200);
+    }
   });
 });
 
@@ -63,7 +75,7 @@ const verifyUser = (key, address, past) => {
   }
 };
 
-function uplodFail(res){
+function uploadFail(res){
   res.send(JSON.stringify({
     isOK: false,
     msg: 'Server Error',
@@ -82,13 +94,12 @@ router.post("/grid_avatar/upload", function(req, res, next) {
   const form = new formidable.IncomingForm();
   var confService = req.app.get("configuration");
   form.parse(req, function(err, fields, files) {
-    console.log("receive avatar from grid")
-
     const {
       grid_idx,
       grid_link,
       signature,
     } = fields
+
     const {
       key,
       address: addr,
@@ -103,14 +114,16 @@ router.post("/grid_avatar/upload", function(req, res, next) {
       var err = fs.renameSync(image.path, path.join(grid_avatar_save_path, filename));
 
       if(err){
-        return uplodFail(res);
+        logger.error(`fail to rename ${image.path} in grid avatar upload: ${err}`)
+        return uploadFail(res);
       } else {
         confService.loadConf(
           confService.CATEGORY["GRID_CONF_CATEGORY"],
           grid_idx,
           (err, conf) => {
             if(err){
-              return uplodFail(res);
+              logger.error(`fail to load grid conf: ${grid_idx}, ${err}`)
+              return uploadFail(res);
             } else {
               if(!conf) conf = {};
               conf.avatar = filename;
@@ -121,9 +134,11 @@ router.post("/grid_avatar/upload", function(req, res, next) {
                 conf,
                 (err, ret) => {
                   if(err){
-                    return uplodFail(res);
+                    logger.error(`fail to save grid conf:${grid_idx}, ${conf}, ${err}`)
+                    return uploadFail(res);
                   } else {
-                    return uplodFail(res, ret);
+                    logger.info(`${addr} upload grid ${grid_idx} avatar ${filename}, link ${grid_link}`)
+                    return uploadSuccess(res, ret);
                   }
                 }
               )
@@ -132,7 +147,8 @@ router.post("/grid_avatar/upload", function(req, res, next) {
         )
       }
     } else {
-      return uplodFail(res);
+      logger.error(`${addr} trying to upload grid ${grid_idx} avatar but authentication fail`);
+      return uploadFail(res);
     }
   })
 });
@@ -176,7 +192,7 @@ router.post('/grid_avatar/del', function(req, res, next) {
       grid_idx,
       (err, conf) => {
         if(err){
-          console.log("fail err" + err);
+          logger.error(`${address} delete ${grid_idx} avatar, fail to load grid conf: ${err}`)
           return delFail(res);
         } else {
           if(!conf) conf = {};
@@ -185,11 +201,12 @@ router.post('/grid_avatar/del', function(req, res, next) {
             confService.CATEGORY["GRID_CONF_CATEGORY"],
             grid_idx,
             conf,
-            (err, conf) => {
+            (err, retConf) => {
               if(err) {
-                console.log("del fail " + err);
+                logger.error(`${address} delete ${grid_idx} avatar, fail to save grid conf ${retConf}: ${err}`);
                 return delFail(res);
               } else {
+                logger.info(`${address} delete ${grid_idx} avatar, ${retConf}`);
                 return res.json(
                   {
                     isOK: true
@@ -204,6 +221,7 @@ router.post('/grid_avatar/del', function(req, res, next) {
     
 
   } else {
+    logger.error(`${address} delete ${grid_idx} avatar, verification fail`);
     return delFail(res);
   }
 })
