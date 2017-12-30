@@ -3,6 +3,7 @@ var DB = require("../db");
 var Conf = require("../public/javascripts/configuration");
 var inquirer = require('inquirer');
 
+debugger;
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -12,8 +13,7 @@ DB.connect(config.db_url, config.database, (err) => {
     process.exit(-1);
   } else {
     var confService = new Conf();
-
-    console.log("connected to database...");
+    console.log(`connected to database ${config.database}`);
 
     inquirer.prompt([
       {
@@ -26,12 +26,13 @@ DB.connect(config.db_url, config.database, (err) => {
         console.log("program error" + JSON.stringify(answers));
       } else {
         console.log("connecting to db: " + DB.get());
-        var grid_idx = parseInt(answers.grid_idx);
+
+        var grid_idx = parseInt(answers.grid_idx)
         if(isNaN(grid_idx)){
           console.log(answers[0] + " is not valid");
         } else {
           console.log("delete grid " + grid_idx + " avatar");
-          confService.forceReloadConf(confService.CATEGORY["GRID_CONF_CATEGORY"], grid_idx, (err, conf) => {
+          confService.forceReloadConf(confService.CATEGORY["GRID_CONF_CATEGORY"], grid_idx.toString(), (err, conf) => {
             if(err){
               console.log("failed: " + err);
             } else {
