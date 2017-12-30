@@ -14,6 +14,7 @@ DB.connect(config.db_url, config.database, (err) => {
   } else {
     var confService = new Conf();
     console.log(`connected to database ${config.database}`);
+    console.log("connecting to db: " + DB.get());
 
     inquirer.prompt([
       {
@@ -25,7 +26,6 @@ DB.connect(config.db_url, config.database, (err) => {
       if(false){
         console.log("program error" + JSON.stringify(answers));
       } else {
-        console.log("connecting to db: " + DB.get());
 
         var grid_idx = parseInt(answers.grid_idx)
         if(isNaN(grid_idx)){
