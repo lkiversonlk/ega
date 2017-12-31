@@ -14,6 +14,17 @@ pragma solidity ^0.4.11;
  */
 
 contract Earth {
+    function safeAdd(uint x, uint y) internal constant returns (uint) {
+        uint ret = x + y;
+        assert(ret > x && ret > y);
+        return ret;
+    }
+
+    function safeMinus(uint x, uint y) internal constant returns (uint) {
+        var ret = x - y;
+        assert(ret >= 0 && ret < x);
+        return ret;
+    }
 
     enum GridState {
         OnSell,
@@ -24,24 +35,29 @@ contract Earth {
     struct Grid {
         GridState state;
         address owner;
-        uint price;   //the selling price set by the owner
+        uint price;       //the selling price set by the owner
+        uint withdrawal;   //value withdrawal
     }
 
-    event GridBought(uint gridIdx, address buyer, uint price);
+    event GridBought(uint gridIdx, address prevOwner, address buyer, uint price);
     event GridOnSell(uint gridIdx, address seller, uint price);
 
-    mapping(uint => Grid) public grids;
-
-    //record player's earnings and owned grids
-    mapping(address => uint) public earns;
-    mapping(address => uint[]) public ownedGrids;
-
+    bool public tradable;
     address public owner;
     uint public minimalPrice;
-
     uint public fee;
     uint public mapSize;  //how many grids per side
-    uint[] public gridSold;
+    uint public gridValue;
+    //record player's earnings and owned grids
+    mapping(address => uint[]) public ownedGrids;
+    mapping(address => uint) public earns;
+    mapping(uint => Grid) public grids;
+    uint public gridSold;
+
+    modifier onlyTradable() {
+        require(tradable);
+        _;
+    }
 
     modifier onlyOwner() {
         require(msg.sender == owner);
@@ -59,8 +75,8 @@ contract Earth {
     }
 
     /**
-     * require the grid owner if it's owned
-     * otherwise require the contract owner
+     * require grid owner if owned
+     * contract owner if wild
      */
     modifier gridOwner(uint gridIdx){
         var gOwner = grids[gridIdx].owner;
@@ -72,44 +88,31 @@ contract Earth {
         _;
     }
 
-    //the grid must not been bought yet
-    modifier noneTaken(uint gridIdx) {
-        require(grids[gridIdx].owner == 0);
-        _;
-    }
-
     function Earth(uint _size, uint _minPrice, uint _fee) public {
         owner = msg.sender;
         mapSize = _size;
         require(_size * _size > _size);
         require(_size * _size / _size == _size);
+
         minimalPrice = _minPrice;
         fee = _fee;
+        tradable = true;
     }
 
-
-    function getGrid(uint gridIdx) internal constant returns (Grid) {
-        return grids[gridIdx];
-    }
-
-    //spread the earnings to all the land owners except himself
-    function spread(uint total, address sender) internal returns (uint) {
-        var length = gridSold.length;
-        if ( length == 0 ) {
-            return total;
+    /**
+     * total earn = 
+     * eth in the pool plus 
+     * eth in each grid he owns
+     */
+    function totalEarn() public returns(uint) {
+        var earned = earns[msg.sender];
+        uint withdrawal = 0;
+        for (uint i = 0; i < ownedGrids[msg.sender].length; i ++) {
+            withdrawal = safeAdd(withdrawal, grids[ownedGrids[msg.sender][i]].withdrawal);
         }
-        var each = total / length;
+        earned = safeAdd(earned, ownedGrids[msg.sender].length * gridValue);
 
-        for (uint i = 0; i < length; i ++) {
-            var grid = grids[gridSold[i]];
-            if (grid.owner != 0 && grid.owner != sender) {
-                earns[grid.owner] += each;
-                total -= each;
-                require(total >= 0);
-            }
-        }
-
-        return total;    
+        return safeMinus(earned, withdrawal);
     }
 
     /**
@@ -131,7 +134,10 @@ contract Earth {
             }
             require(i != length);
             ownedGrids[prevOwner][i] = ownedGrids[prevOwner][length - 1];
-            ownedGrids[prevOwner].length = length - 1;            
+            ownedGrids[prevOwner].length = length - 1;
+
+            earns[prevOwner] += safeMinus(gridValue, grids[index].withdrawal);
+            grids[index].withdrawal = gridValue;
         }
 
         //make sure the new owner doesn't have the grids
@@ -142,63 +148,51 @@ contract Earth {
         ownedGrids[newOwner].push(index);
     }
 
+    //spread the money to gridValue
+    function updateGridBase(uint money, address buyer) internal returns (uint) {
+        var gridCount = gridSold - ownedGrids[buyer].length;
+        uint baseAdd = 0;
+        if (gridCount != 0) {
+            baseAdd = money / gridCount;
+        }
+        gridValue += baseAdd;
+        return gridCount * baseAdd;
+    }
+
     /**
-     * if the grid is not owned yet,
-     * buyer must pay the minimal price, and it all goes to the spread
-     * if the grid is already owned,
-     * buyer must pay larger than the required price, the fee goes to the contract
-     * and the rest goes to the previous owner;
+     * money except the fee goes to the prev owner;
+     * fee will be shared by system and the current owner;
+     * update gridValue so each grid's value is promoted
+     * then withdrawal all the money in the grid and transfer it to prevOwner
      */
-    function buyGrid(uint index) public payable gridIndexValid(index) gridOnSell(index) {
-        var previousOwner = getGrid(index).owner;
-        var grid = getGrid(index);
-        if (grid.owner == 0) {
+    function buyGrid(uint index) public payable gridIndexValid(index) gridOnSell(index) onlyTradable {
+        var grid = grids[index];
+        address prevOwner = grid.owner;
+        uint price;
+        uint charge;
+        if (prevOwner == 0) {
             require(msg.value >= minimalPrice);
-
-            //update the owner
-            //keep the fee to the owner and grid owners
-            grids[index].owner = msg.sender;
-            grids[index].state = GridState.Owned;
-
-            //return the extra ether
-            earns[msg.sender] += (msg.value - minimalPrice);
-
-            //half the income goes to spread
-            var toSpread = minimalPrice / 2;
-            //half goes to land owners
-            var left = spread(toSpread, msg.sender);
-
-            //remains goes to developer
-            earns[owner] += (minimalPrice - toSpread + left);
-
-            //after spread, alter the grid status
-            gridTransfer(index, previousOwner, msg.sender);
-            gridSold.push(index);
-
-            //Event
-            GridBought(index, msg.sender, minimalPrice);
+            price = minimalPrice;
+            charge = price;
+            gridSold += 1;
         } else {
             require(msg.value >= grid.price);
-
-            var charge = grid.price / 1000 * fee;
-
-            var prevOwner = grid.owner;
-            grids[index].owner = msg.sender;
-            grids[index].state = GridState.Owned;
-
-            //the price minus the fee goes to preowner
-            //return extra ether send
-            earns[msg.sender] += (msg.value - grids[index].price);
-            earns[prevOwner] += (grids[index].price - charge);
-
-            //spread the charge
-            toSpread = charge / 2;
-            left = spread(toSpread, msg.sender);
-            earns[owner] += charge - toSpread + left;
-            gridTransfer(index, prevOwner, msg.sender);
-
-            GridBought(index, msg.sender, grids[index].price);
+            price = grid.price;
+            charge = grid.price / 1000 * fee;
         }
+        grid.owner = msg.sender;
+        grid.state = GridState.Owned;
+        earns[msg.sender] += (msg.value - price); //return extra
+        if (price > charge) {
+            earns[prevOwner] += (price - charge); 
+        }
+
+        gridTransfer(index, prevOwner, msg.sender);
+        charge = safeMinus(charge, updateGridBase(charge/2, msg.sender));
+        grid.withdrawal = gridValue; //empty the sold grid
+        earns[owner] += charge;
+
+        GridBought(index, prevOwner, msg.sender, price);
     }
 
     /**
@@ -212,30 +206,34 @@ contract Earth {
         GridOnSell(gridIdx, msg.sender, price);
     }
 
-    function setGridState(uint gridIdx, GridState state) public gridIndexValid(gridIdx) gridOwner(gridIdx) {
-        if ( state == GridState.NotOpenned ) {
-            require(msg.sender == owner);
-        }
-        grids[gridIdx].state = state;
+    function setGridOwned(uint gridIdx) public gridIndexValid(gridIdx) gridOwner(gridIdx) {
+        grids[gridIdx].state = GridState.Owned;
+    }
+
+    function forbiddenGrid(uint gridIdx) public gridIndexValid(gridIdx) onlyOwner() {
+        assert(grids[gridIdx].owner != 0);
+        grids[gridIdx].state = GridState.NotOpenned;
     }
 
     /**
      * player could claim their earnings
      */
-    function getEarn() public {
-        if ( earns[msg.sender] > 0 ) {
-            var value = earns[msg.sender];
-            earns[msg.sender] = 0;
+    function claimEarn() public {
+        uint value = earns[msg.sender];
+        earns[msg.sender] = 0;
+
+        for (uint i = 0; i < ownedGrids[msg.sender].length; i ++) {
+            value = safeAdd(value, safeMinus(gridValue, grids[ownedGrids[msg.sender][i]].withdrawal));
+            grids[ownedGrids[msg.sender][i]].withdrawal = gridValue;
+        }
+
+        if (value > 0) {
             msg.sender.transfer(value);
         }
     }
 
     function gridsCount(address addr) public constant returns (uint) {
         return ownedGrids[addr].length;
-    }
-
-    function gridsSoldOut() public constant returns (uint) {
-        return gridSold.length;
     }
 
     function setMinimalPrice(uint price) public onlyOwner {
