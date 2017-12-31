@@ -1,4 +1,4 @@
-;(function() {
+(function() {
   "use strict";
 
   Cesium.BingMapsApi.defaultKey = 'At36HWsCzUCdp9mDZXKXChHywJ4Rzt7OHdw-VLodUMknjJVR5VVS-E-BCanlX8W-'; // For use with this application only

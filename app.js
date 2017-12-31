@@ -53,9 +53,11 @@ log4js.configure({
     }
 });
 var logger = log4js.getLogger();
+
+/*
 app.use(log4js.connectLogger(log4js.getLogger('req'), {
     level: 'info'
-}));
+}));*/
 
 //the number doesn't mean anything
 //var gridServ = new GridService(10);
