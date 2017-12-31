@@ -1,0 +1,5 @@
+{
+	"db_url":"mongodb://localhost/eegalaxy_test",
+	"database":"eegalaxy_test",
+	"network": "3"
+}
