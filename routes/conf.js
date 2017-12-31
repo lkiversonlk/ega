@@ -50,6 +50,7 @@ router.get("/:category", pre, function(req, res, next){
   }
 });
 
+/*
 router.post("/:category", pre, function(req, res, next){
   var category = req.params['category'];
   var confService = req.app.get("configuration");
@@ -64,7 +65,7 @@ router.post("/:category", pre, function(req, res, next){
   } else {
     return res.sendStatus(500);
   }
-});
+});*/
 
 
 

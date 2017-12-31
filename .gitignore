@@ -3,11 +3,19 @@
 .DS_Store
 
 # project
-# 
+#
+
 public/bower
-public/avatars
+
+public/avatars/*
+!public/avatars/placeholder
+
+public/grid_avatars/*
+!public/grid_avatars/placeholder
+
 avatars/*
 !avatars/placeholder
+
 grid_avatars/*
 !grid_avatars/placeholder
 
@@ -32,6 +40,7 @@ Session.vim
 tmux*.log
 pub_conf/grid.json
 config/config.json
+!config/config.json.template
 
 public/.well-known
 

@@ -18,7 +18,7 @@ Configuration.prototype.CATEGORY = {
 }
 
 Configuration.prototype.Params = {
-  "GRID_PIC_URL_BASE" : "/grid_avatar/get/",
+  "GRID_PIC_URL_BASE" : "/grid_avatars/",
 }
 
 /**

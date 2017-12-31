@@ -6,10 +6,10 @@ var fs = require("fs");
 var etherUtil = require("ethereumjs-util");
 var Grid = require("../public/javascripts/grids");
 
-const avatar_save_path = path.join(__dirname, "..", "avatars");
-const grid_avatar_save_path = path.join(__dirname, "..", "grid_avatars");
-const anonymous = path.join(__dirname, "..", "public", "images", "anonymous.jpg");
-const anonymous_grid = path.join(__dirname, "..", "public", "images", "flag.png");
+const avatar_save_path = path.join(__dirname, "..", "public", "avatars");
+const grid_avatar_save_path = path.join(__dirname, "..", "public", "grid_avatars");
+const anonymous = "/images/anonymous.jpg";
+const anonymous_grid = "/images/flag.png";
 const delay = 5 * 60 * 1000;
 
 const log4js = require('log4js');
@@ -48,13 +48,15 @@ router.post('/avatar/upload', function(req, res, next) {
 
 router.get("/avatar/get/:address", function(req, res, next) {
   if (req.params.address == "0x0000000000000000000000000000000000000000") {
-    return res.sendFile(anonymous);
+    //return res.sendFile(anonymous);
+    return res.redirect(anonymous);
   }
 
   if (fs.existsSync(path.join(avatar_save_path, req.params.address))) {
-    return res.sendFile(path.join(avatar_save_path, req.params.address));
+    //return res.sendFile(path.join(avatar_save_path, req.params.address));
+    return res.redirect("/avatars/" + req.params.address);
   } else {
-    return res.sendFile(anonymous);
+    return res.redirect(anonymous);
   }
 });
 
@@ -172,14 +174,14 @@ router.post("/grid_avatar/upload", function(req, res, next) {
 });
 
 // End upload image together with validation address from user agent
-
+/*
 router.get("/grid_avatar/get/:grid_idx", function(req, res, next) {
   if (fs.existsSync(path.join(grid_avatar_save_path, req.params.grid_idx))) {
     return res.sendFile(path.join(grid_avatar_save_path, req.params.grid_idx));
   } else {
-    return res.sendFile(anonymous_grid);
+    return res.redirect(anonymous_grid);
   }
-});
+});*/
 
 function delFail(res){
   return res.json(
