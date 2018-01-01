@@ -112,11 +112,11 @@ function init_galay_status_event(viewer, gridService){
 
 function init_player_status_event(earth, galaxy){
   $("#player-claim").click(function() {
-    earth.getEarn(function(error, tx) {
+    earth.withdrawal(function(error, tx) {
       if (error) {
         showError("contract call error");
       } else {
-
+        showInfo(tx);
       }
     });
   })

@@ -1,7 +1,7 @@
 //TODO: use async to organize behavior
 function init_galaxy(galaxy, gridService, earth, viewer, confService){
   galaxy.refresh_earth_status = function(earth) {
-    earth.gridsSoldOut(function(err, sold) {
+    earth.gridSold(function(err, sold) {
       if (err) {
         return;
       } else {
@@ -72,7 +72,7 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
       }
     });
 
-    earth.earns(web3.eth.coinbase, function(err, earn) {
+    earth.totalEarned(function(err, earn) {
       if (err) {
         return;
       } else {

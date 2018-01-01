@@ -15,13 +15,13 @@ var EarthContractAbi = [
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "gridsSoldOut",
+		"name": "totalEarned",
 		"outputs": [
 			{
 				"name": "",
@@ -29,8 +29,8 @@ var EarthContractAbi = [
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -48,13 +48,13 @@ var EarthContractAbi = [
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "mapSize",
+		"name": "fee",
 		"outputs": [
 			{
 				"name": "",
@@ -62,13 +62,13 @@ var EarthContractAbi = [
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "minimalPrice",
+		"name": "gridSold",
 		"outputs": [
 			{
 				"name": "",
@@ -76,72 +76,22 @@ var EarthContractAbi = [
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "gridIdx",
-				"type": "uint256"
-			},
-			{
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "sellGrid",
-		"outputs": [],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "nonpayable"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "gridIdx",
-				"type": "uint256"
-			},
-			{
-				"name": "state",
-				"type": "uint8"
-			}
-		],
-		"name": "setGridState",
-		"outputs": [],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "nonpayable"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "owner",
+		"name": "tradable",
 		"outputs": [
 			{
 				"name": "",
-				"type": "address"
+				"type": "bool"
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "buyGrid",
-		"outputs": [],
-		"payable": true,
-		"type": "function",
-		"stateMutability": "payable"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -163,8 +113,50 @@ var EarthContractAbi = [
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "minimalPrice",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "mapSize",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "gridValue",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -187,86 +179,29 @@ var EarthContractAbi = [
 			{
 				"name": "price",
 				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": false,
-		"inputs": [
+			},
 			{
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "setMinimalPrice",
-		"outputs": [],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "nonpayable"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "gridSold",
-		"outputs": [
-			{
-				"name": "",
+				"name": "withdrawal",
 				"type": "uint256"
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "getEarn",
-		"outputs": [],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "nonpayable"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "fee",
+		"name": "owner",
 		"outputs": [
 			{
 				"name": "",
-				"type": "uint256"
+				"type": "address"
 			}
 		],
 		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"inputs": [
-			{
-				"name": "_size",
-				"type": "uint256"
-			},
-			{
-				"name": "_minPrice",
-				"type": "uint256"
-			},
-			{
-				"name": "_fee",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"type": "constructor",
-		"stateMutability": "nonpayable"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -275,6 +210,11 @@ var EarthContractAbi = [
 				"indexed": false,
 				"name": "gridIdx",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "prevOwner",
+				"type": "address"
 			},
 			{
 				"indexed": false,
@@ -289,6 +229,20 @@ var EarthContractAbi = [
 		],
 		"name": "GridBought",
 		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "gridIdx",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawalGrid",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -311,6 +265,108 @@ var EarthContractAbi = [
 		],
 		"name": "GridOnSell",
 		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "buyGrid",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "setMinimalPrice",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "gridIdx",
+				"type": "uint256"
+			}
+		],
+		"name": "setGridOwned",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "gridIdx",
+				"type": "uint256"
+			}
+		],
+		"name": "forbiddenGrid",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_size",
+				"type": "uint256"
+			},
+			{
+				"name": "_minPrice",
+				"type": "uint256"
+			},
+			{
+				"name": "_fee",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "gridIdx",
+				"type": "uint256"
+			},
+			{
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "sellGrid",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdrawal",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	}
 ];
 
@@ -322,7 +378,7 @@ function InitEarthContract(web3, address){
 }
 
 var registryAddresses = {
-  "3": "0xf6366d46ce03ffc7afa2f029ccbeb9a45be7fccb"
+  "3": "0xA7ea90BedC921CfA1F5809Ea7d58391145817561"
 }
 
 var networkName = {
