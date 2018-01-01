@@ -108,6 +108,11 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
   };*/
 
   galaxy.grid_selected = function(grid_idx) {
+    var center = gridService.gridCenterInDegree(grid_idx);
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 4000000.0)
+    });
+
     earth.grids(grid_idx, function(err, result) {
       if (err) {
         return
@@ -222,11 +227,6 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
             }
             $("#grid-link").attr("href", url);
           }
-        });
-
-        var center = gridService.gridCenterInDegree(grid_idx);
-        viewer.camera.flyTo({
-          destination: Cesium.Cartesian3.fromDegrees(center.lng, center.lat, 4000000.0)
         });
       }
     });
