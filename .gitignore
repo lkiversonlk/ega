@@ -45,3 +45,6 @@ config/config.json
 public/.well-known
 
 logs
+
+public/dist/javascripts/*
+!public/dist/javascripts/placeholder
