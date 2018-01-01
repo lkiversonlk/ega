@@ -24,6 +24,7 @@
     "mongodb": "^3.0.1",
     "morgan": "~1.9.0",
     "serve-favicon": "~2.4.5",
+    "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "web3": "^0.20.1"
   }
 }
