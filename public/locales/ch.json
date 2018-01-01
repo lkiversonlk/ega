@@ -57,8 +57,9 @@
 	"you are already the owner of the grid": "您已经是领地主人了",
 	"grid is not on sell": "领地暂不出售",
 	"fail to init grid service": "领地服务启动失败",
-	"ethereum network not connected":"没有有连接到以太坊网络",
+	"ethereum network not connected": "没有有连接到以太坊网络",
 	"fail to save configuration": "保存设置失败",
 	"fail to load configuration": "加载设置失败",
-	"searching...": "查找中..."
+	"searching...": "查找中...",
+	"want ETH in testnet?": "获得测试网络ETH"
 }

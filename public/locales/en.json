@@ -46,5 +46,6 @@
 	"grid link": "grid link",
 	"no ether account connected": "ether account not connected, please check your metamask or mist configuration",
 	"upload_image": "/images/upload-en.jpeg",
-	"searching...": "searching..."
+	"searching...": "searching...",
+	"want ETH in testnet?": "want ETH in testnet?"
 }
