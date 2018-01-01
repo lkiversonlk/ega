@@ -100,22 +100,6 @@ contract Earth {
     }
 
     /**
-     * total earn = 
-     * eth in the pool plus 
-     * eth in each grid he owns
-     */
-    function totalEarn() public returns(uint) {
-        var earned = earns[msg.sender];
-        uint withdrawal = 0;
-        for (uint i = 0; i < ownedGrids[msg.sender].length; i ++) {
-            withdrawal = safeAdd(withdrawal, grids[ownedGrids[msg.sender][i]].withdrawal);
-        }
-        earned = safeAdd(earned, ownedGrids[msg.sender].length * gridValue);
-
-        return safeMinus(earned, withdrawal);
-    }
-
-    /**
      * this function is only used for change the ownership of grids
      */
     function gridTransfer(uint index, address prevOwner, address newOwner) internal {
@@ -137,8 +121,9 @@ contract Earth {
             ownedGrids[prevOwner].length = length - 1;
 
             earns[prevOwner] += safeMinus(gridValue, grids[index].withdrawal);
-            grids[index].withdrawal = gridValue;
         }
+        
+        grids[index].withdrawal = gridValue;
 
         //make sure the new owner doesn't have the grids
         for (i = 0; i<ownedGrids[newOwner].length; i++) {
@@ -156,6 +141,9 @@ contract Earth {
             baseAdd = money / gridCount;
         }
         gridValue += baseAdd;
+        for (uint i = 0; i < ownedGrids[buyer].length; i ++){
+            grids[ownedGrids[buyer][i]].withdrawal += baseAdd;
+        }
         return gridCount * baseAdd;
     }
 
@@ -189,7 +177,7 @@ contract Earth {
 
         gridTransfer(index, prevOwner, msg.sender);
         charge = safeMinus(charge, updateGridBase(charge/2, msg.sender));
-        grid.withdrawal = gridValue; //empty the sold grid
+        //grid.withdrawal = gridValue; //empty the sold grid
         earns[owner] += charge;
 
         GridBought(index, prevOwner, msg.sender, price);
@@ -198,27 +186,27 @@ contract Earth {
     /**
      * owner can set a price to mark a grid as sell
      */
-    function sellGrid(uint gridIdx, uint price) public gridIndexValid(gridIdx) gridOwner(gridIdx) {
-
+    function sellGrid(uint gridIdx, uint price) public gridIndexValid(gridIdx) gridOwner(gridIdx) onlyTradable {
         grids[gridIdx].price = price;
         grids[gridIdx].state = GridState.OnSell;
 
         GridOnSell(gridIdx, msg.sender, price);
     }
 
-    function setGridOwned(uint gridIdx) public gridIndexValid(gridIdx) gridOwner(gridIdx) {
+    function setGridOwned(uint gridIdx) public gridIndexValid(gridIdx) gridOwner(gridIdx) onlyTradable {
         grids[gridIdx].state = GridState.Owned;
     }
 
-    function forbiddenGrid(uint gridIdx) public gridIndexValid(gridIdx) onlyOwner() {
-        assert(grids[gridIdx].owner != 0);
+    /* only admin can forbidden non-sold grid */
+    function forbiddenGrid(uint gridIdx) public gridIndexValid(gridIdx) onlyOwner {
+        assert(grids[gridIdx].owner == 0);
         grids[gridIdx].state = GridState.NotOpenned;
     }
 
     /**
      * player could claim their earnings
      */
-    function claimEarn() public {
+    function withdrawal() public onlyTradable {
         uint value = earns[msg.sender];
         earns[msg.sender] = 0;
 
@@ -230,6 +218,23 @@ contract Earth {
         if (value > 0) {
             msg.sender.transfer(value);
         }
+    }
+
+    function withdrawalGrid(uint gridIdx) public gridIndexValid(gridIdx) gridOwner(gridIdx) onlyTradable {
+        require(grids[gridIdx].owner != 0);
+        uint value = safeMinus(gridValue, grids[gridIdx].withdrawal);
+        grids[gridIdx].withdrawal = gridValue;
+        msg.sender.transfer(value);
+    }
+    
+    function totalEarned() public constant returns (uint) {
+        uint value = earns[msg.sender];
+
+        for (uint i = 0; i < ownedGrids[msg.sender].length; i ++) {
+            value = safeAdd(value, safeMinus(gridValue, grids[ownedGrids[msg.sender][i]].withdrawal));
+        }
+
+        return value;
     }
 
     function gridsCount(address addr) public constant returns (uint) {
