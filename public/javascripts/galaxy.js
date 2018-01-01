@@ -135,6 +135,9 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
         $('#del-grid-img-btn').addClass('disabled')
         if (owner == web3.eth.coinbase) {
           isOwner = true
+          gridAvatar.empty();
+          gridAvatar.append(imgAppend)
+
           new AvatarUpload({
             el: document.querySelector('#grid-avatar'),
             uploadUrl: '/grid_avatar/upload',
