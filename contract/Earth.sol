@@ -16,13 +16,13 @@ pragma solidity ^0.4.11;
 contract Earth {
     function safeAdd(uint x, uint y) internal constant returns (uint) {
         uint ret = x + y;
-        assert(ret > x && ret > y);
+        assert(ret >= x && ret >= y);
         return ret;
     }
 
     function safeMinus(uint x, uint y) internal constant returns (uint) {
         var ret = x - y;
-        assert(ret >= 0 && ret < x);
+        assert(ret >= 0 && ret <= x);
         return ret;
     }
 
