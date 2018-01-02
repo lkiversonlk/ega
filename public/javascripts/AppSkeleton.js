@@ -73,6 +73,10 @@
       uploadData: {
         address: web3.eth.coinbase
       },
+      onError: (xhr, json) => {
+        console.log("fail to upload avatar, " );
+        showError(FAIL_UPLOAD_IMAGE);
+      }
     });
 
     var galaxy = window._galaxyApis = {};

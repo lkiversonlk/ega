@@ -149,6 +149,10 @@ function init_galaxy(galaxy, gridService, earth, viewer, confService){
             uploadData: {
               address: web3.eth.coinbase,
             },
+            onError: (xhr,json)=>{
+              console.log("fail to upload avatar, " );
+              showError(FAIL_UPLOAD_IMAGE);
+            },
             onSuccess: function(xhr, json) {
               //reload conf from server, current 
               if(!json.isOK){

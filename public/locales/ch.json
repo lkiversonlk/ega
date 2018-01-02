@@ -61,5 +61,6 @@
 	"fail to save configuration": "保存设置失败",
 	"fail to load configuration": "加载设置失败",
 	"searching...": "查找中...",
-	"want ETH in testnet?": "获得测试网络ETH"
+	"want ETH in testnet?": "获得测试网络ETH",
+	"fail upload image":"上传失败，图片大小不能超过2M"
 }

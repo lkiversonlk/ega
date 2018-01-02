@@ -13,6 +13,7 @@ FAIL_SAVE_CONF="fail to save configuration";
 ACCOUNT_NOT_CONNECTED="no ether account connected";
 DELETE_GRID_AVATAR_FAIL="fail to delete grid avatar";
 FINDING_OWNER="searching..."
+FAIL_UPLOAD_IMAGE="fail upload image"
 GridStateEng = [
   "On Sell",
   "Owned",
